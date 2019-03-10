@@ -5,15 +5,22 @@
   
 
   
-  <title>某SIerの技術備忘録</title>
+  <title>深さ優先探索について | 某SIerの技術備忘録</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="某SIerの技術備忘録">
-<meta property="og:url" content="https://kosukeland.github.io/index.html">
+  <meta name="description" content="1. はじめにインフラエンジニアとして6年ほど経験を積んできて，ふと周りを世間を見渡すとクラウド全盛期になっていました．しかし私の周りでは，まだまだオンプレ全盛期．お客様的にも「クラウド なにそれ美味しいの？」状態で，多少の興味はあるものの踏み出せないという方がとても多いです．なので，私自身「クラウドの勉強なんかしなくていい」と思っておりましたが，見事に世の中の流れに乗り遅れました．そのことに気">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深さ優先探索について">
+<meta property="og:url" content="https://kosukeland.github.io/2019/03/10/深さ優先探索について/index.html">
 <meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにインフラエンジニアとして6年ほど経験を積んできて，ふと周りを世間を見渡すとクラウド全盛期になっていました．しかし私の周りでは，まだまだオンプレ全盛期．お客様的にも「クラウド なにそれ美味しいの？」状態で，多少の興味はあるものの踏み出せないという方がとても多いです．なので，私自身「クラウドの勉強なんかしなくていい」と思っておりましたが，見事に世の中の流れに乗り遅れました．そのことに気">
 <meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/10/深さ優先探索について/images/20190310-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/10/深さ優先探索について/images/20190310-2.png">
+<meta property="og:updated_time" content="2019-03-10T14:18:44.208Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="某SIerの技術備忘録">
+<meta name="twitter:title" content="深さ優先探索について">
+<meta name="twitter:description" content="1. はじめにインフラエンジニアとして6年ほど経験を積んできて，ふと周りを世間を見渡すとクラウド全盛期になっていました．しかし私の周りでは，まだまだオンプレ全盛期．お客様的にも「クラウド なにそれ美味しいの？」状態で，多少の興味はあるものの踏み出せないという方がとても多いです．なので，私自身「クラウドの勉強なんかしなくていい」と思っておりましたが，見事に世の中の流れに乗り遅れました．そのことに気">
+<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/10/深さ優先探索について/images/20190310-1.png">
   
     <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
   
@@ -60,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-深さ優先探索について" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-深さ優先探索について" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/10/深さ優先探索について/" class="article-date">
   <time datetime="2019-03-10T14:20:00.000Z" itemprop="datePublished">2019-03-10</time>
@@ -75,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+    <h1 class="article-title" itemprop="name">
+      深さ優先探索について
     </h1>
   
 
@@ -122,123 +127,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-HEXOで作成したブログをGithub-ioで公開してみた" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" class="article-date">
-  <time datetime="2019-03-04T10:00:00.000Z" itemprop="datePublished">2019-03-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/">Hexoで作成したブログをGithub.ioで公開してみた</a>
-    </h1>
+    <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Hexoで作成したブログをGithub.ioで公開してみた</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>みなさま，はじめまして．当ブログにアクセスいただきありがとうございます．<br>筆者は某SIerに勤める6年目会社員で，主に基盤系SEとしてプライベートクラウド基盤の構築を中心に仕事をしてきました．</p>
-<p>業務を通して様々な経験をし，それを自身の中で消化してきたつもりではありますが，<br>知識を正しく理解しているか，今一度振り返って確認してみたいと思い，当ブログを立ち上げました．</p>
-<p>あくまで，自分自身の備忘録として利用するつもりではありますが，<br>私が遭遇したトラブル事例も記載しますので，私と同様のトラブルに遭遇した方のお役に立てればと考えています．<br>どうぞよろしくお願いします．</p>
-<hr>
-<h1 id="2-ブログを始めるにあたり"><a href="#2-ブログを始めるにあたり" class="headerlink" title="2. ブログを始めるにあたり"></a>2. ブログを始めるにあたり</h1><p>ブログを始めるにあたり，ツール選びから始めました．<br>私のブログに求める要件は以下の通り</p>
-<ul>
-<li>無料であること</li>
-<li>サーバレスであること</li>
-<li>ブログを通して何かしらの学びがあること</li>
-<li>ジェネレータでindex.htmlを自動作成できること  　←フルスクラッチなんて無理w</li>
-</ul>
-<p>以上の要件だとツールを絞りきれないのですが，今回はGithub.ioとHexoの組み合わせでブログを作成することにしました．<br>理由は，，，，</p>
-<ul>
-<li>Github.ioを利用する理由  : Gitの勉強になるから(筆者はGit未経験である)</li>
-<li>Hexoを利用する理由       : Node.jsで作られているから(筆者はjavascriptなら少しできる)</li>
-</ul>
-<p>※Github.ioやHexoの説明は公式を確認してね<br><strong><a href="https://pages.github.com/" target="_blank" rel="noopener">https://pages.github.com/</a></strong><br><strong><a href="https://hexo.io/" target="_blank" rel="noopener">https://hexo.io/</a></strong></p>
-<hr>
-<h1 id="3-Hexoの準備-For-Mac"><a href="#3-Hexoの準備-For-Mac" class="headerlink" title="3. Hexoの準備(For Mac)"></a>3. Hexoの準備(For Mac)</h1><p>ここから本題．<br>2019年3月時点のインストール方法を記載します(詳しくは公式ページをみてね！)</p>
-<h2 id="3-1-Hexoインストールの前に"><a href="#3-1-Hexoインストールの前に" class="headerlink" title="3.1. Hexoインストールの前に"></a>3.1. Hexoインストールの前に</h2><p>Hexoを動作させるためにはNode.jsが必要なので，PCにインストールします．<br>また，ブログをGithubへプッシュする場合，Gitも必要なので合わせてインストールします．</p>
-<ul>
-<li><p>Node.js:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash</span><br><span class="line">$ nvm install stable</span><br><span class="line">$ node -v <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Git(Github.ioにpushするなら必要):</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br><span class="line">$ git --version <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="3-2-Hexoのインストール"><a href="#3-2-Hexoのインストール" class="headerlink" title="3.2. Hexoのインストール"></a>3.2. Hexoのインストール</h2><p>Hexoを利用するためのHexo CLIのインストールと，HexoコマンドからGitを利用するツールをインストールします．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ hexo version <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure></p>
-<hr>
-<h1 id="4-ブログの作成"><a href="#4-ブログの作成" class="headerlink" title="4. ブログの作成"></a>4. ブログの作成</h1><h2 id="4-1-sourceファイルの作成"><a href="#4-1-sourceファイルの作成" class="headerlink" title="4.1. sourceファイルの作成"></a>4.1. sourceファイルの作成</h2><p>Hexoでのブログ作成は’Hexo’コマンドを利用し，まずsourceファイル([Blog Tittle].md)を作成します．<br>Hexoでは，[Blog Tittle].mdにMarkDown形式でブログ内容を記載することになります．</p>
-<ul>
-<li><p>ブログディレクトリの作成:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init [Directory]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログ記事ファイル(.mdファイル)の作成:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> [Directory]</span><br><span class="line">$ hexo new [Blog Tittle]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログの記載:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="built_in">source</span>/_posts/</span><br><span class="line">$ vim [Blog Title].md</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログ本体の生成(デフォルトだとpublicディレクトリ)</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="4-2-configファイルの編集"><a href="#4-2-configファイルの編集" class="headerlink" title="4.2. configファイルの編集"></a>4.2. configファイルの編集</h2><p>ブログディレクトリ直下に存在する’_config.yml’を開き，ブログを設定を編集します．<br>編集後はこんな感じです(ちなみに，当ブログの_config.yml(一部)はこんな感じ)．</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">某SIerの技術備忘録</span></span><br><span class="line"><span class="attr">subtitle:</span></span><br><span class="line"><span class="attr">description:</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Kosuke</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">ja</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">Asia/Tokyo</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'</span></span><br><span class="line"><span class="attr">url:</span> <span class="attr">https://kosukeland.github.io/</span></span><br><span class="line"><span class="comment">#root: kosukeland</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"></span><br><span class="line"><span class="string">~~~</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/KosukeLand/KosukeLand.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h2 id="4-3-ローカルで動作確認"><a href="#4-3-ローカルで動作確認" class="headerlink" title="4.3. ローカルで動作確認"></a>4.3. ローカルで動作確認</h2><p>ブログの記載内容をローカルで確認してみましょう．<br>以下のコマンドでローカルにWebサーバを立ち上げることができます．</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>Webサーバへのアクセスは，<strong><a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></strong>です．</p>
-<hr>
-<h1 id="5-Github-ioへのデプロイ"><a href="#5-Github-ioへのデプロイ" class="headerlink" title="5. Github.ioへのデプロイ"></a>5. Github.ioへのデプロイ</h1><p>まず，Github側にGithub.ioのリポジトリを作成します．<br>作成するリポジトリ名を<strong>[username].github.io</strong>とします．</p>
-<p>次に，_condig.ymlが正しく設定されていれば，以下のコマンドでGithubにコードがアップロードされWebページが公開されます．<br>なお，Githubへアップロードされる対象は<strong>publicディレクトリ</strong>であり，Blogディレクトリ全体のバージョン管理はされない模様．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></p>
-<p>Github.ioのアクセスは，<strong>https://[username].github.io</strong>です．</p>
-<hr>
-<h1 id="6-トラブル事例"><a href="#6-トラブル事例" class="headerlink" title="6. トラブル事例"></a>6. トラブル事例</h1><h2 id="6-1-“hexo-deploy”-が失敗する"><a href="#6-1-“hexo-deploy”-が失敗する" class="headerlink" title="6.1. “hexo deploy” が失敗する"></a>6.1. “hexo deploy” が失敗する</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line">INFO Start processing</span><br><span class="line"> :</span><br><span class="line"> :</span><br><span class="line">ERROR Deployer not found: git</span><br></pre></td></tr></table></figure>
-<ul>
-<li>原因: hexo-deployer-gitがインストールされていなかったため発生．</li>
-<li>対策: hexo-deployer-gitのインストール</li>
-</ul>
-<hr>
-<h1 id="7-その他"><a href="#7-その他" class="headerlink" title="7. その他"></a>7. その他</h1><h2 id="7-1-ディレクトリ構成"><a href="#7-1-ディレクトリ構成" class="headerlink" title="7.1. ディレクトリ構成"></a>7.1. ディレクトリ構成</h2><p>‘hexo init [Directory]’ をした際に作成されるファイルは以下の通り</p>
-<ul>
-<li>/node_modules: 構成しているnpmライブラリの置き場所</li>
-<li>/public: ここに公開用のデータ一式が書き出される</li>
-<li>/scaffolds: 記事や固定ページを作るときのMarkdownテンプレート集</li>
-<li>/source: 記事や固定ページを構成するMarkdown・画像データを置く場所</li>
-<li>/themes: ブログのテーマが置かれる場所（デフォルトテーマ入り）</li>
-<li>_config.yml: ブログのタイトルやURLなどの設定を書くファイル</li>
-<li>.gitignore: Gitで無視するファイルやディレクトリを書くファイル</li>
-<li>db.json: キャッシュが書き込まれるファイル</li>
-<li>package-lock.json: 特定バージョンのライブラリ構成を共有する目的のファイル</li>
-<li>package.json: Hexoを構成しているライブラリリスト</li>
-</ul>
-<p>Reference: <a href="https://hexo.io/docs/" target="_blank" rel="noopener">https://hexo.io/docs/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjt2l4w850001q8uye8xvpxdb" class="article-share-link">共有</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
