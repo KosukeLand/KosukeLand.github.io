@@ -10,19 +10,19 @@
   <meta name="description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
 <meta property="og:type" content="article">
 <meta property="og:title" content="探索系問題の探索範囲削減方法">
-<meta property="og:url" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/index.html">
+<meta property="og:url" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/index.html">
 <meta property="og:site_name" content="某SIerの技術備忘録">
 <meta property="og:description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
 <meta property="og:locale" content="ja">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/images/20190312-1.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/images/20190312-2.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/images/20190312-3.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/images/20190312-4.png">
-<meta property="og:updated_time" content="2019-03-13T01:30:04.481Z">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-2.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-3.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-4.png">
+<meta property="og:updated_time" content="2019-03-18T11:46:15.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探索系問題の探索範囲削減方法">
 <meta name="twitter:description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
-<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/images/20190312-1.png">
+<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-1.png">
   
     <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
   
@@ -69,10 +69,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-動的計画法についてまとめてみる" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-探索系問題の探索範囲削減方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/12/動的計画法についてまとめてみる/" class="article-date">
-  <time datetime="2019-03-11T23:05:00.000Z" itemprop="datePublished">2019-03-12</time>
+    <a href="/2019/03/18/探索系問題の探索範囲削減方法/" class="article-date">
+  <time datetime="2019-03-18T11:45:00.000Z" itemprop="datePublished">2019-03-18</time>
 </a>
     
   </div>
@@ -126,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/12/動的計画法についてまとめてみる/" data-id="cjtea6usk0002acuypxdepdr5" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjteaazfw0001buuy5h9dstnu" class="article-share-link">共有</a>
       
       
     </footer>
@@ -175,7 +175,7 @@
       <ul>
         
           <li>
-            <a href="/2019/03/12/動的計画法についてまとめてみる/">探索系問題の探索範囲削減方法</a>
+            <a href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
           </li>
         
           <li>
