@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Union-Findアルゴリズムを解説する | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．その名もUnion-Findです！　それでは，いきましょう！  2.Union-Findアルゴリズム概要Union-Findとは，文字通りUnionとFindを実施するためのアルゴリズムです．Union">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Union-Findアルゴリズムを解説する">
+<meta property="og:url" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．その名もUnion-Findです！　それでは，いきましょう！  2.Union-Findアルゴリズム概要Union-Findとは，文字通りUnionとFindを実施するためのアルゴリズムです．Union">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/images/20190324-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/images/20190324-2.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/images/20190324-3.png">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/images/20190324-4.png">
+<meta property="og:updated_time" content="2019-03-24T14:33:10.219Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Union-Findアルゴリズムを解説する">
+<meta name="twitter:description" content="1. はじめにここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．その名もUnion-Findです！　それでは，いきましょう！  2.Union-Findアルゴリズム概要Union-Findとは，文字通りUnionとFindを実施するためのアルゴリズムです．Union">
+<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/images/20190324-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Union-Findアルゴリズムを解説する" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/24/Union-Findアルゴリズムを解説する/" class="article-date">
+  <time datetime="2019-03-24T14:30:00.000Z" itemprop="datePublished">2019-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Union-Findアルゴリズムを解説する
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>ここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．<br>過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．<br>その名もUnion-Findです！　それでは，いきましょう！</p>
+<hr>
+<h1 id="2-Union-Findアルゴリズム概要"><a href="#2-Union-Findアルゴリズム概要" class="headerlink" title="2.Union-Findアルゴリズム概要"></a>2.Union-Findアルゴリズム概要</h1><p>Union-Findとは，文字通り<strong>Union</strong>と<strong>Find</strong>を実施するためのアルゴリズムです．<br>UnionとFindとは，</p>
+<ul>
+<li>Union:2つの集合を1つに統合する </li>
+<li>Find: 2つの要素が同一集合に属しているかどうか判定する</li>
+</ul>
+<p>つまりUnion-Findでは，任意の集合同士を結合した際に，任意2つの要素が同一の集合に属しているかを判定する　ことができます．<br>わかりましたか？　これだけの説明では，どのようなケースで利用するかわかりませんね苦笑　具体的な問題を使って説明します．</p>
+<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p><strong>N個の島とM本の橋があります。</strong><br>i番目の橋はAi番目の島とBi番目の島を繋いでおり、双方向に行き来可能です。<br>はじめ、全ての島で橋は存在していません．<br>そこで，橋を順に<strong>建築することにしました．</strong><br>「いくつかの橋を渡って互いに行き来できる2つの島の組(a, b)(a &lt; b) の数」を便利さと呼ぶことにします。<br>各i(1≤i≤M)について、i番目の橋を建築した直後の便利さを求めてください。</p>
+<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>入力は全て整数である。<br>2≤N≤10^5, 1≤M≤10^5<br>1≤Ai&lt;Bi≤N<br>(Ai,Bi) の組は全て異なる。<br>初期状態における便利さは0である。<br><strong>出展：<a href="https://atcoder.jp/contests/abc120/tasks/abc120_d" target="_blank" rel="noopener">https://atcoder.jp/contests/abc120/tasks/abc120_d</a></strong> (※上記の問題は少しアレンジしてます)</p>
+<p>さて，皆さんはどのようなアルゴリズムを利用して解きますか？<br>ここから2つの解法を示します．1つは直感的な解法で，2つめはUnion-Findを利用した解法です．<br>まず直感的な解法をみていきましょう．</p>
+<h3 id="2-1-直感的な解法-Not-Union-Find"><a href="#2-1-直感的な解法-Not-Union-Find" class="headerlink" title="2.1. 直感的な解法(Not Union-Find)"></a>2.1. 直感的な解法(Not Union-Find)</h3><p>問題を解くために島と島同士の関係を保持する必要があるため，<br>インデックスが<strong>島</strong>の表し，配列の要素が<strong>渡航可能な島グループ</strong>を表すような配列を用意します．<br>初期状態では橋がかかっていないため，各島は他の島に渡航することができません<br>つまり，配列の渡航可能な島グループはそれぞれ異なる値をとります．<br>今回は，配列array = [1,2,3,..,N] とします(図1 Before)．<br>この状態ですと，どの島へも渡航不可能なので便利さ0です．</p>
+<p>ここで，島1と島2に橋がかかったとしましょう．<br>すると，島1と島2は渡航可能になるので，島1と島2の渡航可能な島グループはともに1となります．<br>この場合，配列array = [1,1,3,..,N] となり，便利さが1となります(図1 After)．<br>図で表すと下記の様なイメージです．</p>
+<p><img src="images/20190324-1.png" alt="図1: 渡航可能情報を配列で管理" title="図1: 渡航可能情報を配列で管理" width="500"></p>
+<p>このように橋がかかるたびに，配列を更新することで便利さを計算することが可能です．<br>しかし，配列の更新にO(N)必要であり，それを橋の数だけ更新する必要があるため，<strong>実行時間はO(N^M)</strong>となります．</p>
+<h3 id="2-2-Union-Findを利用した解法"><a href="#2-2-Union-Findを利用した解法" class="headerlink" title="2.2. Union-Findを利用した解法"></a>2.2. Union-Findを利用した解法</h3><p>それに対し，Union-Findでは上記の問題をO(N^M)より少ない計算量で解くことが可能です．<br>そのために木を利用します．</p>
+<p><img src="images/20190324-2.png" alt="図2: Union-Findを利用した際の集合同士の結合" title="図2: Union-Findを利用した際の集合同士の結合" width="700"></p>
+<p>Union-Findでは，同じグループに所属する要素をエッジで接続するデータ構造をとります．<br>上記の図では，要素1と要素3がグループ1，要素2と要素4がグループ2に所属することを表しています(図2 Before)．<br>ここでグループ1とグループ2が結合された場合，それぞれのグループ同士を線で結ぶ処理をします(図2 After)．<br>これにより，<strong>2つのグループを結合した際に要素が同一グループに所属しているかどうか</strong>を高速に判定することができます．</p>
+<p><img src="images/20190324-3.png" alt="図3: 根の探索" title="図3: 根の探索" width="350"></p>
+<p>判定方法は，任意要素から順に上へ遡り，根を確認することで実現できます．<br>図3から分かるように2つの要素が同一グループである場合，根は同一になります．<br>反対に異なるグループであれば，根は同一とはなりません．<br>なので，<strong>木の根が同一であれば同一グループ</strong>，<strong>木の根が同一でなければ異なるグループ</strong>　と言えそうです．<br>例えば，図3の要素3と要素4は共に要素1が根であるため，同一グループと言えます．</p>
+<p>このように結合と探索を実施した場合，<strong>結合にO(1),探索にO(木の高さ)</strong>の計算量で完結します．<br>これだけでも直感的な解放よりも高速ですが，Union-Findをさらに高速化するため木の構造を図3から図4の様に修正します．<br>この場合，結合と探索は共に<strong>O(1)</strong>で実施可能です．</p>
+<p><img src="images/20190324-4.png" alt="図3: 探索高速化のため木構造を修正" title="図3: 探索高速化のため木構造を修正" width="350"></p>
+<hr>
+<h1 id="3-Union-Findアルゴリズム実装"><a href="#3-Union-Findアルゴリズム実装" class="headerlink" title="3. Union-Findアルゴリズム実装"></a>3. Union-Findアルゴリズム実装</h1><p>さて，Union-Findを実装しましょう．<br>実装では，<strong>初期化，グループの結合，根の探索，要素同士が同一グループであるか調査</strong>の4つのコンポーネントが必要です．</p>
+<h4 id="初期化"><a href="#初期化" class="headerlink" title="初期化"></a>初期化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funciton init(n)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; n ; i++)&#123;</span><br><span class="line">        <span class="comment">// 自身の根は自分で初期化</span></span><br><span class="line">        per[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="グループの結合"><a href="#グループの結合" class="headerlink" title="グループの結合"></a>グループの結合</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unit</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    x = root(x);</span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が同一であれば，同一グループ(結合の必要なし)</span></span><br><span class="line">    <span class="keyword">if</span>(x == y)&#123; <span class="keyword">return</span>(<span class="number">0</span>); &#125;</span><br><span class="line">    <span class="comment">// 根が異なれば，xの根をyとする(結合)</span></span><br><span class="line">    <span class="keyword">else</span>&#123; ptr[x] = y; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="根の探索"><a href="#根の探索" class="headerlink" title="根の探索"></a>根の探索</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">root</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 自身の根が自身出会った場合(根が判明した場合)，根を返す</span></span><br><span class="line">    <span class="keyword">if</span>(per[x]==x) &#123; <span class="keyword">return</span>(x); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 根の探索 および 探索圧縮の実施</span></span><br><span class="line">        per[x] = root(per[x]);</span><br><span class="line">        <span class="keyword">return</span>( per[x]  );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="同一グループであるか調査"><a href="#同一グループであるか調査" class="headerlink" title="同一グループであるか調査"></a>同一グループであるか調査</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">same</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 要素xの根を探索</span></span><br><span class="line">    x = root(x);</span><br><span class="line">    <span class="comment">// 要素yの根を探索</span></span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が一致していれば同一ブループ，一致していなければ異なるグループ</span></span><br><span class="line">    <span class="keyword">if</span>(x == y) &#123; <span class="keyword">return</span>(<span class="literal">true</span>); &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; <span class="keyword">return</span>(<span class="literal">false</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>Union-Findアルゴリズムご理解いただけたでしょうか．<br>なんとなく理解できた方は，一度ご自身で問題を解いてみると良いと思います．<br>理解している部分としていない部分がよく分かると思います．</p>
+<p>さて次回は，ダイクストラを紹介したいと思いますが，<br>私自身もしっかり理解しているとは言い難いので，これから頑張って勉強しますw<br>それでは．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjtjvmvd900012sso9fdgk0mu" class="article-share-link">共有</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/22/Windowsが起動しなくなった話/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windowsが起動しなくなった話</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/">Hexoで作成したブログをGithub.ioで公開してみた</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

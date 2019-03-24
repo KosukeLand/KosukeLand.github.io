@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-2.png">
 <meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-3.png">
 <meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-4.png">
-<meta property="og:updated_time" content="2019-03-18T11:46:15.156Z">
+<meta property="og:updated_time" content="2019-03-24T07:36:47.077Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探索系問題の探索範囲削減方法">
 <meta name="twitter:description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
@@ -118,7 +118,7 @@
 </ul>
 <p>C行6列目の場合，「B行6列目の最適解と同じ」 もしくは 「B行0列目の最適解に荷物Cを加えた解(荷物Cの重量が6kgなので)」 の大きい方が最適解となります．<br>この場合，荷物Cを入れた場合の方がナップサック内の金額が高くなるので，こちらが最適解として選択されます．</p>
 <p>では，図2を例にdpのプログラムで書いてみましょう．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> weight = [<span class="number">11</span>, <span class="number">10</span>, <span class="number">6</span>, <span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> money = [<span class="number">2</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 荷物を全探索(行)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; money.length; i++) &#123;</span><br><span class="line">    <span class="comment">// 重量を全探索(列)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt;= W; j++) &#123;</span><br><span class="line">        <span class="comment">// 現在の袋のに荷物が入れない場合，荷物を袋に入れない</span></span><br><span class="line">        <span class="keyword">if</span> (j - weight[i] &lt; <span class="number">0</span>) &#123; dp[i + <span class="number">1</span>][j] = dp[i][j]; &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> a = dp[i][j - weight[i]] + money[i];　<span class="comment">// 荷物を入れた場合</span></span><br><span class="line">            <span class="keyword">var</span> b = dp[i][j]; <span class="comment">// 荷物を入れない場合</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 金額が最大となる方選択</span></span><br><span class="line">            dp[i + <span class="number">1</span>][j] = <span class="built_in">Math</span>.max(a, b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="3-2-メモ化"><a href="#3-2-メモ化" class="headerlink" title="3.2 メモ化"></a>3.2 メモ化</h2><p>みなさん，<strong>メモ化</strong>ご存知でしょうか！<br>メモ化とは，任意の関数において「入力が同一であれば出力も同一である」性質を生かし，計算結果を再利用することによって計算を省略する手法のことです．<br>動的計画法と考え方は似てますね．というか，ほぼ同じですねw 唯一違うところは，「メモ化は深さ優先探索と同様トップダウンに探索するところ」だと思います．<br>当ブログではこれ以上の説明はしませんが，「もっと知りたい！」という意欲的な方は頭いい人が記載したメモ化説明をご覧いただくと良いと思います．</p>
+<h2 id="3-2-メモ化"><a href="#3-2-メモ化" class="headerlink" title="3.2 メモ化"></a>3.2 メモ化</h2><p>みなさん，<strong>メモ化</strong>ご存知でしょうか！<br>メモ化とは，任意の関数において「入力が同一であれば出力も同一である」性質を生かし，計算結果を再利用することによって計算を省略する手法のことです．<br>動的計画法と考え方は似てますね．というか，ほぼ同じですねw<br>唯一違うところは，「メモ化は深さ優先探索と同様トップダウンに探索するところ」だと思います．<br>当ブログではこれ以上の説明はしませんが，「もっと知りたい！」という意欲的な方は頭いい人が記載したメモ化説明をご覧いただくと良いと思います．</p>
 <p>あと，ここからは私の疑問を書いていきたいのですが，ナップサック問題ってメモ化できますかね？<br>例えば，フィボナッチ数列を解く際にメモ化を利用するケースは多く，実際にプログラムを組んでみると計算省略効果は大きいことが分かります．<br>しかし，ナップサック問題でメモ化しても計算が再利用されないため実行時間が短縮されません．<br>私が思うに，<strong>ナップサック問題では入力が複数(本ブログではn, w)あるため，「メモ化しても再利用対象箇所がない」</strong>と考えております．<br>上手にメモ化してあげれば計算を省略可能かもしれませんが，筆者の頭では無理でした．<br>頭のいい人教えてくださいm(_ _)m</p>
 <hr>
 <h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今回は，探索の省略について記載しました．一通りご理解頂けたら幸いです．<br>ただ，最適解探索系問題のバリエーションは多種多様であり，上記以外の解法が必要な問題もあります．<br>基本を抑えておけば応用も効くと思いますので，いくつか問題を解いて感触をつかんでください．</p>
@@ -126,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtjthr2k0002t6soowfsnzvv" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtjvmvdc00032ssom9145rq1" class="article-share-link">共有</a>
       
       
     </footer>
@@ -182,6 +182,10 @@
     <h3 class="widget-title">最近の投稿</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
         
           <li>
             <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>

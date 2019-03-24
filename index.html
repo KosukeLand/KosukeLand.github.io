@@ -62,6 +62,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Union-Findアルゴリズムを解説する" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/24/Union-Findアルゴリズムを解説する/" class="article-date">
+  <time datetime="2019-03-24T14:30:00.000Z" itemprop="datePublished">2019-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>ここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．<br>過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．<br>その名もUnion-Findです！　それでは，いきましょう！</p>
+<hr>
+<h1 id="2-Union-Findアルゴリズム概要"><a href="#2-Union-Findアルゴリズム概要" class="headerlink" title="2.Union-Findアルゴリズム概要"></a>2.Union-Findアルゴリズム概要</h1><p>Union-Findとは，文字通り<strong>Union</strong>と<strong>Find</strong>を実施するためのアルゴリズムです．<br>UnionとFindとは，</p>
+<ul>
+<li>Union:2つの集合を1つに統合する </li>
+<li>Find: 2つの要素が同一集合に属しているかどうか判定する</li>
+</ul>
+<p>つまりUnion-Findでは，任意の集合同士を結合した際に，任意2つの要素が同一の集合に属しているかを判定する　ことができます．<br>わかりましたか？　これだけの説明では，どのようなケースで利用するかわかりませんね苦笑　具体的な問題を使って説明します．</p>
+<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p><strong>N個の島とM本の橋があります。</strong><br>i番目の橋はAi番目の島とBi番目の島を繋いでおり、双方向に行き来可能です。<br>はじめ、全ての島で橋は存在していません．<br>そこで，橋を順に<strong>建築することにしました．</strong><br>「いくつかの橋を渡って互いに行き来できる2つの島の組(a, b)(a &lt; b) の数」を便利さと呼ぶことにします。<br>各i(1≤i≤M)について、i番目の橋を建築した直後の便利さを求めてください。</p>
+<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>入力は全て整数である。<br>2≤N≤10^5, 1≤M≤10^5<br>1≤Ai&lt;Bi≤N<br>(Ai,Bi) の組は全て異なる。<br>初期状態における便利さは0である。<br><strong>出展：<a href="https://atcoder.jp/contests/abc120/tasks/abc120_d" target="_blank" rel="noopener">https://atcoder.jp/contests/abc120/tasks/abc120_d</a></strong> (※上記の問題は少しアレンジしてます)</p>
+<p>さて，皆さんはどのようなアルゴリズムを利用して解きますか？<br>ここから2つの解法を示します．1つは直感的な解法で，2つめはUnion-Findを利用した解法です．<br>まず直感的な解法をみていきましょう．</p>
+<h3 id="2-1-直感的な解法-Not-Union-Find"><a href="#2-1-直感的な解法-Not-Union-Find" class="headerlink" title="2.1. 直感的な解法(Not Union-Find)"></a>2.1. 直感的な解法(Not Union-Find)</h3><p>問題を解くために島と島同士の関係を保持する必要があるため，<br>インデックスが<strong>島</strong>の表し，配列の要素が<strong>渡航可能な島グループ</strong>を表すような配列を用意します．<br>初期状態では橋がかかっていないため，各島は他の島に渡航することができません<br>つまり，配列の渡航可能な島グループはそれぞれ異なる値をとります．<br>今回は，配列array = [1,2,3,..,N] とします(図1 Before)．<br>この状態ですと，どの島へも渡航不可能なので便利さ0です．</p>
+<p>ここで，島1と島2に橋がかかったとしましょう．<br>すると，島1と島2は渡航可能になるので，島1と島2の渡航可能な島グループはともに1となります．<br>この場合，配列array = [1,1,3,..,N] となり，便利さが1となります(図1 After)．<br>図で表すと下記の様なイメージです．</p>
+<p><img src="images/20190324-1.png" alt="図1: 渡航可能情報を配列で管理" title="図1: 渡航可能情報を配列で管理" width="500"></p>
+<p>このように橋がかかるたびに，配列を更新することで便利さを計算することが可能です．<br>しかし，配列の更新にO(N)必要であり，それを橋の数だけ更新する必要があるため，<strong>実行時間はO(N^M)</strong>となります．</p>
+<h3 id="2-2-Union-Findを利用した解法"><a href="#2-2-Union-Findを利用した解法" class="headerlink" title="2.2. Union-Findを利用した解法"></a>2.2. Union-Findを利用した解法</h3><p>それに対し，Union-Findでは上記の問題をO(N^M)より少ない計算量で解くことが可能です．<br>そのために木を利用します．</p>
+<p><img src="images/20190324-2.png" alt="図2: Union-Findを利用した際の集合同士の結合" title="図2: Union-Findを利用した際の集合同士の結合" width="700"></p>
+<p>Union-Findでは，同じグループに所属する要素をエッジで接続するデータ構造をとります．<br>上記の図では，要素1と要素3がグループ1，要素2と要素4がグループ2に所属することを表しています(図2 Before)．<br>ここでグループ1とグループ2が結合された場合，それぞれのグループ同士を線で結ぶ処理をします(図2 After)．<br>これにより，<strong>2つのグループを結合した際に要素が同一グループに所属しているかどうか</strong>を高速に判定することができます．</p>
+<p><img src="images/20190324-3.png" alt="図3: 根の探索" title="図3: 根の探索" width="350"></p>
+<p>判定方法は，任意要素から順に上へ遡り，根を確認することで実現できます．<br>図3から分かるように2つの要素が同一グループである場合，根は同一になります．<br>反対に異なるグループであれば，根は同一とはなりません．<br>なので，<strong>木の根が同一であれば同一グループ</strong>，<strong>木の根が同一でなければ異なるグループ</strong>　と言えそうです．<br>例えば，図3の要素3と要素4は共に要素1が根であるため，同一グループと言えます．</p>
+<p>このように結合と探索を実施した場合，<strong>結合にO(1),探索にO(木の高さ)</strong>の計算量で完結します．<br>これだけでも直感的な解放よりも高速ですが，Union-Findをさらに高速化するため木の構造を図3から図4の様に修正します．<br>この場合，結合と探索は共に<strong>O(1)</strong>で実施可能です．</p>
+<p><img src="images/20190324-4.png" alt="図3: 探索高速化のため木構造を修正" title="図3: 探索高速化のため木構造を修正" width="350"></p>
+<hr>
+<h1 id="3-Union-Findアルゴリズム実装"><a href="#3-Union-Findアルゴリズム実装" class="headerlink" title="3. Union-Findアルゴリズム実装"></a>3. Union-Findアルゴリズム実装</h1><p>さて，Union-Findを実装しましょう．<br>実装では，<strong>初期化，グループの結合，根の探索，要素同士が同一グループであるか調査</strong>の4つのコンポーネントが必要です．</p>
+<h4 id="初期化"><a href="#初期化" class="headerlink" title="初期化"></a>初期化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funciton init(n)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; n ; i++)&#123;</span><br><span class="line">        <span class="comment">// 自身の根は自分で初期化</span></span><br><span class="line">        per[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="グループの結合"><a href="#グループの結合" class="headerlink" title="グループの結合"></a>グループの結合</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unit</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    x = root(x);</span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が同一であれば，同一グループ(結合の必要なし)</span></span><br><span class="line">    <span class="keyword">if</span>(x == y)&#123; <span class="keyword">return</span>(<span class="number">0</span>); &#125;</span><br><span class="line">    <span class="comment">// 根が異なれば，xの根をyとする(結合)</span></span><br><span class="line">    <span class="keyword">else</span>&#123; ptr[x] = y; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="根の探索"><a href="#根の探索" class="headerlink" title="根の探索"></a>根の探索</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">root</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 自身の根が自身出会った場合(根が判明した場合)，根を返す</span></span><br><span class="line">    <span class="keyword">if</span>(per[x]==x) &#123; <span class="keyword">return</span>(x); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 根の探索 および 探索圧縮の実施</span></span><br><span class="line">        per[x] = root(per[x]);</span><br><span class="line">        <span class="keyword">return</span>( per[x]  );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="同一グループであるか調査"><a href="#同一グループであるか調査" class="headerlink" title="同一グループであるか調査"></a>同一グループであるか調査</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">same</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 要素xの根を探索</span></span><br><span class="line">    x = root(x);</span><br><span class="line">    <span class="comment">// 要素yの根を探索</span></span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が一致していれば同一ブループ，一致していなければ異なるグループ</span></span><br><span class="line">    <span class="keyword">if</span>(x == y) &#123; <span class="keyword">return</span>(<span class="literal">true</span>); &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; <span class="keyword">return</span>(<span class="literal">false</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>Union-Findアルゴリズムご理解いただけたでしょうか．<br>なんとなく理解できた方は，一度ご自身で問題を解いてみると良いと思います．<br>理解している部分としていない部分がよく分かると思います．</p>
+<p>さて次回は，ダイクストラを紹介したいと思いますが，<br>私自身もしっかり理解しているとは言い難いので，これから頑張って勉強しますw<br>それでは．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjtjvmvd900012sso9fdgk0mu" class="article-share-link">共有</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Windowsが起動しなくなった話" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/22/Windowsが起動しなくなった話/" class="article-date">
@@ -91,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjtjthr2i0001t6so85467pes" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjtjvmvdb00022ssoq6jf9z16" class="article-share-link">共有</a>
       
       
     </footer>
@@ -150,7 +218,7 @@
 </ul>
 <p>C行6列目の場合，「B行6列目の最適解と同じ」 もしくは 「B行0列目の最適解に荷物Cを加えた解(荷物Cの重量が6kgなので)」 の大きい方が最適解となります．<br>この場合，荷物Cを入れた場合の方がナップサック内の金額が高くなるので，こちらが最適解として選択されます．</p>
 <p>では，図2を例にdpのプログラムで書いてみましょう．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> weight = [<span class="number">11</span>, <span class="number">10</span>, <span class="number">6</span>, <span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> money = [<span class="number">2</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">1</span>];</span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 荷物を全探索(行)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; money.length; i++) &#123;</span><br><span class="line">    <span class="comment">// 重量を全探索(列)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt;= W; j++) &#123;</span><br><span class="line">        <span class="comment">// 現在の袋のに荷物が入れない場合，荷物を袋に入れない</span></span><br><span class="line">        <span class="keyword">if</span> (j - weight[i] &lt; <span class="number">0</span>) &#123; dp[i + <span class="number">1</span>][j] = dp[i][j]; &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> a = dp[i][j - weight[i]] + money[i];　<span class="comment">// 荷物を入れた場合</span></span><br><span class="line">            <span class="keyword">var</span> b = dp[i][j]; <span class="comment">// 荷物を入れない場合</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 金額が最大となる方選択</span></span><br><span class="line">            dp[i + <span class="number">1</span>][j] = <span class="built_in">Math</span>.max(a, b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="3-2-メモ化"><a href="#3-2-メモ化" class="headerlink" title="3.2 メモ化"></a>3.2 メモ化</h2><p>みなさん，<strong>メモ化</strong>ご存知でしょうか！<br>メモ化とは，任意の関数において「入力が同一であれば出力も同一である」性質を生かし，計算結果を再利用することによって計算を省略する手法のことです．<br>動的計画法と考え方は似てますね．というか，ほぼ同じですねw 唯一違うところは，「メモ化は深さ優先探索と同様トップダウンに探索するところ」だと思います．<br>当ブログではこれ以上の説明はしませんが，「もっと知りたい！」という意欲的な方は頭いい人が記載したメモ化説明をご覧いただくと良いと思います．</p>
+<h2 id="3-2-メモ化"><a href="#3-2-メモ化" class="headerlink" title="3.2 メモ化"></a>3.2 メモ化</h2><p>みなさん，<strong>メモ化</strong>ご存知でしょうか！<br>メモ化とは，任意の関数において「入力が同一であれば出力も同一である」性質を生かし，計算結果を再利用することによって計算を省略する手法のことです．<br>動的計画法と考え方は似てますね．というか，ほぼ同じですねw<br>唯一違うところは，「メモ化は深さ優先探索と同様トップダウンに探索するところ」だと思います．<br>当ブログではこれ以上の説明はしませんが，「もっと知りたい！」という意欲的な方は頭いい人が記載したメモ化説明をご覧いただくと良いと思います．</p>
 <p>あと，ここからは私の疑問を書いていきたいのですが，ナップサック問題ってメモ化できますかね？<br>例えば，フィボナッチ数列を解く際にメモ化を利用するケースは多く，実際にプログラムを組んでみると計算省略効果は大きいことが分かります．<br>しかし，ナップサック問題でメモ化しても計算が再利用されないため実行時間が短縮されません．<br>私が思うに，<strong>ナップサック問題では入力が複数(本ブログではn, w)あるため，「メモ化しても再利用対象箇所がない」</strong>と考えております．<br>上手にメモ化してあげれば計算を省略可能かもしれませんが，筆者の頭では無理でした．<br>頭のいい人教えてくださいm(_ _)m</p>
 <hr>
 <h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今回は，探索の省略について記載しました．一通りご理解頂けたら幸いです．<br>ただ，最適解探索系問題のバリエーションは多種多様であり，上記以外の解法が必要な問題もあります．<br>基本を抑えておけば応用も効くと思いますので，いくつか問題を解いて感触をつかんでください．</p>
@@ -158,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtjthr2k0002t6soowfsnzvv" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtjvmvdc00032ssom9145rq1" class="article-share-link">共有</a>
       
       
     </footer>
@@ -222,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjtjthr2o0003t6sozjrhnu57" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjtjvmvdd00042sso3nwz8xn4" class="article-share-link">共有</a>
       
       
     </footer>
@@ -334,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjtjthr2e0000t6soma6pfdj4" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjtjvmvd300002sso3f481q23" class="article-share-link">共有</a>
       
       
     </footer>
@@ -373,6 +441,10 @@
     <h3 class="widget-title">最近の投稿</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
         
           <li>
             <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
