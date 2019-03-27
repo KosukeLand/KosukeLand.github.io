@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>クイックソート実装できますか？ | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめに先日，「クイックソートの最悪計算量はいくつ？」と聞かれ，「O(NlogN)です！」と高らかに解答して恥ずかしい思いをした筆者です．こんにちは！ 筆者の復習をかねて，今回はクイックソートを取り上げます．それでは行きましょう．  2. クイックソート概要クイックソートは，最良計算量O(NlogN)，平均計算量O(NlogN)，最悪計算量O(N^2)のアルゴリズムです．計算量から分かる様">
+<meta property="og:type" content="article">
+<meta property="og:title" content="クイックソート実装できますか？">
+<meta property="og:url" content="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめに先日，「クイックソートの最悪計算量はいくつ？」と聞かれ，「O(NlogN)です！」と高らかに解答して恥ずかしい思いをした筆者です．こんにちは！ 筆者の復習をかねて，今回はクイックソートを取り上げます．それでは行きましょう．  2. クイックソート概要クイックソートは，最良計算量O(NlogN)，平均計算量O(NlogN)，最悪計算量O(N^2)のアルゴリズムです．計算量から分かる様">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/images/20190327-1.png">
+<meta property="og:updated_time" content="2019-03-27T12:01:45.087Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="クイックソート実装できますか？">
+<meta name="twitter:description" content="1. はじめに先日，「クイックソートの最悪計算量はいくつ？」と聞かれ，「O(NlogN)です！」と高らかに解答して恥ずかしい思いをした筆者です．こんにちは！ 筆者の復習をかねて，今回はクイックソートを取り上げます．それでは行きましょう．  2. クイックソート概要クイックソートは，最良計算量O(NlogN)，平均計算量O(NlogN)，最悪計算量O(N^2)のアルゴリズムです．計算量から分かる様">
+<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/images/20190327-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-クイックソート実装できますか？" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/27/クイックソート実装できますか？/" class="article-date">
+  <time datetime="2019-03-27T12:00:00.000Z" itemprop="datePublished">2019-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      クイックソート実装できますか？
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>先日，「クイックソートの最悪計算量はいくつ？」と聞かれ，<br>「O(NlogN)です！」と高らかに解答して恥ずかしい思いをした筆者です．こんにちは！</p>
+<p>筆者の復習をかねて，今回はクイックソートを取り上げます．<br>それでは行きましょう．</p>
+<hr>
+<h1 id="2-クイックソート概要"><a href="#2-クイックソート概要" class="headerlink" title="2. クイックソート概要"></a>2. クイックソート概要</h1><p>クイックソートは，<strong>最良計算量O(NlogN)，平均計算量O(NlogN)，最悪計算量O(N^2)</strong>のアルゴリズムです．<br>計算量から分かる様に最悪のケースを引かなければ，とってもクイックにソート可能です．</p>
+<p>クイックソート(昇順)は以下の手順で実施します．</p>
+<ol>
+<li>ソート対象の中で基準要素を決定する(ソート対象の中央値が望ましい)</li>
+<li>基準要素よりも「小さい要素のグループ」を前方に，基準要素よりも「大きい要素のグループ」後方に移動する(分割する)</li>
+<li>1,2を繰り返し，各グループの要素が1つになったら終了する</li>
+</ol>
+<p>図で書くとこんな感じです(図1では，グループの先頭要素を基準要素としている)<br><img src="images/20190327-1.png" alt="図1: クイックソートの流れ" title="図1: クイックソートの流れ" width="500"></p>
+<h2 id="2-1-クイックソート最良計算量"><a href="#2-1-クイックソート最良計算量" class="headerlink" title="2.1 クイックソート最良計算量"></a>2.1 クイックソート最良計算量</h2><p>クイックソートで最良計算量となるのは，常にN/2:N/2で分割されるケースで<br>その場合，入れ替え捜査のために配列をNlogN回捜査する必要があるため，実行時間はO(NlogN)となります．<br>※ NlogN = N + (N/2 + N/2) + (N/4 + N/4 + N/4 + N/4) + … +(2 + 2 + … + 2)</p>
+<h2 id="2-2-クイックソート最悪計算量"><a href="#2-2-クイックソート最悪計算量" class="headerlink" title="2.2 クイックソート最悪計算量"></a>2.2 クイックソート最悪計算量</h2><p>クイックソートで最悪計算量となるのは，常に1:N-1で分割されるケースで<br>その場合，入れ替え操作のために配列内をN(N-2)/2回捜査する必要があるため，実行時間はO(N^2)となります．<br>※ N(N+2)/2 = N + N-1 + N-2 + … + 2 </p>
+<hr>
+<h1 id="3-クイックソート実装"><a href="#3-クイックソート実装" class="headerlink" title="3. クイックソート実装"></a>3. クイックソート実装</h1><p>再起関数を使うと簡単に実装できました．<br>(下記の例では，ソート対象配列のスコープはグローバルとします．)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quicksort</span>(<span class="params">left, right</span>)</span></span><br><span class="line"><span class="function">/* クイックソート</span></span><br><span class="line"><span class="function"> * <span class="title">left</span>  : ソートするデータの開始位置</span></span><br><span class="line"><span class="function"> * <span class="title">right</span> : ソートするデータの終了位置</span></span><br><span class="line"><span class="function"> */ </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="keyword">var</span> i = left; <span class="keyword">var</span> j = right;</span><br><span class="line">        <span class="keyword">var</span> tmp;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> pivot = array[<span class="built_in">Math</span>.floor((array[right] + array[left]) / <span class="number">2</span>)]; <span class="comment">/* 中央値が望ましい */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) &#123; <span class="comment">/* a[] を pivot 以上と以下の集まりに分割する */</span></span><br><span class="line">            <span class="keyword">while</span> (array[i] &lt; pivot) &#123; i++; &#125;  <span class="comment">/* array[i] &gt;= pivot となる位置を検索 */</span></span><br><span class="line">            <span class="keyword">while</span> (pivot &lt; array[j]) &#123; j--; &#125;  <span class="comment">/* array[j] &lt;= pivot となる位置を検索 */</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i &gt;= j) <span class="keyword">break</span>;</span><br><span class="line">            tmp = array[i]; array[i] = array[j]; array[j] = tmp; <span class="comment">/* array[i],array[j] を交換 */</span></span><br><span class="line">            i++; j--;</span><br><span class="line">        &#125;</span><br><span class="line">        quicksort(left, i - <span class="number">1</span>);  <span class="comment">/* 分割した左を再帰的にソート */</span></span><br><span class="line">        quicksort(j + <span class="number">1</span>, right); <span class="comment">/* 分割した右を再帰的にソート */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>本日はクイックソートを取り上げました．<br>最近？の高級言語はソートメソッドが用意されているケースが多く，ソートを実装することも少ないと思います．<br>本記事が読者の復習に利用頂けたら幸いです．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjtr2ny4l0001suso03emy665" class="article-share-link">共有</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/24/Union-Findアルゴリズムを解説する/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Union-Findアルゴリズムを解説する</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
