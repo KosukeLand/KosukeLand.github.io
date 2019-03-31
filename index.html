@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="某SIerの技術備忘録">
   
-    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+    <link rel="alternate" href="kosukeland/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -23,7 +23,7 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="kosukeland/css/style.css">
 </head>
 </html>
 <body>
@@ -34,7 +34,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">某SIerの技術備忘録</a>
+        <a href="kosukeland/" id="logo">某SIerの技術備忘録</a>
       </h1>
       
     </div>
@@ -42,14 +42,14 @@
       <nav id="main-nav">
         <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">Home</a>
+          <a class="main-nav-link" href="kosukeland/">Home</a>
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+          <a class="main-nav-link" href="kosukeland/archives">Archives</a>
         
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+          <a id="nav-rss-link" class="nav-icon" href="kosukeland/atom.xml" title="RSSフィード"></a>
         
         <a id="nav-search-btn" class="nav-icon" title="検索"></a>
       </nav>
@@ -62,9 +62,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-しゃくとり法で計算量削減" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="kosukeland/2019/03/31/しゃくとり法で計算量削減/" class="article-date">
+  <time datetime="2019-03-31T14:00:00.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="kosukeland/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>今日は，競技プログラミングで必須のテクニックである<strong>しゃくとり法</strong>について解説していきます．<br>それでは行きましょう！<br>※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが，<br> 思うように勉強が進まなかったので次回以降のネタにします．．．<br> ゆるして(´；ω；｀)ﾌﾞﾜｯ</p>
+<hr>
+<h1 id="2-しゃくとり法とは"><a href="#2-しゃくとり法とは" class="headerlink" title="2. しゃくとり法とは"></a>2. しゃくとり法とは</h1><p>しゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．<br>例えば，文字列の部分集合を発見する問題など通常O(N^2)かかる計算をO(N)で計算可能です．<br>具体例を使って説明します．</p>
+<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p>WUPC2019の開催を記念して、カトーくんは文字列sをプレゼントとしてもらいました。<br>しかしながら、カトーくんは’WA’という文字列が嫌いなので、’WA’という文字列がなくなるまで以下の行動をすることにしました。<br>文字列sを先頭から見ていき、連続する2文字が’WA’である場合、これを’AC’という文字列に置換する。<br>1回の置換を行った場合、文字列の先頭から再び上記の行動を行い、置換が行われなかった場合、終了する。<br>カトーくんが行動を終了したときの文字列を答えよ。</p>
+<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>1≤|s|≤10^5<br>入力される文字列は英大文字のみで構成される。<br>制限時間: 2s<br><strong>出展：<a href="https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a" target="_blank" rel="noopener">https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a</a></strong> </p>
+<p>上記の問題において，入力’CWWWWA’が与えられたとします．<br>ここで入力を頭から捜査し，素直に’WA’を’AC’に変化させていくと<br> <strong>CWWWWA → CWWWAC → CWWACC → CWACCC → CACCCC</strong><br>となります．<br>この場合，N x N回文字列を捜査する必要があるため計算量はO(N^2)です(二重ループが必要)．<br>しかし，文字列の最大サイズは10^5なので，これでは制限時間に間に合いません(TLEの判断に関しては別途ブログで記載したいと思います)</p>
+<p>TLEを回避するために，しゃくとり法を利用してみます．<br>しゃくとり法では，上記の問題を2つのポインタを利用することで文字列に対する捜査回数を減らします．<br>以下の図を利用して説明します．</p>
+<p><img src="/images/20190331-1.png" alt="図1: しゃくとり法の考え方" title="図1: しゃくとり法の考え方" width="600"></p>
+<ol>
+<li><p>文字列を指すポインタ(Left, Right)を用意します(初期状態では，両ポインタとも先頭文字を指します)．<br>LeftとRightが同位置に存在する場合，<br>ポインタが指す文字が”W”以外であれば両ポインタを右へ移動させ，<br>ポインタが指す文字が”W”であればRightのみを右へ移動させます.<br>図1の先頭文字は’C’なので両ポインタを右へ移動させます．</p>
+</li>
+<li><p>2文字目は’W’なので，しゃくとり法のルールに従いRightのみ右へ移動させます．<br>この時，WW…Aを考慮するため，W以外が出現するまでRightを移動させることを忘れないでください．</p>
+</li>
+<li><p>‘W’以外の文字である’A’が出現したので，カトーくんが嫌いな’WA’が存在していることがわかりました．<br>なので，問題文のルールに従いLeftが指す文字を’A’へ置換し，RightとLeftの間にある文字を’C’へ置換します．<br>最後に，Leftの位置をRightと同じにします．</p>
+</li>
+<li><p>Rightが文字列の端に到達した場合，捜査を終了します．</p>
+</li>
+</ol>
+<p>このように，2つのポインタを使って部分集合を発見することで，部分集合に対して処理の処理をO(N)で実施可能です．<br>※ なお，本問題では文字列を後ろから捜査することで しゃくとり法でなくともO(N)で計算可能です苦笑</p>
+<hr>
+<h1 id="3-しゃくとり法の実装"><a href="#3-しゃくとり法の実装" class="headerlink" title="3. しゃくとり法の実装"></a>3. しゃくとり法の実装</h1><p>上記の問題を解くプログラムを実装してみます．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">lines <span class="comment">// 文字列</span></span><br><span class="line">len;  <span class="comment">// 文字数の長さ</span></span><br><span class="line">left = <span class="number">0</span>; right = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// しゃくとり法</span></span><br><span class="line"><span class="keyword">while</span>(right &lt; len)&#123;</span><br><span class="line">    <span class="comment">// "W"が出現したら</span></span><br><span class="line">    <span class="keyword">if</span> (lines[left] == <span class="string">"W"</span>) &#123;</span><br><span class="line">        <span class="comment">// "W"の出現がなくなるまで，rightをカウントアップ</span></span><br><span class="line">        <span class="keyword">while</span> (lines[right + <span class="number">1</span>] == <span class="string">"W"</span>) &#123; right++; &#125;</span><br><span class="line">        right++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// "W"の後に"A"が出現した場合，"WWW...WA" ==&gt; "ACC...CC"に書き換え</span></span><br><span class="line">        <span class="keyword">if</span> (lines[right] == <span class="string">"A"</span>) &#123;</span><br><span class="line">            lines[left] = <span class="string">"A"</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> j = left + <span class="number">1</span>; j &lt;= right; j++) &#123; lines[j] = <span class="string">"C"</span>; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// left == rightに</span></span><br><span class="line">        right++; left = right;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">// "W"が出現していない</span></span><br><span class="line">    <span class="keyword">else</span> &#123; left++; right++; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日はしゃくとり法の説明でした．<br>次は何を題材にブログを買いていきましょうか(遠い目)<br>実は，そろそろネタ切れだったり…苦笑<br>では^^</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjtwse5uk00030tuyc7o7eu3c" class="article-share-link">共有</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-クイックソート実装できますか？" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/27/クイックソート実装できますか？/" class="article-date">
+    <a href="kosukeland/2019/03/27/クイックソート実装できますか？/" class="article-date">
   <time datetime="2019-03-27T12:00:00.000Z" itemprop="datePublished">2019-03-27</time>
 </a>
     
@@ -76,7 +137,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+      <a class="article-title" href="kosukeland/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
     </h1>
   
 
@@ -95,7 +156,7 @@
 <li>基準要素よりも「小さい要素のグループ」を前方に，基準要素よりも「大きい要素のグループ」後方に移動する(分割する)</li>
 <li>1,2を繰り返し，各グループの要素が1つになったら終了する</li>
 </ol>
-<p>図で書くとこんな感じです(図1では，グループの先頭要素を基準要素としている)<br><img src="images/20190327-1.png" alt="図1: クイックソートの流れ" title="図1: クイックソートの流れ" width="500"></p>
+<p>図で書くとこんな感じです(図1では，グループの先頭要素を基準要素としている)<br><img src="/images/20190327-1.png" alt="図1: クイックソートの流れ" title="図1: クイックソートの流れ" width="500"></p>
 <h2 id="2-1-クイックソート最良計算量"><a href="#2-1-クイックソート最良計算量" class="headerlink" title="2.1 クイックソート最良計算量"></a>2.1 クイックソート最良計算量</h2><p>クイックソートで最良計算量となるのは，常にN/2:N/2で分割されるケースで<br>その場合，入れ替え捜査のために配列をNlogN回捜査する必要があるため，実行時間はO(NlogN)となります．<br>※ NlogN = N + (N/2 + N/2) + (N/4 + N/4 + N/4 + N/4) + … +(2 + 2 + … + 2)</p>
 <h2 id="2-2-クイックソート最悪計算量"><a href="#2-2-クイックソート最悪計算量" class="headerlink" title="2.2 クイックソート最悪計算量"></a>2.2 クイックソート最悪計算量</h2><p>クイックソートで最悪計算量となるのは，常に1:N-1で分割されるケースで<br>その場合，入れ替え操作のために配列内をN(N-2)/2回捜査する必要があるため，実行時間はO(N^2)となります．<br>※ N(N+2)/2 = N + N-1 + N-2 + … + 2 </p>
 <hr>
@@ -107,7 +168,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjtr2ny4l0001suso03emy665" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjtwse5ul00040tuyqhzydsh2" class="article-share-link">共有</a>
       
       
     </footer>
@@ -119,7 +180,7 @@
   
     <article id="post-Union-Findアルゴリズムを解説する" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/24/Union-Findアルゴリズムを解説する/" class="article-date">
+    <a href="kosukeland/2019/03/24/Union-Findアルゴリズムを解説する/" class="article-date">
   <time datetime="2019-03-24T14:30:00.000Z" itemprop="datePublished">2019-03-24</time>
 </a>
     
@@ -131,7 +192,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+      <a class="article-title" href="kosukeland/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
     </h1>
   
 
@@ -153,15 +214,15 @@
 <p>さて，皆さんはどのようなアルゴリズムを利用して解きますか？<br>ここから2つの解法を示します．1つは直感的な解法で，2つめはUnion-Findを利用した解法です．<br>まず直感的な解法をみていきましょう．</p>
 <h2 id="2-1-直感的な解法-Not-Union-Find"><a href="#2-1-直感的な解法-Not-Union-Find" class="headerlink" title="2.1. 直感的な解法(Not Union-Find)"></a>2.1. 直感的な解法(Not Union-Find)</h2><p>問題を解くために島と島同士の関係を保持する必要があるため，<br>インデックスが<strong>島</strong>の表し，配列の要素が<strong>渡航可能な島グループ</strong>を表すような配列を用意します．<br>初期状態では橋がかかっていないため，各島は他の島に渡航することができません<br>つまり，配列の渡航可能な島グループはそれぞれ異なる値をとります．<br>今回は，配列array = [1,2,3,..,N] とします(図1 Before)．<br>この状態ですと，どの島へも渡航不可能なので便利さ0です．</p>
 <p>ここで，島1と島2に橋がかかったとしましょう．<br>すると，島1と島2は渡航可能になるので，島1と島2の渡航可能な島グループはともに1となります．<br>この場合，配列array = [1,1,3,..,N] となり，便利さが1となります(図1 After)．<br>図で表すと下記の様なイメージです．</p>
-<p><img src="images/20190324-1.png" alt="図1: 渡航可能情報を配列で管理" title="図1: 渡航可能情報を配列で管理" width="500"></p>
+<p><img src="/images/20190324-1.png" alt="図1: 渡航可能情報を配列で管理" title="図1: 渡航可能情報を配列で管理" width="500"></p>
 <p>このように橋がかかるたびに，配列を更新することで便利さを計算することが可能です．<br>しかし，配列の更新にO(N)必要であり，それを橋の数だけ更新する必要があるため，<strong>実行時間はO(N^M)</strong>となります．</p>
 <h2 id="2-2-Union-Findを利用した解法"><a href="#2-2-Union-Findを利用した解法" class="headerlink" title="2.2. Union-Findを利用した解法"></a>2.2. Union-Findを利用した解法</h2><p>それに対し，Union-Findでは上記の問題をO(N^M)より少ない計算量で解くことが可能です．<br>そのために木を利用します．</p>
-<p><img src="images/20190324-2.png" alt="図2: Union-Findを利用した際の集合同士の結合" title="図2: Union-Findを利用した際の集合同士の結合" width="700"></p>
+<p><img src="/images/20190324-2.png" alt="図2: Union-Findを利用した際の集合同士の結合" title="図2: Union-Findを利用した際の集合同士の結合" width="700"></p>
 <p>Union-Findでは，同じグループに所属する要素をエッジで接続するデータ構造をとります．<br>上記の図では，要素1と要素3がグループ1，要素2と要素4がグループ2に所属することを表しています(図2 Before)．<br>ここでグループ1とグループ2が結合された場合，それぞれのグループ同士を線で結ぶ処理をします(図2 After)．<br>これにより，<strong>2つのグループを結合した際に要素が同一グループに所属しているかどうか</strong>を高速に判定することができます．</p>
-<p><img src="images/20190324-3.png" alt="図3: 根の探索" title="図3: 根の探索" width="350"></p>
+<p><img src="/images/20190324-3.png" alt="図3: 根の探索" title="図3: 根の探索" width="350"></p>
 <p>判定方法は，任意要素から順に上へ遡り，根を確認することで実現できます．<br>図3から分かるように2つの要素が同一グループである場合，根は同一になります．<br>反対に異なるグループであれば，根は同一とはなりません．<br>なので，<strong>木の根が同一であれば同一グループ</strong>，<strong>木の根が同一でなければ異なるグループ</strong>　と言えそうです．<br>例えば，図3の要素3と要素4は共に要素1が根であるため，同一グループと言えます．</p>
 <p>このように結合と探索を実施した場合，<strong>結合にO(1),探索にO(木の高さ)</strong>の計算量で完結します．<br>これだけでも直感的な解放よりも高速ですが，Union-Findをさらに高速化するため木の構造を図3から図4の様に修正します．<br>この場合，結合と探索は共に<strong>O(1)</strong>で実施可能です．</p>
-<p><img src="images/20190324-4.png" alt="図3: 探索高速化のため木構造を修正" title="図3: 探索高速化のため木構造を修正" width="350"></p>
+<p><img src="/images/20190324-4.png" alt="図3: 探索高速化のため木構造を修正" title="図3: 探索高速化のため木構造を修正" width="350"></p>
 <hr>
 <h1 id="3-Union-Findアルゴリズム実装"><a href="#3-Union-Findアルゴリズム実装" class="headerlink" title="3. Union-Findアルゴリズム実装"></a>3. Union-Findアルゴリズム実装</h1><p>さて，Union-Findを実装しましょう．<br>実装では，<strong>初期化，グループの結合，根の探索，要素同士が同一グループであるか調査</strong>の4つのコンポーネントが必要です．</p>
 <h4 id="初期化"><a href="#初期化" class="headerlink" title="初期化"></a>初期化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funciton init(n)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; n ; i++)&#123;</span><br><span class="line">        <span class="comment">// 自身の根は自分で初期化</span></span><br><span class="line">        per[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -175,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjtr2ny4h0000susoi1mfz47p" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjtwse5uh00010tuyngrs3dgw" class="article-share-link">共有</a>
       
       
     </footer>
@@ -187,7 +248,7 @@
   
     <article id="post-Windowsが起動しなくなった話" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/22/Windowsが起動しなくなった話/" class="article-date">
+    <a href="kosukeland/2019/03/22/Windowsが起動しなくなった話/" class="article-date">
   <time datetime="2019-03-22T08:40:00.000Z" itemprop="datePublished">2019-03-22</time>
 </a>
     
@@ -199,7 +260,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+      <a class="article-title" href="kosukeland/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
     </h1>
   
 
@@ -217,7 +278,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjtr2ny4n0002susoddzhl09e" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjtwse5uj00020tuy9hpw4qea" class="article-share-link">共有</a>
       
       
     </footer>
@@ -229,7 +290,7 @@
   
     <article id="post-探索系問題の探索範囲削減方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/18/探索系問題の探索範囲削減方法/" class="article-date">
+    <a href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/" class="article-date">
   <time datetime="2019-03-18T11:45:00.000Z" itemprop="datePublished">2019-03-18</time>
 </a>
     
@@ -241,7 +302,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+      <a class="article-title" href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
     </h1>
   
 
@@ -253,11 +314,11 @@
 <h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．<br>そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．<br>それではいきましょう．</p>
 <hr>
 <h1 id="2-枝刈り"><a href="#2-枝刈り" class="headerlink" title="2. 枝刈り"></a>2. 枝刈り</h1><p>もっとも直感的でわかりやすい手法の1つです．<br>文字通り，ツリーの枝を刈ることによって探索範囲を減らします．<br>図を使って説明します．</p>
-<p><img src="images/20190312-1.png" alt="図1: 単一荷物重量で枝刈り" title="図1: 単一荷物重量で枝刈り" width="700"></p>
+<p><img src="/images/20190312-1.png" alt="図1: 単一荷物重量で枝刈り" title="図1: 単一荷物重量で枝刈り" width="700"></p>
 <p>図1では，ナップサック問題を深さ優先探索で解くことを考えています．荷物それぞれの重さとナップサック許容重量は図1の通りです．<br>ここで，荷物Bの重さ(100kg)に着目すると，ナップサックの許容重量を超過していることが分かります．<br>つまり，「荷物Bをナップサックに入れる」というケースは考えなくて良い　と言えます．<br>これが探索における枝刈りです．</p>
 <p>深さ優先探索に枝刈りを追加したプログラムを以下に記載します．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth = <span class="number">4</span>;                <span class="comment">// 木の深さ</span></span><br><span class="line"><span class="keyword">var</span> weight = [<span class="number">5</span>, <span class="number">100</span>, <span class="number">10</span>, <span class="number">1</span>]; <span class="comment">// 荷物の重さ</span></span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;                   <span class="comment">// ナップサックの許容重量</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// ナップサック許容重量よりもn番目の荷物が重い場合，continue(枝刈り)</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">1</span> &amp;&amp; W &lt; weight[n]) &#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line"></span><br><span class="line">        comb[n] = i;        <span class="comment">//iが0:入れない，iが1:入れる</span></span><br><span class="line">        dfs(n + <span class="number">1</span>, comb);   <span class="comment">// n+1番目を探索</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上記のように，荷物の重量がナップサックの許容重量を超えている場合は，荷物ごとに枝刈り可否を検討すれば良いです．<br>しかし，そのようなケースは稀ですので，上記の方法だけでは十分に枝刈りができません．<br>そこで，荷物の合計重量がナップサックの許容重量を超えている場合も，枝刈りしたいと思います．</p>
-<p><img src="images/20190312-2.png" alt="図2: 荷物重量で枝刈り" title="図2: 荷物重量で枝刈り" width="700"></p>
+<p><img src="/images/20190312-2.png" alt="図2: 荷物重量で枝刈り" title="図2: 荷物重量で枝刈り" width="700"></p>
 <p>図2の場合，荷物Aと荷物Bをナップサックに入れると許容重量を超えることが分かります．<br>つまり，これ以上の探索を省略することができます．</p>
 <p>先ほどのプログラムを改良することで，それを実現できます．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth = <span class="number">4</span>;                <span class="comment">// 木の深さ</span></span><br><span class="line"><span class="keyword">var</span> weight = [<span class="number">11</span>, <span class="number">10</span>, <span class="number">6</span>, <span class="number">1</span>];  <span class="comment">// 荷物の重</span></span><br><span class="line"><span class="keyword">var</span> money = [<span class="number">2</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">1</span>];    <span class="comment">// 荷物の金額</span></span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;                   <span class="comment">// ナップサックの許容重量</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="comment">// w: 袋に入っている荷物の重量</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, w, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// n番目の荷物を入れてナップサックの重量超過となった場合，continue(枝刈り)</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">1</span> &amp;&amp; (W &lt; weight[n] || W &lt; w + weight[n])) &#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line"></span><br><span class="line">        comb[n] = i;        <span class="comment">//iが0:入れない，iが1:入れる</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 荷物を入れない場合</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">0</span>) &#123; dfs(n + <span class="number">1</span>, w, comb); &#125;     <span class="comment">// n+1番目を探索</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 荷物を入れる場合</span></span><br><span class="line">        <span class="keyword">else</span> &#123; dfs(n + <span class="number">1</span>, w + weight[n], comb); &#125; <span class="comment">// wの容量をweight[n]だけ増やし，n+1番目を探索        </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>プログラムでは，ナップサック内の荷物の合計を管理する変数wをdfs関数に渡しています．</p>
@@ -265,9 +326,9 @@
 <p>では，枝刈りが使い得ないような問題に対して効率的に探索する手法を以下に示します．<br>ここから少し難しくなりますので，頑張って勉強しましょう！</p>
 <hr>
 <h1 id="3-部分集合の最適化"><a href="#3-部分集合の最適化" class="headerlink" title="3. 部分集合の最適化"></a>3. 部分集合の最適化</h1><h2 id="3-1-動的計画法-dp"><a href="#3-1-動的計画法-dp" class="headerlink" title="3.1 動的計画法(dp)"></a>3.1 動的計画法(dp)</h2><p>深さ優先探索では，再帰関数を利用してトップダウンに探索をしていました．<br>しかし，動的計画法ではボトムアップで部分集合の最適解を発見していくことで，無駄な計算を省略していきます．<br>例えば，図3のようなツリーをボトムアップで探索する場合，赤枠部分は互いに同じツリー構造をしていることが分かります．<br>同一ツリー構造であれば，最適解は同一であると考えられるため，これらを複数回計算する必要はありません．<br>ツリーを探索をする場合，このように部分最適解を記憶しておき再利用することがとても重要になります．</p>
-<p><img src="images/20190312-3.png" alt="図3: dpの考え方" title="図3: dpの考え方" width="600"></p>
+<p><img src="/images/20190312-3.png" alt="図3: dpの考え方" title="図3: dpの考え方" width="600"></p>
 <p>それでは，dpについて具体的にみていきましょう．</p>
-<p><img src="images/20190312-4.png" alt="図4: dpの考え方" title="図4: dpの考え方" width="700"></p>
+<p><img src="/images/20190312-4.png" alt="図4: dpの考え方" title="図4: dpの考え方" width="700"></p>
 <p>図(表？)を見てください．今まで，ツリーの図を記載していたので，「表なの？」言われそうですね．<br>そうです．dpでは部分集合の最適解を表に記載すると分かりやすいです．</p>
 <p>図3は，図2の例をdpで解く場合の考え方を示しています．表の行は荷物を，列はナップサック許容重量を表しています．<br>本問題では荷物を4つ，ナップサック許容重量を20kgとしているため，4行20列の表を使います．<br>表の中には部分集合の最適解が記載されており，例えばC行6列目の数字は「荷物A，荷物B，荷物Cとナップサック許容重量6kg」の場合の最適解が記載されています．<br>では，C行6列目の最適解はどのように算出されているのでしょうか．<br>部分集合(ナップサック許容重量)nの最適解は，以下の2つのどちらかであることがわかっています．</p>
 <ul>
@@ -284,7 +345,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtr2ny4p0004suso8yqs9le8" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtwse5um00050tuygjboelln" class="article-share-link">共有</a>
       
       
     </footer>
@@ -296,7 +357,7 @@
   
     <article id="post-深さ優先探索について" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/10/深さ優先探索について/" class="article-date">
+    <a href="kosukeland/2019/03/10/深さ優先探索について/" class="article-date">
   <time datetime="2019-03-10T14:20:00.000Z" itemprop="datePublished">2019-03-10</time>
 </a>
     
@@ -308,7 +369,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+      <a class="article-title" href="kosukeland/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
     </h1>
   
 
@@ -323,7 +384,7 @@
 <p>参考：筆者のGithub<br><strong><em><a href="https://github.com/KosukeLand" target="_blank" rel="noopener">https://github.com/KosukeLand</a></em></strong></p>
 <hr>
 <h1 id="2-深さ優先探索について"><a href="#2-深さ優先探索について" class="headerlink" title="2. 深さ優先探索について"></a>2. 深さ優先探索について</h1><p>コンピュータサイエンスを学んだ方なら，勉強したことがあるかもしれません．<br>深さ優先探索と名前が付いている通り，探索アルゴリズムの1つです．プロコンでは必須の知識です．</p>
-<p>では「3つの事象(A,B,C)を順序付きで選択する場合」を例に深さ優先探索について説明します．<br><img src="images/20190310-1.png" alt="図1: 深さ優先全探索" title="図1: 深さ優先全探索" width="700"><br>深さ優先探索では物事をツリー状に整理し，ツリーの深いところから順に探索をします．<br>探索は図1の数字の順に実施され，<strong>1回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Bを選択する場合</strong> → <strong>…</strong>といった具合です．</p>
+<p>では「3つの事象(A,B,C)を順序付きで選択する場合」を例に深さ優先探索について説明します．<br><img src="/images/20190310-1.png" alt="図1: 深さ優先全探索" title="図1: 深さ優先全探索" width="700"><br>深さ優先探索では物事をツリー状に整理し，ツリーの深いところから順に探索をします．<br>探索は図1の数字の順に実施され，<strong>1回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Bを選択する場合</strong> → <strong>…</strong>といった具合です．</p>
 <p>では，深さ優先探索はどのような問題を解く際に利用されるのでしょうか．<br>具体例をあげてみましょう．</p>
 <h3 id="深さ優先探索で解く問題"><a href="#深さ優先探索で解く問題" class="headerlink" title="深さ優先探索で解く問題"></a>深さ優先探索で解く問題</h3><p>ナップサックに荷物を入れていく．<br>荷物には、それぞれ重さと金額が設定されており，ナップサック内に入っている荷物の金額を最大化したい．<br>荷物はそれぞれ1つしか存在しない．<br>ナップサックには合計5kgまでしか荷物が入らない．</p>
 <ul>
@@ -338,7 +399,7 @@
 <li>同じ荷物は複数存在しない．</li>
 <li>A-B-Cと荷物を入れた場合とA-C-Bと荷物を入れた場合では，ナップサックの中身は同じ(順序考慮不要)．</li>
 </ul>
-<p>だからです．<br>なので考え方を少し変えて，以下のように「どの荷物を入れるか」だけを考えます．<br><img src="images/20190310-2.png" alt="図2: ナップサック問題全探索" title="図2: ナップサック問題全探索" width="700"><br>図2では，2回目の試行の途中まで記載しました．<br>各試行では，「荷物を入れる」 or 「荷物を入れない」のみを検討してしています．<br>なので図2の赤印は，ナップサックに荷物Aのみ入っている状況です．</p>
+<p>だからです．<br>なので考え方を少し変えて，以下のように「どの荷物を入れるか」だけを考えます．<br><img src="/images/20190310-2.png" alt="図2: ナップサック問題全探索" title="図2: ナップサック問題全探索" width="700"><br>図2では，2回目の試行の途中まで記載しました．<br>各試行では，「荷物を入れる」 or 「荷物を入れない」のみを検討してしています．<br>なので図2の赤印は，ナップサックに荷物Aのみ入っている状況です．</p>
 <p>上記の考え方でプログラムを書くと，以下のようになります．</p>
 <p><strong>サンプル2</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth; <span class="comment">// 木の深さ</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成(0:入れない，1:入れる)　←サンプル1と異なる箇所</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        comb[n] = i; <span class="comment">// n番目にi番目の荷物を袋に入れる</span></span><br><span class="line">        dfs(n + <span class="number">1</span>, comb); <span class="comment">// n+1番目を探索</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>この場合，配列combが取り得る値は <strong>[0,0,0]〜[1,1,1]</strong> であり，<strong>8通り</strong>探索すればよいとわかります．</p>
@@ -348,7 +409,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjtr2ny4q0005susotdokdihf" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjtwse5un00060tuygl7y1gp1" class="article-share-link">共有</a>
       
       
     </footer>
@@ -360,7 +421,7 @@
   
     <article id="post-HEXOで作成したブログをGithub-ioで公開してみた" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" class="article-date">
+    <a href="kosukeland/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" class="article-date">
   <time datetime="2019-03-04T10:00:00.000Z" itemprop="datePublished">2019-03-04</time>
 </a>
     
@@ -372,7 +433,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/">Hexoで作成したブログをGithub.ioで公開してみた</a>
+      <a class="article-title" href="kosukeland/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/">Hexoで作成したブログをGithub.ioで公開してみた</a>
     </h1>
   
 
@@ -460,7 +521,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjtr2ny4o0003susojhypmd4y" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjtwse5ud00000tuyhxrc2foe" class="article-share-link">共有</a>
       
       
     </footer>
@@ -488,7 +549,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="kosukeland/archives/2019/03/">三月 2019</a></li></ul>
     </div>
   </div>
 
@@ -501,23 +562,23 @@
       <ul>
         
           <li>
-            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+            <a href="kosukeland/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
           </li>
         
           <li>
-            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+            <a href="kosukeland/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
           </li>
         
           <li>
-            <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+            <a href="kosukeland/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
           </li>
         
           <li>
-            <a href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+            <a href="kosukeland/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
           </li>
         
           <li>
-            <a href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+            <a href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
           </li>
         
       </ul>
@@ -540,9 +601,9 @@
     </div>
     <nav id="mobile-nav">
   
-    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="kosukeland/" class="mobile-nav-link">Home</a>
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+    <a href="kosukeland/archives" class="mobile-nav-link">Archives</a>
   
 </nav>
     
@@ -550,11 +611,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <link rel="stylesheet" href="kosukeland/fancybox/jquery.fancybox.css">
+  <script src="kosukeland/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
+<script src="kosukeland/js/script.js"></script>
 
 
 

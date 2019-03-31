@@ -14,17 +14,17 @@
 <meta property="og:site_name" content="某SIerの技術備忘録">
 <meta property="og:description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
 <meta property="og:locale" content="ja">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-1.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-2.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-3.png">
-<meta property="og:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-4.png">
-<meta property="og:updated_time" content="2019-03-24T07:36:47.077Z">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190312-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190312-2.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190312-3.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190312-4.png">
+<meta property="og:updated_time" content="2019-03-31T07:44:02.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探索系問題の探索範囲削減方法">
 <meta name="twitter:description" content="1. はじめに前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．それではいきましょう．  2. 枝刈りもっとも直感的でわかりやすい手法の1つです．文字通り，ツリーの枝を刈ることによって探索範囲を減らします．図を使って説明します．">
-<meta name="twitter:image" content="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/images/20190312-1.png">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20190312-1.png">
   
-    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+    <link rel="alternate" href="kosukeland/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -32,7 +32,7 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="kosukeland/css/style.css">
 </head>
 </html>
 <body>
@@ -43,7 +43,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">某SIerの技術備忘録</a>
+        <a href="kosukeland/" id="logo">某SIerの技術備忘録</a>
       </h1>
       
     </div>
@@ -51,14 +51,14 @@
       <nav id="main-nav">
         <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">Home</a>
+          <a class="main-nav-link" href="kosukeland/">Home</a>
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+          <a class="main-nav-link" href="kosukeland/archives">Archives</a>
         
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+          <a id="nav-rss-link" class="nav-icon" href="kosukeland/atom.xml" title="RSSフィード"></a>
         
         <a id="nav-search-btn" class="nav-icon" title="検索"></a>
       </nav>
@@ -71,7 +71,7 @@
       <div class="outer">
         <section id="main"><article id="post-探索系問題の探索範囲削減方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/18/探索系問題の探索範囲削減方法/" class="article-date">
+    <a href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/" class="article-date">
   <time datetime="2019-03-18T11:45:00.000Z" itemprop="datePublished">2019-03-18</time>
 </a>
     
@@ -95,11 +95,11 @@
 <h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>前回のブログで深さ優先探索について記載しましたが，単に深さ優先で全探索していては実行時間が増大してしまうケースが多いです．<br>そこで少しアルゴリズムを工夫し，実行時間を短縮する手法について今日は書いていきたいと思います．<br>それではいきましょう．</p>
 <hr>
 <h1 id="2-枝刈り"><a href="#2-枝刈り" class="headerlink" title="2. 枝刈り"></a>2. 枝刈り</h1><p>もっとも直感的でわかりやすい手法の1つです．<br>文字通り，ツリーの枝を刈ることによって探索範囲を減らします．<br>図を使って説明します．</p>
-<p><img src="images/20190312-1.png" alt="図1: 単一荷物重量で枝刈り" title="図1: 単一荷物重量で枝刈り" width="700"></p>
+<p><img src="/images/20190312-1.png" alt="図1: 単一荷物重量で枝刈り" title="図1: 単一荷物重量で枝刈り" width="700"></p>
 <p>図1では，ナップサック問題を深さ優先探索で解くことを考えています．荷物それぞれの重さとナップサック許容重量は図1の通りです．<br>ここで，荷物Bの重さ(100kg)に着目すると，ナップサックの許容重量を超過していることが分かります．<br>つまり，「荷物Bをナップサックに入れる」というケースは考えなくて良い　と言えます．<br>これが探索における枝刈りです．</p>
 <p>深さ優先探索に枝刈りを追加したプログラムを以下に記載します．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth = <span class="number">4</span>;                <span class="comment">// 木の深さ</span></span><br><span class="line"><span class="keyword">var</span> weight = [<span class="number">5</span>, <span class="number">100</span>, <span class="number">10</span>, <span class="number">1</span>]; <span class="comment">// 荷物の重さ</span></span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;                   <span class="comment">// ナップサックの許容重量</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// ナップサック許容重量よりもn番目の荷物が重い場合，continue(枝刈り)</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">1</span> &amp;&amp; W &lt; weight[n]) &#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line"></span><br><span class="line">        comb[n] = i;        <span class="comment">//iが0:入れない，iが1:入れる</span></span><br><span class="line">        dfs(n + <span class="number">1</span>, comb);   <span class="comment">// n+1番目を探索</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上記のように，荷物の重量がナップサックの許容重量を超えている場合は，荷物ごとに枝刈り可否を検討すれば良いです．<br>しかし，そのようなケースは稀ですので，上記の方法だけでは十分に枝刈りができません．<br>そこで，荷物の合計重量がナップサックの許容重量を超えている場合も，枝刈りしたいと思います．</p>
-<p><img src="images/20190312-2.png" alt="図2: 荷物重量で枝刈り" title="図2: 荷物重量で枝刈り" width="700"></p>
+<p><img src="/images/20190312-2.png" alt="図2: 荷物重量で枝刈り" title="図2: 荷物重量で枝刈り" width="700"></p>
 <p>図2の場合，荷物Aと荷物Bをナップサックに入れると許容重量を超えることが分かります．<br>つまり，これ以上の探索を省略することができます．</p>
 <p>先ほどのプログラムを改良することで，それを実現できます．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth = <span class="number">4</span>;                <span class="comment">// 木の深さ</span></span><br><span class="line"><span class="keyword">var</span> weight = [<span class="number">11</span>, <span class="number">10</span>, <span class="number">6</span>, <span class="number">1</span>];  <span class="comment">// 荷物の重</span></span><br><span class="line"><span class="keyword">var</span> money = [<span class="number">2</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">1</span>];    <span class="comment">// 荷物の金額</span></span><br><span class="line"><span class="keyword">var</span> W = <span class="number">20</span>;                   <span class="comment">// ナップサックの許容重量</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="comment">// w: 袋に入っている荷物の重量</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, w, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// n番目の荷物を入れてナップサックの重量超過となった場合，continue(枝刈り)</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">1</span> &amp;&amp; (W &lt; weight[n] || W &lt; w + weight[n])) &#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line"></span><br><span class="line">        comb[n] = i;        <span class="comment">//iが0:入れない，iが1:入れる</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 荷物を入れない場合</span></span><br><span class="line">        <span class="keyword">if</span> (i === <span class="number">0</span>) &#123; dfs(n + <span class="number">1</span>, w, comb); &#125;     <span class="comment">// n+1番目を探索</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 荷物を入れる場合</span></span><br><span class="line">        <span class="keyword">else</span> &#123; dfs(n + <span class="number">1</span>, w + weight[n], comb); &#125; <span class="comment">// wの容量をweight[n]だけ増やし，n+1番目を探索        </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>プログラムでは，ナップサック内の荷物の合計を管理する変数wをdfs関数に渡しています．</p>
@@ -107,9 +107,9 @@
 <p>では，枝刈りが使い得ないような問題に対して効率的に探索する手法を以下に示します．<br>ここから少し難しくなりますので，頑張って勉強しましょう！</p>
 <hr>
 <h1 id="3-部分集合の最適化"><a href="#3-部分集合の最適化" class="headerlink" title="3. 部分集合の最適化"></a>3. 部分集合の最適化</h1><h2 id="3-1-動的計画法-dp"><a href="#3-1-動的計画法-dp" class="headerlink" title="3.1 動的計画法(dp)"></a>3.1 動的計画法(dp)</h2><p>深さ優先探索では，再帰関数を利用してトップダウンに探索をしていました．<br>しかし，動的計画法ではボトムアップで部分集合の最適解を発見していくことで，無駄な計算を省略していきます．<br>例えば，図3のようなツリーをボトムアップで探索する場合，赤枠部分は互いに同じツリー構造をしていることが分かります．<br>同一ツリー構造であれば，最適解は同一であると考えられるため，これらを複数回計算する必要はありません．<br>ツリーを探索をする場合，このように部分最適解を記憶しておき再利用することがとても重要になります．</p>
-<p><img src="images/20190312-3.png" alt="図3: dpの考え方" title="図3: dpの考え方" width="600"></p>
+<p><img src="/images/20190312-3.png" alt="図3: dpの考え方" title="図3: dpの考え方" width="600"></p>
 <p>それでは，dpについて具体的にみていきましょう．</p>
-<p><img src="images/20190312-4.png" alt="図4: dpの考え方" title="図4: dpの考え方" width="700"></p>
+<p><img src="/images/20190312-4.png" alt="図4: dpの考え方" title="図4: dpの考え方" width="700"></p>
 <p>図(表？)を見てください．今まで，ツリーの図を記載していたので，「表なの？」言われそうですね．<br>そうです．dpでは部分集合の最適解を表に記載すると分かりやすいです．</p>
 <p>図3は，図2の例をdpで解く場合の考え方を示しています．表の行は荷物を，列はナップサック許容重量を表しています．<br>本問題では荷物を4つ，ナップサック許容重量を20kgとしているため，4行20列の表を使います．<br>表の中には部分集合の最適解が記載されており，例えばC行6列目の数字は「荷物A，荷物B，荷物Cとナップサック許容重量6kg」の場合の最適解が記載されています．<br>では，C行6列目の最適解はどのように算出されているのでしょうか．<br>部分集合(ナップサック許容重量)nの最適解は，以下の2つのどちらかであることがわかっています．</p>
 <ul>
@@ -126,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtr2ny4p0004suso8yqs9le8" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjtwse5um00050tuygjboelln" class="article-share-link">共有</a>
       
       
     </footer>
@@ -135,7 +135,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/03/22/Windowsが起動しなくなった話/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="kosukeland/2019/03/22/Windowsが起動しなくなった話/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">次の記事</strong>
       <div class="article-nav-title">
         
@@ -145,7 +145,7 @@
     </a>
   
   
-    <a href="/2019/03/10/深さ優先探索について/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="kosukeland/2019/03/10/深さ優先探索について/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">前の記事</strong>
       <div class="article-nav-title">深さ優先探索について</div>
     </a>
@@ -171,7 +171,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="kosukeland/archives/2019/03/">三月 2019</a></li></ul>
     </div>
   </div>
 
@@ -184,23 +184,23 @@
       <ul>
         
           <li>
-            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+            <a href="kosukeland/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
           </li>
         
           <li>
-            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+            <a href="kosukeland/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
           </li>
         
           <li>
-            <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+            <a href="kosukeland/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
           </li>
         
           <li>
-            <a href="/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+            <a href="kosukeland/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
           </li>
         
           <li>
-            <a href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+            <a href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
           </li>
         
       </ul>
@@ -223,9 +223,9 @@
     </div>
     <nav id="mobile-nav">
   
-    <a href="/" class="mobile-nav-link">Home</a>
+    <a href="kosukeland/" class="mobile-nav-link">Home</a>
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+    <a href="kosukeland/archives" class="mobile-nav-link">Archives</a>
   
 </nav>
     
@@ -233,11 +233,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <link rel="stylesheet" href="kosukeland/fancybox/jquery.fancybox.css">
+  <script src="kosukeland/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
+<script src="kosukeland/js/script.js"></script>
 
 
 

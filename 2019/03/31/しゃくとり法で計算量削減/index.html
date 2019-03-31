@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>しゃくとり法で計算量削減 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめに今日は，競技プログラミングで必須のテクニックであるしゃくとり法について解説していきます．それでは行きましょう！※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが， 思うように勉強が進まなかったので次回以降のネタにします．．． ゆるして(´；ω；｀)ﾌﾞﾜｯ  2. しゃくとり法とはしゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．">
+<meta property="og:type" content="article">
+<meta property="og:title" content="しゃくとり法で計算量削減">
+<meta property="og:url" content="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめに今日は，競技プログラミングで必須のテクニックであるしゃくとり法について解説していきます．それでは行きましょう！※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが， 思うように勉強が進まなかったので次回以降のネタにします．．． ゆるして(´；ω；｀)ﾌﾞﾜｯ  2. しゃくとり法とはしゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190331-1.png">
+<meta property="og:updated_time" content="2019-03-31T10:33:06.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="しゃくとり法で計算量削減">
+<meta name="twitter:description" content="1. はじめに今日は，競技プログラミングで必須のテクニックであるしゃくとり法について解説していきます．それでは行きましょう！※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが， 思うように勉強が進まなかったので次回以降のネタにします．．． ゆるして(´；ω；｀)ﾌﾞﾜｯ  2. しゃくとり法とはしゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20190331-1.png">
+  
+    <link rel="alternate" href="kosukeland/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="kosukeland/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="kosukeland/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="kosukeland/">Home</a>
+        
+          <a class="main-nav-link" href="kosukeland/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="kosukeland/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-しゃくとり法で計算量削減" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="kosukeland/2019/03/31/しゃくとり法で計算量削減/" class="article-date">
+  <time datetime="2019-03-31T14:00:00.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      しゃくとり法で計算量削減
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>今日は，競技プログラミングで必須のテクニックである<strong>しゃくとり法</strong>について解説していきます．<br>それでは行きましょう！<br>※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが，<br> 思うように勉強が進まなかったので次回以降のネタにします．．．<br> ゆるして(´；ω；｀)ﾌﾞﾜｯ</p>
+<hr>
+<h1 id="2-しゃくとり法とは"><a href="#2-しゃくとり法とは" class="headerlink" title="2. しゃくとり法とは"></a>2. しゃくとり法とは</h1><p>しゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．<br>例えば，文字列の部分集合を発見する問題など通常O(N^2)かかる計算をO(N)で計算可能です．<br>具体例を使って説明します．</p>
+<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p>WUPC2019の開催を記念して、カトーくんは文字列sをプレゼントとしてもらいました。<br>しかしながら、カトーくんは’WA’という文字列が嫌いなので、’WA’という文字列がなくなるまで以下の行動をすることにしました。<br>文字列sを先頭から見ていき、連続する2文字が’WA’である場合、これを’AC’という文字列に置換する。<br>1回の置換を行った場合、文字列の先頭から再び上記の行動を行い、置換が行われなかった場合、終了する。<br>カトーくんが行動を終了したときの文字列を答えよ。</p>
+<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>1≤|s|≤10^5<br>入力される文字列は英大文字のみで構成される。<br>制限時間: 2s<br><strong>出展：<a href="https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a" target="_blank" rel="noopener">https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a</a></strong> </p>
+<p>上記の問題において，入力’CWWWWA’が与えられたとします．<br>ここで入力を頭から捜査し，素直に’WA’を’AC’に変化させていくと<br> <strong>CWWWWA → CWWWAC → CWWACC → CWACCC → CACCCC</strong><br>となります．<br>この場合，N x N回文字列を捜査する必要があるため計算量はO(N^2)です(二重ループが必要)．<br>しかし，文字列の最大サイズは10^5なので，これでは制限時間に間に合いません(TLEの判断に関しては別途ブログで記載したいと思います)</p>
+<p>TLEを回避するために，しゃくとり法を利用してみます．<br>しゃくとり法では，上記の問題を2つのポインタを利用することで文字列に対する捜査回数を減らします．<br>以下の図を利用して説明します．</p>
+<p><img src="/images/20190331-1.png" alt="図1: しゃくとり法の考え方" title="図1: しゃくとり法の考え方" width="600"></p>
+<ol>
+<li><p>文字列を指すポインタ(Left, Right)を用意します(初期状態では，両ポインタとも先頭文字を指します)．<br>LeftとRightが同位置に存在する場合，<br>ポインタが指す文字が”W”以外であれば両ポインタを右へ移動させ，<br>ポインタが指す文字が”W”であればRightのみを右へ移動させます.<br>図1の先頭文字は’C’なので両ポインタを右へ移動させます．</p>
+</li>
+<li><p>2文字目は’W’なので，しゃくとり法のルールに従いRightのみ右へ移動させます．<br>この時，WW…Aを考慮するため，W以外が出現するまでRightを移動させることを忘れないでください．</p>
+</li>
+<li><p>‘W’以外の文字である’A’が出現したので，カトーくんが嫌いな’WA’が存在していることがわかりました．<br>なので，問題文のルールに従いLeftが指す文字を’A’へ置換し，RightとLeftの間にある文字を’C’へ置換します．<br>最後に，Leftの位置をRightと同じにします．</p>
+</li>
+<li><p>Rightが文字列の端に到達した場合，捜査を終了します．</p>
+</li>
+</ol>
+<p>このように，2つのポインタを使って部分集合を発見することで，部分集合に対して処理の処理をO(N)で実施可能です．<br>※ なお，本問題では文字列を後ろから捜査することで しゃくとり法でなくともO(N)で計算可能です苦笑</p>
+<hr>
+<h1 id="3-しゃくとり法の実装"><a href="#3-しゃくとり法の実装" class="headerlink" title="3. しゃくとり法の実装"></a>3. しゃくとり法の実装</h1><p>上記の問題を解くプログラムを実装してみます．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">lines <span class="comment">// 文字列</span></span><br><span class="line">len;  <span class="comment">// 文字数の長さ</span></span><br><span class="line">left = <span class="number">0</span>; right = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// しゃくとり法</span></span><br><span class="line"><span class="keyword">while</span>(right &lt; len)&#123;</span><br><span class="line">    <span class="comment">// "W"が出現したら</span></span><br><span class="line">    <span class="keyword">if</span> (lines[left] == <span class="string">"W"</span>) &#123;</span><br><span class="line">        <span class="comment">// "W"の出現がなくなるまで，rightをカウントアップ</span></span><br><span class="line">        <span class="keyword">while</span> (lines[right + <span class="number">1</span>] == <span class="string">"W"</span>) &#123; right++; &#125;</span><br><span class="line">        right++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// "W"の後に"A"が出現した場合，"WWW...WA" ==&gt; "ACC...CC"に書き換え</span></span><br><span class="line">        <span class="keyword">if</span> (lines[right] == <span class="string">"A"</span>) &#123;</span><br><span class="line">            lines[left] = <span class="string">"A"</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> j = left + <span class="number">1</span>; j &lt;= right; j++) &#123; lines[j] = <span class="string">"C"</span>; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// left == rightに</span></span><br><span class="line">        right++; left = right;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">// "W"が出現していない</span></span><br><span class="line">    <span class="keyword">else</span> &#123; left++; right++; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日はしゃくとり法の説明でした．<br>次は何を題材にブログを買いていきましょうか(遠い目)<br>実は，そろそろネタ切れだったり…苦笑<br>では^^</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjtwse5uk00030tuyc7o7eu3c" class="article-share-link">共有</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="kosukeland/2019/03/27/クイックソート実装できますか？/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">クイックソート実装できますか？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="kosukeland/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="kosukeland/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+          </li>
+        
+          <li>
+            <a href="kosukeland/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+          </li>
+        
+          <li>
+            <a href="kosukeland/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
+        
+          <li>
+            <a href="kosukeland/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
+          </li>
+        
+          <li>
+            <a href="kosukeland/2019/03/18/探索系問題の探索範囲削減方法/">探索系問題の探索範囲削減方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="kosukeland/" class="mobile-nav-link">Home</a>
+  
+    <a href="kosukeland/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="kosukeland/fancybox/jquery.fancybox.css">
+  <script src="kosukeland/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="kosukeland/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
