@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>CloudFormation(1) 〜テンプレートを書いてみた〜 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにAWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．今日のテーマはAWSのプロビジョニングツール CloudFormationです！※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．  2. ドキュメ">
+<meta name="keywords" content="AWS,CloudFormation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CloudFormation(1) 〜テンプレートを書いてみた〜">
+<meta property="og:url" content="https://kosukeland.github.io/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにAWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．今日のテーマはAWSのプロビジョニングツール CloudFormationです！※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．  2. ドキュメ">
+<meta property="og:locale" content="ja">
+<meta property="og:updated_time" content="2019-04-08T10:41:54.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CloudFormation(1) 〜テンプレートを書いてみた〜">
+<meta name="twitter:description" content="1. はじめにAWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．今日のテーマはAWSのプロビジョニングツール CloudFormationです！※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．  2. ドキュメ">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CloudFormation-1-ドキュメントを眺めてみた" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/" class="article-date">
+  <time datetime="2019-04-07T06:26:11.000Z" itemprop="datePublished">2019-04-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CloudFormation(1) 〜テンプレートを書いてみた〜
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>AWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．<br>なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．<br>今日のテーマはAWSのプロビジョニングツール CloudFormationです！<br>※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．</p>
+<hr>
+<h1 id="2-ドキュメントを眺めながら手を動かしてみた"><a href="#2-ドキュメントを眺めながら手を動かしてみた" class="headerlink" title="2. ドキュメントを眺めながら手を動かしてみた"></a>2. ドキュメントを眺めながら手を動かしてみた</h1><p>AWSのドキュメントと言えば，BlackBeltが有名です．<br>各ソリューションの概要が適切にまとめられており，勉強するには最適です．<br>リンク貼っておきます↓<br><strong><a href="https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/" target="_blank" rel="noopener">https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/</a></strong></p>
+<h2 id="2-1-CloudFormtionの用途"><a href="#2-1-CloudFormtionの用途" class="headerlink" title="2.1. CloudFormtionの用途"></a>2.1. CloudFormtionの用途</h2><p>AWSには様々なデプロイツール/プロビジョニングツールが用意されていますが，<br>CloudFormationの立ち位置は，<strong>AWSのネットワーク構築や各インスタンスの配置，セキュリティ等，マネジメントコンソールから実施できる作業の自動化</strong>になります．</p>
+<p>その他のデプロイツールとその立ち位置に関しては，BlackBelt資料に記載があるのでこちらを参照ください．<br><strong><a href="https://www.slideshare.net/AmazonWebServicesJapan/aws-black-belt-online-seminar-aws-cloudformation/12" target="_blank" rel="noopener">https://www.slideshare.net/AmazonWebServicesJapan/aws-black-belt-online-seminar-aws-cloudformation/12</a></strong></p>
+<p>※別途機会を設けて，CloudFormation以外の紹介もできたらとも思っております．</p>
+<h2 id="2-2-CloudFormtionテンプレート"><a href="#2-2-CloudFormtionテンプレート" class="headerlink" title="2.2. CloudFormtionテンプレート"></a>2.2. CloudFormtionテンプレート</h2><p>AWSのサービスを自動的にプロビジョニングするためには，<br>プロビジョニング方法を規定した”基盤の設計書”を事前に用意する必要があります．<br>CloudFormationでは，当該設計書をテンプレートと呼び，json または yamlで記載します．</p>
+<p>テンプレートの記載可能な内容は以下の通りです．<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">AWSTemplateFormatVersion: &quot;version date&quot; // テンプレートバージョン記載</span><br><span class="line">Description:   // テンプレート説明文を記載</span><br><span class="line">Resources:     // EC2やRDSなどAWSのリソースとプロパティ(必須項目)</span><br><span class="line">Parameters:    // インスタンスサイズ，ユーザ名等 ユーザに入力されるパラメータ</span><br><span class="line">Metadata:      // テンプレートに関する付加情報</span><br><span class="line">Mappings:      // キーと値のマッピング</span><br><span class="line">Condition:     // 条件名と条件判断内容</span><br><span class="line">Transform:     // サーバレスアプリケーションの場合，使用するSAMのバージョンを指定</span><br><span class="line">Outputs:       // デプロイ後にCloudFormationから出力させる値</span><br></pre></td></tr></table></figure></p>
+<p>今日はこのなかで，<strong>Resources, Parameters</strong>に関してみていきます(他の項目は，まだ理解していない汗)．</p>
+<h3 id="2-2-1-Resources"><a href="#2-2-1-Resources" class="headerlink" title="2.2.1 Resources"></a>2.2.1 Resources</h3><p>Resourcesには，プロビジョニング対象のAWSのリソース情報(VPC，インスタンス，RDS等)を記載します(必須記載項目です！)．<br>記載内容は，インスタンスのサイズ(t2.micro等)やIP，VPCに割り当てるのアドレスなど，多岐に渡ります．<br>具体例をみていきましょう．ここではyamlで記載したテンプレートを紹介します．</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  WorkSpacesVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
+<p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>Resources識別子の以下に，VPCに関する詳細情報が記載されてます．<br>1行ずつみていきます．</p>
+<ul>
+<li>1行目: テンプレートのバージョンを規定しています</li>
+<li>2行目: これ以降にリソースを記載する と宣言しています．</li>
+<li>3行目: 論理IDを指定しています．</li>
+<li>4行目: リソースタイプを指定します．ここではVPCを指定しています．</li>
+<li>5行目: これ以降にリソースプロパティを記載する と宣言しています．</li>
+<li>6行目: VPCのCidrBlockを指定しています．</li>
+<li>7行目: VPC内でDNSを利用有無を指定しています．</li>
+<li>8行目: VPC内のインスタンスがDNSホスト名を取得するように指定しています．</li>
+</ul>
+<p>※論理ID: テンプレート内で利用する識別子です．他のリソース設定で本リソース情報を利用する場合は，論理IDを指定します．</p>
+<p></p>
+<h3 id="2-2-2-Parameters"><a href="#2-2-2-Parameters" class="headerlink" title="2.2.2 Parameters"></a>2.2.2 Parameters</h3><p>Parameterには，テンプレート内に変数を持ちたい場合に利用されます．<br>例えば，プロビジョニングの度にVPCのCidrBlockを変更したい場合，その都度テンプレートを書き換えるのは非効率です．<br>バグの温床になる可能性もあります．<br>このような場合，VPCのCidrBlockを変数(Parameters)として定義することで，プロビジョニングの度にCidrBlockを変更することが可能です．<br>具体例を見ていきます．</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Parameters:</span></span><br><span class="line"><span class="attr">  VPCcidr:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">String</span></span><br><span class="line"><span class="attr">    Default:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">    AllowedPattern:</span> <span class="string">'(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)/(\d&#123;1,2&#125;)'</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  WorkSpacesVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="type">!Ref</span> <span class="string">VPCcidr</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
+<p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>先ほどの例と異なり，今回はVPCのCidrBlockを変数化しています．<br>1行ずつみていきます．</p>
+<ul>
+<li>2行目: これ以降にパラメータを記載する と宣言しています</li>
+<li>3行目: 論理IDを指定しています．</li>
+<li>4行目: 入力タイプStringを指定しています．</li>
+<li>5行目: CidrBlockのデフォルト値を指定しています．</li>
+<li>6行目: デフォルトから入力を変更する場合，許可する入力パターンを指定しています．</li>
+<li>12行目: VPCのCidrBlockに関してはParameterを参照しています．Ref関数を利用します．</li>
+</ul>
+<p>上記の2つの例(yaml)は，CloudFormationに食わせることでVPCを作成することができます．<br>ぜひ試してみてください！</p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>今日は，CloudFormationのテンプレートのResorces識別子とParameters識別子に関して記載しました．<br>次回(以降？)は，その他の識別子に関しても記事にできればと思っております．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/" data-id="cju888pts00007ssoz5jpyjod" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/03/競技プログラミングと計算量/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">競技プログラミングと計算量</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 10px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/03/競技プログラミングと計算量/">競技プログラミングと計算量</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -8,6 +8,7 @@
   <title>競技プログラミングと計算量 | 某SIerの技術備忘録</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1. はじめに競技プログラミング歴2ヶ月の筆者です．こんにちは！まだまだ初心者ではありますが，今日は競技プログラミングで求められる計算量について，書いていこうと思います．それではいきましょう！  2. O(N)と実行時間計算量とはプログラムが実行完了までにかかる計算の量であり，計算の量が多いほど実行完了までに時間がかかると言えます．計算量はO(x)の形で記載され，例えばN回のループを実行する以下">
+<meta name="keywords" content="競技プログラミング">
 <meta property="og:type" content="article">
 <meta property="og:title" content="競技プログラミングと計算量">
 <meta property="og:url" content="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/index.html">
@@ -15,7 +16,7 @@
 <meta property="og:description" content="1. はじめに競技プログラミング歴2ヶ月の筆者です．こんにちは！まだまだ初心者ではありますが，今日は競技プログラミングで求められる計算量について，書いていこうと思います．それではいきましょう！  2. O(N)と実行時間計算量とはプログラムが実行完了までにかかる計算の量であり，計算の量が多いほど実行完了までに時間がかかると言えます．計算量はO(x)の形で記載され，例えばN回のループを実行する以下">
 <meta property="og:locale" content="ja">
 <meta property="og:image" content="https://kosukeland.github.io/images/20190403-1.png">
-<meta property="og:updated_time" content="2019-04-04T03:02:05.830Z">
+<meta property="og:updated_time" content="2019-04-05T04:23:23.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="競技プログラミングと計算量">
 <meta name="twitter:description" content="1. はじめに競技プログラミング歴2ヶ月の筆者です．こんにちは！まだまだ初心者ではありますが，今日は競技プログラミングで求められる計算量について，書いていこうと思います．それではいきましょう！  2. O(N)と実行時間計算量とはプログラムが実行完了までにかかる計算の量であり，計算の量が多いほど実行完了までに時間がかかると言えます．計算量はO(x)の形で記載され，例えばN回のループを実行する以下">
@@ -98,7 +99,7 @@
 <h4 id="検証環境"><a href="#検証環境" class="headerlink" title="検証環境"></a>検証環境</h4><p>・OS: Mojave 10.14.3<br>・CPU: 2.3Ghz Corei5<br>・メモリ: 16GB 2133MHz<br>・Node: v8.10.0</p>
 <h4 id="検証プログラム"><a href="#検証プログラム" class="headerlink" title="検証プログラム"></a>検証プログラム</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 開始時間</span></span><br><span class="line"><span class="keyword">const</span> startTime = <span class="built_in">Date</span>.now();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> N = <span class="built_in">Math</span>.pow(<span class="number">10</span>, x);</span><br><span class="line"><span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 10^x回だけresultを加算する</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; N; i++) &#123; result++; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 終了時間</span></span><br><span class="line"><span class="keyword">const</span> endTime = <span class="built_in">Date</span>.now();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log((endTime - startTime)/<span class="number">1000</span>+<span class="string">"s"</span>);</span><br></pre></td></tr></table></figure>
 <p>今回は上記のプログラムのxを1から10まで変化させ(ループ回数を変化させ)，その実行時間をそれぞれ5回計測します．<br>そして，5回の平均実行時間をグラフにしました．<br>結果を以下に示します．</p>
-<p><img src="/images/20190403-1.png" alt="図1: 計算量と計算時間" title="図1: 計算量と計算時間" width="500"></p>
+<p><img src="/images/20190403-1.png" alt="図1: 計算量と実行時間" title="図1: 計算量と実行時間" width="500"></p>
 <p>横軸は計算量，縦軸は計算時間を表しています．<br>グラフを見ると，10^9までは2秒以内に実行が完了するのに対し，10^10では11秒程度実行時間がかかっていることが分かります．<br>このことから，AtCoderの多くの問題では<strong>計算量を10^9以下</strong>に抑える必要がありそうです(10^8以下に抑えることができれば理想的)．</p>
 <p>なのでこの性質を利用して，例えばAtCoderの問題で与えられる入力文字列長が10^9以上で場合，「全パターンを探索する可能性は低いな」と邪推することも可能ですw</p>
 <h1 id="3-O-x-と計算量"><a href="#3-O-x-と計算量" class="headerlink" title="3. O(x)と計算量"></a>3. O(x)と計算量</h1><p>参考情報扱いですが，<br>以下の計算量のアルゴリズムの入力と計算量の関係を以下に記載します．</p>
@@ -178,7 +179,7 @@
 </tr>
 </tbody>
 </table>
-<p>※TLE: Time Limit Exceeded<br>※実行時間が2秒以上の場合 TLEと判定します．</p>
+<p>※TLE: Time Limit Exceeded<br>※計算量が10^9(実行時間が2秒)以上の場合 TLEと判定します．</p>
 <p>表はO(N)を基準に記載されており，例えば N=10の時はO(log10)=3.3と読みます．<br>この表から，O(logN)はNを増加させても計算量がほとんど上昇しないことが分かるかと思います．<br>反対にO(2^N)は一瞬でTLEになるため，全集合2^Nを全探索することは難しいと言うことも分かります．</p>
 <p>※もちろん筆者の環境とAtCoderの環境は異なるため，10^9の計算量でTLEになる可能性はあります．ご了承ください．</p>
 <hr>
@@ -188,14 +189,25 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju0z2ibz00008wuyl9rr1q2z" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju888pu7000c7ssorsacid3s" class="article-share-link">共有</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          CloudFormation(1) 〜テンプレートを書いてみた〜
+        
+      </div>
+    </a>
   
   
     <a href="/2019/03/31/しゃくとり法で計算量削減/" id="article-nav-older" class="article-nav-link-wrap">
@@ -216,9 +228,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 10px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -237,6 +263,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/07/CloudFormation-1-ドキュメントを眺めてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/03/競技プログラミングと計算量/">競技プログラミングと計算量</a>
           </li>
         
@@ -250,10 +280,6 @@
         
           <li>
             <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
           </li>
         
       </ul>
