@@ -108,7 +108,6 @@
 <li>8行目: VPC内のインスタンスがDNSホスト名を取得するように指定しています．</li>
 </ul>
 <p>※論理ID: テンプレート内で利用する識別子です．他のリソース設定で本リソース情報を利用する場合は，論理IDを指定します．</p>
-<p></p>
 <h3 id="2-2-2-Parameters"><a href="#2-2-2-Parameters" class="headerlink" title="2.2.2 Parameters"></a>2.2.2 Parameters</h3><p>Parameterには，テンプレート内に変数を持ちたい場合に利用されます．<br>例えば，プロビジョニングの度にVPCのCidrBlockを変更したい場合，その都度テンプレートを書き換えるのは非効率です．<br>バグの温床になる可能性もあります．<br>このような場合，VPCのCidrBlockを変数(Parameters)として定義することで，プロビジョニングの度にCidrBlockを変更することが可能です．<br>具体例を見ていきます．</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Parameters:</span></span><br><span class="line"><span class="attr">  VPCcidr:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">String</span></span><br><span class="line"><span class="attr">    Default:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">    AllowedPattern:</span> <span class="string">'(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)/(\d&#123;1,2&#125;)'</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  WorkSpacesVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="type">!Ref</span> <span class="string">VPCcidr</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
 <p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>先ほどの例と異なり，今回はVPCのCidrBlockを変数化しています．<br>1行ずつみていきます．</p>
@@ -127,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju88do1x00019csogiup6kvd" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju88f0cp00039usok5obt03p" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -261,7 +260,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju88do2a000c9cso2tq6nqr6" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju88f0cx000d9usopmcsgz9k" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -324,7 +323,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cju88do2300059csocvyg58zw" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cju88f0cs00059usotus6j8qx" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -381,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cju88do2500089csozmgdx567" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cju88f0ct00089usoaxsafyoz" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -451,7 +450,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cju88do2000039cso82a774l1" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cju88f0cq00049usomoaw5k6q" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -495,7 +494,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cju88do2200049csosw1qfoyl" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cju88f0cm00019usov83z0c84" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -564,7 +563,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cju88do2700099cso6cwu35gq" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cju88f0cv00099usog3gj98eg" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -630,7 +629,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cju88do28000b9csojgexpnb8" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cju88f0cw000b9uso0399llfj" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -744,7 +743,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cju88do1t00009csoigfdeld7" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cju88f0ci00009usoaklt7b8a" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>

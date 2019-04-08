@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="某SIerの技術備忘録">
 <meta property="og:description" content="1. はじめにAWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．今日のテーマはAWSのプロビジョニングツール CloudFormationです！※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．  2. ドキュメ">
 <meta property="og:locale" content="ja">
-<meta property="og:updated_time" content="2019-04-08T10:43:32.215Z">
+<meta property="og:updated_time" content="2019-04-08T10:47:30.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CloudFormation(1) 〜テンプレートを書いてみた〜">
 <meta name="twitter:description" content="1. はじめにAWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．今日のテーマはAWSのプロビジョニングツール CloudFormationです！※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．  2. ドキュメ">
@@ -111,7 +111,6 @@
 <li>8行目: VPC内のインスタンスがDNSホスト名を取得するように指定しています．</li>
 </ul>
 <p>※論理ID: テンプレート内で利用する識別子です．他のリソース設定で本リソース情報を利用する場合は，論理IDを指定します．</p>
-<p></p>
 <h3 id="2-2-2-Parameters"><a href="#2-2-2-Parameters" class="headerlink" title="2.2.2 Parameters"></a>2.2.2 Parameters</h3><p>Parameterには，テンプレート内に変数を持ちたい場合に利用されます．<br>例えば，プロビジョニングの度にVPCのCidrBlockを変更したい場合，その都度テンプレートを書き換えるのは非効率です．<br>バグの温床になる可能性もあります．<br>このような場合，VPCのCidrBlockを変数(Parameters)として定義することで，プロビジョニングの度にCidrBlockを変更することが可能です．<br>具体例を見ていきます．</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Parameters:</span></span><br><span class="line"><span class="attr">  VPCcidr:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">String</span></span><br><span class="line"><span class="attr">    Default:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">    AllowedPattern:</span> <span class="string">'(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)/(\d&#123;1,2&#125;)'</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  WorkSpacesVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="type">!Ref</span> <span class="string">VPCcidr</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
 <p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>先ほどの例と異なり，今回はVPCのCidrBlockを変数化しています．<br>1行ずつみていきます．</p>
@@ -130,7 +129,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju88do1x00019csogiup6kvd" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju88f0cp00039usok5obt03p" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
