@@ -62,6 +62,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Javascriptの罠-値渡しと参照渡し-" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" class="article-date">
+  <time datetime="2019-04-09T11:00:00.000Z" itemprop="datePublished">2019-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>こんなタイトルつけたら，Brendan Eich氏に怒られてしまいそうですね苦笑<br>今日は，筆者がJavascriptの仕様をキチンと理解していなかったために発生したトラブルについて紹介します．<br>それでは行きましょう！</p>
+<hr>
+<h1 id="2-値渡し-と-参照渡し"><a href="#2-値渡し-と-参照渡し" class="headerlink" title="2. 値渡し と 参照渡し"></a>2. 値渡し と 参照渡し</h1><p>値渡しとは，変数間で値のみを渡すことを指し，<br>参照渡しとは，変数間でメモリ上のアドレスを渡すことを指します(参照渡しすると，それぞれの変数が同一のアドレスを指す)．<br>Javascriptにも値渡しと参照渡しがありますが，みなさん意識して使い分けられていますか？　どうでしょうか？</p>
+<p>本ブログの結論でもあるのですが，実は意識して使い分ける必要はありません．<br>Javascriptにおいては，<br>　 <strong>変数間の値代入において，プリミティブ型は値渡しとなり，オブジェクト型は参照渡し</strong><br>となります．</p>
+<p>「うんうん．そうだよね！」と思われた方は，これ以降は目を通す必要はありません．ブラウザの戻るボタンを押しましょう．</p>
+<p>理解していない方，一緒に勉強していきましょう！<br>以下のプログラムをみてください．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 値渡しの例 */</span> </span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>; <span class="keyword">var</span> b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 値渡し</span></span><br><span class="line">a = b; </span><br><span class="line"></span><br><span class="line">a++;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 3</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure></p>
+<p>上記は，Javascriptで”値渡し”をした例です．<br>5行目を見ると，変数bを変数aに代入しています．変数bはプリミティブ型な値のため，変数bの値が変数aに渡されています．<br>その後7行目で変数aはインクリメントされていますが，もちろん変数aに対する処理が変数bに影響を与えることがないため，<br>それぞれの変数は異なる値となります．</p>
+<p>しかし，参照渡しでは動作が異なります．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 参照渡しの例 */</span> </span><br><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]; <span class="keyword">var</span> b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参照渡し</span></span><br><span class="line">a = b; </span><br><span class="line"></span><br><span class="line">a[<span class="number">0</span>]++;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// [5, 5, 6]</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// [5, 5, 6]</span></span><br></pre></td></tr></table></figure></p>
+<p>上記は，Javascriptで”参照渡し”をした例です．<br>先ほどの例と同様，5行目で変数bを変数aに代入しています．<br>しかし変数bはオブジェクト型の値であるため，先ほどとは異なり変数bのアドレスが変数aに渡されていることに注意です．<br>なので，7行目で変数a[0]をインクリメントしていますが，この処理は処理が変数bにも影響を与えています(変数aと変数bは同一のアドレスを参照しているので)．<br>9行目，10行目でそれぞれの変数を表示させていますが，同一の値が出力されているのが分かります．</p>
+<hr>
+<h1 id="3-トラブル"><a href="#3-トラブル" class="headerlink" title="3. トラブル"></a>3. トラブル</h1><p>競技プログラミングの中で発生したトラブルを紹介します(筆者はJavascriptで競技プログラミングに参戦しております)．<br>筆者は以下のように，入力で関数の処理を分岐させ配列aに対して異なる処理をしようとしました．<br>※プログラムは簡略化しております．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result_x = execute(a,<span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> result_y = execute(a,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.max(result_x, result_y));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execute</span>(<span class="params">array,i</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// iが0の時の，arrayに対する処理</span></span><br><span class="line">    <span class="keyword">if</span>(i === <span class="number">0</span>)&#123; a[<span class="number">0</span>]++ &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iが1の時の，arrayに対する処理</span></span><br><span class="line">    <span class="keyword">if</span>(i === <span class="number">1</span>)&#123; a[<span class="number">0</span>]++; a[<span class="number">0</span>]++; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(a[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>筆者は，上記のプログラムで配列aが値渡しされていると勘違いしていたため，<br>3行目と4行目で配列aの要素に変化はないと考えていました．<br>しかしこの場合Javascriptでは参照渡しとなるため，3行目と4行目で配列aの要素が異なります．<br>結果，正しい解が表示されず苦しみました苦笑</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>Javascriptでも配列の値渡ししたいなぁというのが，筆者の感想です．<br>なんとかなりませんかね(遠い目)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cju9qdr7n00037suyf9n521a4" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-CloudFormation-1-テンプレートを書いてみた" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" class="article-date">
@@ -126,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju88f0cp00039usok5obt03p" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju9qdr7g00007suy221fr2mp" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -260,7 +313,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju88f0cx000d9usopmcsgz9k" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju9qdr7v000c7suy8q3guu9e" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -323,7 +376,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cju88f0cs00059usotus6j8qx" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cju9qdr7p00057suyos2qab5u" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -380,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cju88f0ct00089usoaxsafyoz" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cju9qdr7r00077suytf8h3k47" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -450,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cju88f0cq00049usomoaw5k6q" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cju9qdr7o00047suynjcrj1c1" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -494,7 +547,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cju88f0cm00019usov83z0c84" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cju9qdr7k00017suykp8ew5ki" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -563,7 +616,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cju88f0cv00099usog3gj98eg" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cju9qdr7s00087suyv2g8j966" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -629,7 +682,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cju88f0cw000b9uso0399llfj" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cju9qdr7u000a7suylhcc9ha7" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -743,7 +796,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cju88f0ci00009usoaklt7b8a" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cju9qdr7x000f7suyhwsklsof" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -768,7 +821,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
     </div>
   </div>
 
@@ -778,7 +831,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 10px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
     </div>
   </div>
 
@@ -800,6 +853,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
           </li>
         
@@ -813,10 +870,6 @@
         
           <li>
             <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
           </li>
         
       </ul>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Javascriptの罠 〜値渡しと参照渡し〜 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにこんなタイトルつけたら，Brendan Eich氏に怒られてしまいそうですね苦笑今日は，筆者がJavascriptの仕様をキチンと理解していなかったために発生したトラブルについて紹介します．それでは行きましょう！  2. 値渡し と 参照渡し値渡しとは，変数間で値のみを渡すことを指し，参照渡しとは，変数間でメモリ上のアドレスを渡すことを指します(参照渡しすると，それぞれの変数が同">
+<meta name="keywords" content="トラブル,Javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascriptの罠 〜値渡しと参照渡し〜">
+<meta property="og:url" content="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにこんなタイトルつけたら，Brendan Eich氏に怒られてしまいそうですね苦笑今日は，筆者がJavascriptの仕様をキチンと理解していなかったために発生したトラブルについて紹介します．それでは行きましょう！  2. 値渡し と 参照渡し値渡しとは，変数間で値のみを渡すことを指し，参照渡しとは，変数間でメモリ上のアドレスを渡すことを指します(参照渡しすると，それぞれの変数が同">
+<meta property="og:locale" content="ja">
+<meta property="og:updated_time" content="2019-04-09T11:56:47.599Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascriptの罠 〜値渡しと参照渡し〜">
+<meta name="twitter:description" content="1. はじめにこんなタイトルつけたら，Brendan Eich氏に怒られてしまいそうですね苦笑今日は，筆者がJavascriptの仕様をキチンと理解していなかったために発生したトラブルについて紹介します．それでは行きましょう！  2. 値渡し と 参照渡し値渡しとは，変数間で値のみを渡すことを指し，参照渡しとは，変数間でメモリ上のアドレスを渡すことを指します(参照渡しすると，それぞれの変数が同">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Javascriptの罠-値渡しと参照渡し-" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" class="article-date">
+  <time datetime="2019-04-09T11:00:00.000Z" itemprop="datePublished">2019-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Javascriptの罠 〜値渡しと参照渡し〜
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>こんなタイトルつけたら，Brendan Eich氏に怒られてしまいそうですね苦笑<br>今日は，筆者がJavascriptの仕様をキチンと理解していなかったために発生したトラブルについて紹介します．<br>それでは行きましょう！</p>
+<hr>
+<h1 id="2-値渡し-と-参照渡し"><a href="#2-値渡し-と-参照渡し" class="headerlink" title="2. 値渡し と 参照渡し"></a>2. 値渡し と 参照渡し</h1><p>値渡しとは，変数間で値のみを渡すことを指し，<br>参照渡しとは，変数間でメモリ上のアドレスを渡すことを指します(参照渡しすると，それぞれの変数が同一のアドレスを指す)．<br>Javascriptにも値渡しと参照渡しがありますが，みなさん意識して使い分けられていますか？　どうでしょうか？</p>
+<p>本ブログの結論でもあるのですが，実は意識して使い分ける必要はありません．<br>Javascriptにおいては，<br>　 <strong>変数間の値代入において，プリミティブ型は値渡しとなり，オブジェクト型は参照渡し</strong><br>となります．</p>
+<p>「うんうん．そうだよね！」と思われた方は，これ以降は目を通す必要はありません．ブラウザの戻るボタンを押しましょう．</p>
+<p>理解していない方，一緒に勉強していきましょう！<br>以下のプログラムをみてください．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 値渡しの例 */</span> </span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>; <span class="keyword">var</span> b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 値渡し</span></span><br><span class="line">a = b; </span><br><span class="line"></span><br><span class="line">a++;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 3</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure></p>
+<p>上記は，Javascriptで”値渡し”をした例です．<br>5行目を見ると，変数bを変数aに代入しています．変数bはプリミティブ型な値のため，変数bの値が変数aに渡されています．<br>その後7行目で変数aはインクリメントされていますが，もちろん変数aに対する処理が変数bに影響を与えることがないため，<br>それぞれの変数は異なる値となります．</p>
+<p>しかし，参照渡しでは動作が異なります．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 参照渡しの例 */</span> </span><br><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]; <span class="keyword">var</span> b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参照渡し</span></span><br><span class="line">a = b; </span><br><span class="line"></span><br><span class="line">a[<span class="number">0</span>]++;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// [5, 5, 6]</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// [5, 5, 6]</span></span><br></pre></td></tr></table></figure></p>
+<p>上記は，Javascriptで”参照渡し”をした例です．<br>先ほどの例と同様，5行目で変数bを変数aに代入しています．<br>しかし変数bはオブジェクト型の値であるため，先ほどとは異なり変数bのアドレスが変数aに渡されていることに注意です．<br>なので，7行目で変数a[0]をインクリメントしていますが，この処理は処理が変数bにも影響を与えています(変数aと変数bは同一のアドレスを参照しているので)．<br>9行目，10行目でそれぞれの変数を表示させていますが，同一の値が出力されているのが分かります．</p>
+<hr>
+<h1 id="3-トラブル"><a href="#3-トラブル" class="headerlink" title="3. トラブル"></a>3. トラブル</h1><p>競技プログラミングの中で発生したトラブルを紹介します(筆者はJavascriptで競技プログラミングに参戦しております)．<br>筆者は以下のように，入力で関数の処理を分岐させ配列aに対して異なる処理をしようとしました．<br>※プログラムは簡略化しております．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result_x = execute(a,<span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> result_y = execute(a,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Math</span>.max(result_x, result_y));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execute</span>(<span class="params">array,i</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// iが0の時の，arrayに対する処理</span></span><br><span class="line">    <span class="keyword">if</span>(i === <span class="number">0</span>)&#123; a[<span class="number">0</span>]++ &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iが1の時の，arrayに対する処理</span></span><br><span class="line">    <span class="keyword">if</span>(i === <span class="number">1</span>)&#123; a[<span class="number">0</span>]++; a[<span class="number">0</span>]++; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>(a[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>筆者は，上記のプログラムで配列aが値渡しされていると勘違いしていたため，<br>3行目と4行目で配列aの要素に変化はないと考えていました．<br>しかしこの場合Javascriptでは参照渡しとなるため，3行目と4行目で配列aの要素が異なります．<br>結果，正しい解が表示されず苦しみました苦笑</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>Javascriptでも配列の値渡ししたいなぁというのが，筆者の感想です．<br>なんとかなりませんかね(遠い目)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cju9qdr7n00037suyf9n521a4" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">CloudFormation(1) 〜テンプレートを書いてみた〜</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/03/競技プログラミングと計算量/">競技プログラミングと計算量</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
