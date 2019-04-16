@@ -62,6 +62,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/" class="article-date">
+  <time datetime="2019-04-16T11:15:00.000Z" itemprop="datePublished">2019-04-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/">AWSアカウントとアベイラビリティーゾーン名</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>AWSに関して小ネタを仕入れたので紹介します．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-リージョンとアベイラビリティーゾーン"><a href="#2-リージョンとアベイラビリティーゾーン" class="headerlink" title="2. リージョンとアベイラビリティーゾーン"></a>2. リージョンとアベイラビリティーゾーン</h1><p>AWSでは，データセンター群をリージョンという単位で分割しています．<br>リージョンとは直訳した通り”地域”を指し，AWSがデータセンターを展開している地域を指します．<br>リージョンはデータセンター群を表すもっとも大きい単位であり，日本であれば東京リージョンと大阪ローカルリージョンの2つがあります．</p>
+<p>さらに，各リージョン内に所属する複数のデータセンタを細分化したグループをアベイラビリティーゾーン(AZ)と呼びます．<br>AZ同士は高速回線で接続されており，AZ間では低遅延で通信することが可能です，<br>図で表すと，下記のような関係です．</p>
+<p><img src="/images/20190416-1.png" alt="図1: リージョンとアベイラビリティーゾーン" title="図1: リージョンとアベイラビリティーゾーン" width="500"></p>
+<p>一番外側の枠がリージョンを示し，丸がAZを示します．<br>それぞれのAZには名前がついており，東京リージョンの場合だと<strong>ap-northeast-1[a|c|d]</strong>と呼ばれます．</p>
+<hr>
+<h1 id="3-AWSアカウントとアベイラビリティーゾーン名の関係性"><a href="#3-AWSアカウントとアベイラビリティーゾーン名の関係性" class="headerlink" title="3. AWSアカウントとアベイラビリティーゾーン名の関係性"></a>3. AWSアカウントとアベイラビリティーゾーン名の関係性</h1><p>さて，ここからが本題です．<br>AWSの公式ベージにAZに関して興味深い説明がありました．</p>
+<p><strong>アベイラビリティーゾーンは、リージョンコードとそれに続く文字識別子によって表されます(us-east-1a など)。</strong><br><strong>リソースがリージョンの複数のアベイラビリティーゾーンに分散されるようにするため、アベイラビリティーゾーンは各AWSアカウントの名前に個別にマップされます。</strong><br><strong>たとえば、ご使用のAWSアカウントのアベイラビリティーゾーンus-east-1aは別のAWSアカウントのアベイラビリティーゾーンus-east-1aと同じ場所にはない可能性があります。</strong></p>
+<p>何を言ってるか分かりますか？<br>「Aさんのus-east-1aと Bさんのus-east-1aは異なる可能性があるよ．なぜなら，各AZの使用リソースが偏らないようにするためだ．」と言っています．<br>ユーザは無意識のうちに若い番号のAZから利用する可能性が高く，AWSはAZごとのリソースの偏りを恐れたのでしょうね．</p>
+<p>では，AさんとBさんが同一のAZにシステムを作る方法はないのでしょうか．<br>AWSの公式には，次のようにあります．</p>
+<p><strong>アカウント間でアベイラビリティーゾーンを調整するには、アベイラビリティーゾーンの一意で一貫性のある識別子であるAZ IDを使用する必要があります．</strong></p>
+<p>つまり，異なるアカウントで同一のAZを利用したい場合，AZ IDを合わせることで実現できそうです．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日は，AWS小ネタでした．<br>次回は，CloudFormation か DNS周り か WorkSpacesの説明を予定しています．<br>早くアップロードできるように頑張りますb<br>ではノシ</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/" data-id="cjujuizge0000dcuys1neh7i6" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Javascriptの罠-値渡しと参照渡し-" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" class="article-date">
@@ -103,7 +157,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cju9qdr7n00037suyf9n521a4" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjujuizgm0004dcuyate2j6kb" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -179,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cju9qdr7g00007suy221fr2mp" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjujuizgi0001dcuya84g05kp" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -313,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cju9qdr7v000c7suy8q3guu9e" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjujuizgt000adcuy61eqpaoh" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -376,7 +430,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cju9qdr7p00057suyos2qab5u" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjujuizgx000gdcuydborfked" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -433,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cju9qdr7r00077suytf8h3k47" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjujuizgq0008dcuygi8spbv7" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -503,7 +557,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cju9qdr7o00047suynjcrj1c1" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjujuizgn0005dcuy4q9uo3az" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -547,7 +601,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cju9qdr7k00017suykp8ew5ki" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjujuizgp0007dcuyzhak1nea" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -616,7 +670,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cju9qdr7s00087suyv2g8j966" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjujuizgu000cdcuy7wfsufkj" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -682,7 +736,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cju9qdr7u000a7suylhcc9ha7" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjujuizgw000fdcuya05ri0uk" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -694,121 +748,12 @@
 
 
   
-    <article id="post-HEXOで作成したブログをGithub-ioで公開してみた" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" class="article-date">
-  <time datetime="2019-03-04T10:00:00.000Z" itemprop="datePublished">2019-03-04</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/">Hexoで作成したブログをGithub.ioで公開してみた</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>みなさま，はじめまして．当ブログにアクセスいただきありがとうございます．<br>筆者は某SIerに勤める6年目会社員で，主に基盤系SEとしてプライベートクラウド基盤の構築を中心に仕事をしてきました．</p>
-<p>業務を通して様々な経験をし，それを自身の中で消化してきたつもりではありますが，<br>知識を正しく理解しているか，今一度振り返って確認してみたいと思い，当ブログを立ち上げました．</p>
-<p>あくまで，自分自身の備忘録として利用するつもりではありますが，<br>私が遭遇したトラブル事例も記載しますので，私と同様のトラブルに遭遇した方のお役に立てればと考えています．<br>どうぞよろしくお願いします．</p>
-<hr>
-<h1 id="2-ブログを始めるにあたり"><a href="#2-ブログを始めるにあたり" class="headerlink" title="2. ブログを始めるにあたり"></a>2. ブログを始めるにあたり</h1><p>ブログを始めるにあたり，ツール選びから始めました．<br>私のブログに求める要件は以下の通り</p>
-<ul>
-<li>無料であること</li>
-<li>サーバレスであること</li>
-<li>ブログを通して何かしらの学びがあること</li>
-<li>ジェネレータでindex.htmlを自動作成できること  　←フルスクラッチなんて無理w</li>
-</ul>
-<p>以上の要件だとツールを絞りきれないのですが，今回はGithub.ioとHexoの組み合わせでブログを作成することにしました．<br>理由は，，，，</p>
-<ul>
-<li>Github.ioを利用する理由  : Gitの勉強になるから(筆者はGit未経験である)</li>
-<li>Hexoを利用する理由       : Node.jsで作られているから(筆者はjavascriptなら少しできる)</li>
-</ul>
-<p>※Github.ioやHexoの説明は公式を確認してね<br><strong><a href="https://pages.github.com/" target="_blank" rel="noopener">https://pages.github.com/</a></strong><br><strong><a href="https://hexo.io/" target="_blank" rel="noopener">https://hexo.io/</a></strong></p>
-<hr>
-<h1 id="3-Hexoの準備-For-Mac"><a href="#3-Hexoの準備-For-Mac" class="headerlink" title="3. Hexoの準備(For Mac)"></a>3. Hexoの準備(For Mac)</h1><p>ここから本題．<br>2019年3月時点のインストール方法を記載します(詳しくは公式ページをみてね！)</p>
-<h2 id="3-1-Hexoインストールの前に"><a href="#3-1-Hexoインストールの前に" class="headerlink" title="3.1. Hexoインストールの前に"></a>3.1. Hexoインストールの前に</h2><p>Hexoを動作させるためにはNode.jsが必要なので，PCにインストールします．<br>また，ブログをGithubへプッシュする場合，Gitも必要なので合わせてインストールします．</p>
-<ul>
-<li><p>Node.js:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash</span><br><span class="line">$ nvm install stable</span><br><span class="line">$ node -v <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Git(Github.ioにpushするなら必要):</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br><span class="line">$ git --version <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="3-2-Hexoのインストール"><a href="#3-2-Hexoのインストール" class="headerlink" title="3.2. Hexoのインストール"></a>3.2. Hexoのインストール</h2><p>Hexoを利用するためのHexo CLIのインストールと，HexoコマンドからGitを利用するツールをインストールします．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ hexo version <span class="comment"># インストール確認</span></span><br></pre></td></tr></table></figure></p>
-<hr>
-<h1 id="4-ブログの作成"><a href="#4-ブログの作成" class="headerlink" title="4. ブログの作成"></a>4. ブログの作成</h1><h2 id="4-1-sourceファイルの作成"><a href="#4-1-sourceファイルの作成" class="headerlink" title="4.1. sourceファイルの作成"></a>4.1. sourceファイルの作成</h2><p>Hexoでのブログ作成は’Hexo’コマンドを利用し，まずsourceファイル([Blog Tittle].md)を作成します．<br>Hexoでは，[Blog Tittle].mdにMarkDown形式でブログ内容を記載することになります．</p>
-<ul>
-<li><p>ブログディレクトリの作成:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init [Directory]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログ記事ファイル(.mdファイル)の作成:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> [Directory]</span><br><span class="line">$ hexo new [Blog Tittle]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログの記載:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="built_in">source</span>/_posts/</span><br><span class="line">$ vim [Blog Title].md</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>ブログ本体の生成(デフォルトだとpublicディレクトリ)</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="4-2-configファイルの編集"><a href="#4-2-configファイルの編集" class="headerlink" title="4.2. configファイルの編集"></a>4.2. configファイルの編集</h2><p>ブログディレクトリ直下に存在する’_config.yml’を開き，ブログを設定を編集します．<br>編集後はこんな感じです(ちなみに，当ブログの_config.yml(一部)はこんな感じ)．</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">某SIerの技術備忘録</span></span><br><span class="line"><span class="attr">subtitle:</span></span><br><span class="line"><span class="attr">description:</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">Kosuke</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">ja</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">Asia/Tokyo</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'</span></span><br><span class="line"><span class="attr">url:</span> <span class="attr">https://kosukeland.github.io/</span></span><br><span class="line"><span class="comment">#root: kosukeland</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"></span><br><span class="line"><span class="string">~~~</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/KosukeLand/KosukeLand.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<h2 id="4-3-ローカルで動作確認"><a href="#4-3-ローカルで動作確認" class="headerlink" title="4.3. ローカルで動作確認"></a>4.3. ローカルで動作確認</h2><p>ブログの記載内容をローカルで確認してみましょう．<br>以下のコマンドでローカルにWebサーバを立ち上げることができます．</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>Webサーバへのアクセスは，<strong><a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a></strong>です．</p>
-<hr>
-<h1 id="5-Github-ioへのデプロイ"><a href="#5-Github-ioへのデプロイ" class="headerlink" title="5. Github.ioへのデプロイ"></a>5. Github.ioへのデプロイ</h1><p>まず，Github側にGithub.ioのリポジトリを作成します．<br>作成するリポジトリ名を<strong>[username].github.io</strong>とします．</p>
-<p>次に，_condig.ymlが正しく設定されていれば，以下のコマンドでGithubにコードがアップロードされWebページが公開されます．<br>なお，Githubへアップロードされる対象は<strong>publicディレクトリ</strong>であり，Blogディレクトリ全体のバージョン管理はされない模様．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></p>
-<p>Github.ioのアクセスは，<strong>https://[username].github.io</strong>です．</p>
-<hr>
-<h1 id="6-トラブル事例"><a href="#6-トラブル事例" class="headerlink" title="6. トラブル事例"></a>6. トラブル事例</h1><h2 id="6-1-“hexo-deploy”-が失敗する"><a href="#6-1-“hexo-deploy”-が失敗する" class="headerlink" title="6.1. “hexo deploy” が失敗する"></a>6.1. “hexo deploy” が失敗する</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br><span class="line">INFO Start processing</span><br><span class="line"> :</span><br><span class="line"> :</span><br><span class="line">ERROR Deployer not found: git</span><br></pre></td></tr></table></figure>
-<ul>
-<li>原因: hexo-deployer-gitがインストールされていなかったため発生．</li>
-<li>対策: hexo-deployer-gitのインストール</li>
-</ul>
-<hr>
-<h1 id="7-その他"><a href="#7-その他" class="headerlink" title="7. その他"></a>7. その他</h1><h2 id="7-1-ディレクトリ構成"><a href="#7-1-ディレクトリ構成" class="headerlink" title="7.1. ディレクトリ構成"></a>7.1. ディレクトリ構成</h2><p>‘hexo init [Directory]’ をした際に作成されるファイルは以下の通り</p>
-<ul>
-<li>/node_modules: 構成しているnpmライブラリの置き場所</li>
-<li>/public: ここに公開用のデータ一式が書き出される</li>
-<li>/scaffolds: 記事や固定ページを作るときのMarkdownテンプレート集</li>
-<li>/source: 記事や固定ページを構成するMarkdown・画像データを置く場所</li>
-<li>/themes: ブログのテーマが置かれる場所（デフォルトテーマ入り）</li>
-<li>_config.yml: ブログのタイトルやURLなどの設定を書くファイル</li>
-<li>.gitignore: Gitで無視するファイルやディレクトリを書くファイル</li>
-<li>db.json: キャッシュが書き込まれるファイル</li>
-<li>package-lock.json: 特定バージョンのライブラリ構成を共有する目的のファイル</li>
-<li>package.json: Hexoを構成しているライブラリリスト</li>
-</ul>
-<p>Reference: <a href="https://hexo.io/docs/" target="_blank" rel="noopener">https://hexo.io/docs/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cju9qdr7x000f7suyhwsklsof" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">次へ &raquo;</a>
+  </nav>
 
 </section>
         
@@ -821,7 +766,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
     </div>
   </div>
 
@@ -831,7 +776,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 10px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
     </div>
   </div>
 
@@ -853,6 +798,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/">AWSアカウントとアベイラビリティーゾーン名</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
           </li>
         
@@ -866,10 +815,6 @@
         
           <li>
             <a href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
           </li>
         
       </ul>

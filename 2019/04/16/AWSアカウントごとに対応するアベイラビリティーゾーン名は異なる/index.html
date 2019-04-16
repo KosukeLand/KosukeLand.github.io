@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>AWSアカウントとアベイラビリティーゾーン名 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにAWSに関して小ネタを仕入れたので紹介します．それではいきましょう！  2. リージョンとアベイラビリティーゾーンAWSでは，データセンター群をリージョンという単位で分割しています．リージョンとは直訳した通り”地域”を指し，AWSがデータセンターを展開している地域を指します．リージョンはデータセンター群を表すもっとも大きい単位であり，日本であれば東京リージョンと大阪ローカルリージョ">
+<meta name="keywords" content="AWS,小ネタ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWSアカウントとアベイラビリティーゾーン名">
+<meta property="og:url" content="https://kosukeland.github.io/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにAWSに関して小ネタを仕入れたので紹介します．それではいきましょう！  2. リージョンとアベイラビリティーゾーンAWSでは，データセンター群をリージョンという単位で分割しています．リージョンとは直訳した通り”地域”を指し，AWSがデータセンターを展開している地域を指します．リージョンはデータセンター群を表すもっとも大きい単位であり，日本であれば東京リージョンと大阪ローカルリージョ">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190416-1.png">
+<meta property="og:updated_time" content="2019-04-16T13:50:57.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWSアカウントとアベイラビリティーゾーン名">
+<meta name="twitter:description" content="1. はじめにAWSに関して小ネタを仕入れたので紹介します．それではいきましょう！  2. リージョンとアベイラビリティーゾーンAWSでは，データセンター群をリージョンという単位で分割しています．リージョンとは直訳した通り”地域”を指し，AWSがデータセンターを展開している地域を指します．リージョンはデータセンター群を表すもっとも大きい単位であり，日本であれば東京リージョンと大阪ローカルリージョ">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20190416-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/" class="article-date">
+  <time datetime="2019-04-16T11:15:00.000Z" itemprop="datePublished">2019-04-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AWSアカウントとアベイラビリティーゾーン名
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>AWSに関して小ネタを仕入れたので紹介します．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-リージョンとアベイラビリティーゾーン"><a href="#2-リージョンとアベイラビリティーゾーン" class="headerlink" title="2. リージョンとアベイラビリティーゾーン"></a>2. リージョンとアベイラビリティーゾーン</h1><p>AWSでは，データセンター群をリージョンという単位で分割しています．<br>リージョンとは直訳した通り”地域”を指し，AWSがデータセンターを展開している地域を指します．<br>リージョンはデータセンター群を表すもっとも大きい単位であり，日本であれば東京リージョンと大阪ローカルリージョンの2つがあります．</p>
+<p>さらに，各リージョン内に所属する複数のデータセンタを細分化したグループをアベイラビリティーゾーン(AZ)と呼びます．<br>AZ同士は高速回線で接続されており，AZ間では低遅延で通信することが可能です，<br>図で表すと，下記のような関係です．</p>
+<p><img src="/images/20190416-1.png" alt="図1: リージョンとアベイラビリティーゾーン" title="図1: リージョンとアベイラビリティーゾーン" width="500"></p>
+<p>一番外側の枠がリージョンを示し，丸がAZを示します．<br>それぞれのAZには名前がついており，東京リージョンの場合だと<strong>ap-northeast-1[a|c|d]</strong>と呼ばれます．</p>
+<hr>
+<h1 id="3-AWSアカウントとアベイラビリティーゾーン名の関係性"><a href="#3-AWSアカウントとアベイラビリティーゾーン名の関係性" class="headerlink" title="3. AWSアカウントとアベイラビリティーゾーン名の関係性"></a>3. AWSアカウントとアベイラビリティーゾーン名の関係性</h1><p>さて，ここからが本題です．<br>AWSの公式ベージにAZに関して興味深い説明がありました．</p>
+<p><strong>アベイラビリティーゾーンは、リージョンコードとそれに続く文字識別子によって表されます(us-east-1a など)。</strong><br><strong>リソースがリージョンの複数のアベイラビリティーゾーンに分散されるようにするため、アベイラビリティーゾーンは各AWSアカウントの名前に個別にマップされます。</strong><br><strong>たとえば、ご使用のAWSアカウントのアベイラビリティーゾーンus-east-1aは別のAWSアカウントのアベイラビリティーゾーンus-east-1aと同じ場所にはない可能性があります。</strong></p>
+<p>何を言ってるか分かりますか？<br>「Aさんのus-east-1aと Bさんのus-east-1aは異なる可能性があるよ．なぜなら，各AZの使用リソースが偏らないようにするためだ．」と言っています．<br>ユーザは無意識のうちに若い番号のAZから利用する可能性が高く，AWSはAZごとのリソースの偏りを恐れたのでしょうね．</p>
+<p>では，AさんとBさんが同一のAZにシステムを作る方法はないのでしょうか．<br>AWSの公式には，次のようにあります．</p>
+<p><strong>アカウント間でアベイラビリティーゾーンを調整するには、アベイラビリティーゾーンの一意で一貫性のある識別子であるAZ IDを使用する必要があります．</strong></p>
+<p>つまり，異なるアカウントで同一のAZを利用したい場合，AZ IDを合わせることで実現できそうです．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日は，AWS小ネタでした．<br>次回は，CloudFormation か DNS周り か WorkSpacesの説明を予定しています．<br>早くアップロードできるように頑張りますb<br>ではノシ</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/" data-id="cjujuizge0000dcuys1neh7i6" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Javascriptの罠 〜値渡しと参照渡し〜</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 10px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/16/AWSアカウントごとに対応するアベイラビリティーゾーン名は異なる/">AWSアカウントとアベイラビリティーゾーン名</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/03/競技プログラミングと計算量/">競技プログラミングと計算量</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
