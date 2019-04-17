@@ -102,12 +102,12 @@
 <h1 id="4-幅優先探索の実装"><a href="#4-幅優先探索の実装" class="headerlink" title="4. 幅優先探索の実装"></a>4. 幅優先探索の実装</h1><p>幅優先探索の擬似コードを記載します．<br>本擬似コードは，迷路の最適経路探索をイメージしながら記載しました．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bfs</span>(<span class="params"> </span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> q = <span class="comment">/* 初期値 */</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 探索済みフラグ */</span></span><br><span class="line">    <span class="keyword">var</span> flag[][] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(q.length)&#123;</span><br><span class="line">        <span class="comment">/* 探索範囲取り出し */</span></span><br><span class="line">        q.pop();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/* ゴール？ */</span></span><br><span class="line">        <span class="keyword">if</span>(q == <span class="string">"ゴール"</span>) &#123; <span class="keyword">return</span>( <span class="comment">/* ゴール */</span>); &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/* 探索済みならcontinue */</span></span><br><span class="line">        <span class="keyword">if</span>( flag[][] == <span class="number">1</span> )&#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line">      </span><br><span class="line">      　<span class="comment">/* 探索済みフラグセット */</span> </span><br><span class="line">        flag[][] = <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span>(<span class="comment">/* 次の探索範囲がある */</span>) q.push( <span class="comment">/* 次の探索範囲 */</span> );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span>( <span class="comment">/* ゴールせず */</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>幅優先探索はループで記載されることが多いようです．<br>探索候補を格納する変数qから探索候補を1つずつ取り出し，それがゴールであるか確認します(L12)．<br>ゴールでなければ探索済みフラグを立て，次の探索範囲を変数qへ追加します(L20)．<br>全ての探索が完了した場合(qが空になった場合)，関数bfs内の処理が終了します(L23)．</p>
 <hr>
-<h1 id="5-おわりに"><a href="#5-おわりに" class="headerlink" title="5. おわりに"></a>5. おわりに</h1><p>幅優先探索でした．ご理解いただけたら幸いです．<br>アルゴリズム関係で次に予定している題材は，動的計画法です．<br>以前にも少しブログにさらっと書きましたが，もう少し深いところまで記載できたらと考えています(動的計画法奥深すぎです汗)<br>それでは！</p>
+<h1 id="5-おわりに"><a href="#5-おわりに" class="headerlink" title="5. おわりに"></a>5. おわりに</h1><p>幅優先探索でした．ご理解いただけたら幸いです．<br>アルゴリズム関係で次に予定している題材は，動的計画法です．<br>以前にもさらっとブログに書きましたが，もう少し深いところまで記載できたらと考えています(動的計画法 奥深すぎです汗)<br>それでは！</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjul2648z000czssocvdhyd2k" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjul28jvx000c13soyxnc1adm" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -161,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjul2648m0001zssof22sxywc" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjul28jvo000313soikal1w0q" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -214,7 +214,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjul2648s0005zssoedn66jb3" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjul28jvq000413sozg4qdmtl" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -290,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjul2648i0000zssotswuzmr1" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjul28jvh000013sorl4qh1y5" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -424,7 +424,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjul26494000izsso3c2kg1sa" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjul28jw2000j13soy43weme0" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -487,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjul2648v0008zsso0ic85iuc" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjul28jvu000813sou0w2w53k" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -544,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjul2648y000azssozl6z2vrp" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjul28jvv000a13sojq58yklx" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -614,7 +614,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjul2648r0004zssopejgnnp3" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjul28jvr000513sofac4eoc9" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -658,7 +658,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjul2648u0007zssoeu0iybav" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjul28jvt000713son95gcrbd" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -727,7 +727,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjul26491000fzsso83qn8xif" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjul28jvz000f13soq1bbzrhg" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
