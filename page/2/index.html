@@ -62,6 +62,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-深さ優先探索について" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/10/深さ優先探索について/" class="article-date">
+  <time datetime="2019-03-10T14:20:00.000Z" itemprop="datePublished">2019-03-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/10/深さ優先探索について/">深さ優先探索について</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>インフラエンジニアとして6年ほど経験を積んできて，ふと周りを世間を見渡すとクラウド全盛期になっていました．<br>しかし私の周りでは，まだまだオンプレ全盛期．<br>お客様的にも「クラウド なにそれ美味しいの？」状態で，多少の興味はあるものの踏み出せないという方がとても多いです．<br>なので，私自身「クラウドの勉強なんかしなくていい」と思っておりましたが，見事に世の中の流れに乗り遅れました．<br>そのことに気付いたのが，昨年の11月．←遅いw<br>急いでAWSの勉強を始め，2019/01にAWSのソリューションアーキテクトプロフェッショナルを取得しました．</p>
+<p>もともと資格とって勉強終了する予定だったのですが，AWSに詳しくなるほど「プログラミングしてモノをつくりたいなぁ」という思いが強くなりました．<br>どうすれば，良いのか考えてみたものの答えはでなかったので，とりあえず手を動かして LambdaとDynamoDB使ってLineBot作ったり，プロコン始めたり，ReactNativeでモバイルアプリ作ったりと多方面に手を伸ばしてみました．<br>仕事から帰ってきて夜な夜なプログラムを組む日々．とても刺激的ですw<br>分からないことが多く頭を悩ませる日々ではありますが，エンジニアはモノを作ってナンボだと思っているので，少しでも自分ができる範囲を増やしていければと思っております．</p>
+<p>さて，前置きが長くなりました．汗<br>今日は，プロコンを通して得た知識 (アルゴリズム)を少し書きたいと思います．</p>
+<p>参考：筆者のGithub<br><strong><em><a href="https://github.com/KosukeLand" target="_blank" rel="noopener">https://github.com/KosukeLand</a></em></strong></p>
+<hr>
+<h1 id="2-深さ優先探索について"><a href="#2-深さ優先探索について" class="headerlink" title="2. 深さ優先探索について"></a>2. 深さ優先探索について</h1><p>コンピュータサイエンスを学んだ方なら，勉強したことがあるかもしれません．<br>深さ優先探索と名前が付いている通り，探索アルゴリズムの1つです．プロコンでは必須の知識です．</p>
+<p>では「3つの事象(A,B,C)を順序付きで選択する場合」を例に深さ優先探索について説明します．<br><img src="/images/20190310-1.png" alt="図1: 深さ優先全探索" title="図1: 深さ優先全探索" width="700"><br>深さ優先探索では物事をツリー状に整理し，ツリーの深いところから順に探索をします．<br>探索は図1の数字の順に実施され，<strong>1回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Aを選択する場合</strong> → <strong>1回目Aを選択し，2回目Bを選択する場合</strong> → <strong>…</strong>といった具合です．</p>
+<p>では，深さ優先探索はどのような問題を解く際に利用されるのでしょうか．<br>具体例をあげてみましょう．</p>
+<h3 id="深さ優先探索で解く問題"><a href="#深さ優先探索で解く問題" class="headerlink" title="深さ優先探索で解く問題"></a>深さ優先探索で解く問題</h3><p>ナップサックに荷物を入れていく．<br>荷物には、それぞれ重さと金額が設定されており，ナップサック内に入っている荷物の金額を最大化したい．<br>荷物はそれぞれ1つしか存在しない．<br>ナップサックには合計5kgまでしか荷物が入らない．</p>
+<ul>
+<li>A :  8円 , 1kg</li>
+<li>B : 10円 , 2kg</li>
+<li>C : 15円 , 3kg</li>
+</ul>
+<p>この問題を解くために，深さ優先で全探索をしてみます．</p>
+<p><strong>サンプル1</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth; <span class="comment">// 木の深さ</span></span><br><span class="line"><span class="keyword">var</span> kind;  <span class="comment">// 荷物の種類</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, comb</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span>(n == depth)&#123; calc(comb); <span class="keyword">return</span>(<span class="number">0</span>);&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;= kind; i++)&#123;</span><br><span class="line">        comb[n] = i; <span class="comment">// n番目にi番目の荷物を袋に入れる</span></span><br><span class="line">        dfs(n + <span class="number">1</span>, comb); <span class="comment">// n+1番目を探索</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上記のサンプルの場合，図1と同様の探索を実施しています．<br>なので，配列combには荷物の順序込みの組み合わせパターンが入ります．<br>この場合，combが取り得る値は <strong>[0,0,0,0]〜[3,3,3,3]</strong> であり，<strong>256通り</strong>試行する必要があると言えます．<br>しかし，本ナップサック問題の場合，この組み合わせを全て探索する必要はありません．<br>なぜなら，</p>
+<ul>
+<li>同じ荷物は複数存在しない．</li>
+<li>A-B-Cと荷物を入れた場合とA-C-Bと荷物を入れた場合では，ナップサックの中身は同じ(順序考慮不要)．</li>
+</ul>
+<p>だからです．<br>なので考え方を少し変えて，以下のように「どの荷物を入れるか」だけを考えます．<br><img src="/images/20190310-2.png" alt="図2: ナップサック問題全探索" title="図2: ナップサック問題全探索" width="700"><br>図2では，2回目の試行の途中まで記載しました．<br>各試行では，「荷物を入れる」 or 「荷物を入れない」のみを検討してしています．<br>なので図2の赤印は，ナップサックに荷物Aのみ入っている状況です．</p>
+<p>上記の考え方でプログラムを書くと，以下のようになります．</p>
+<p><strong>サンプル2</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> depth; <span class="comment">// 木の深さ</span></span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, []);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">n, comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 組み合わせが決まったら，その組み合わせの金額を計算</span></span><br><span class="line">    <span class="keyword">if</span> (n == depth) &#123; calc(comb); <span class="keyword">return</span> (<span class="number">0</span>); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 組み合わせを作成(0:入れない，1:入れる)　←サンプル1と異なる箇所</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        comb[n] = i; <span class="comment">// n番目にi番目の荷物を袋に入れる</span></span><br><span class="line">        dfs(n + <span class="number">1</span>, comb); <span class="comment">// n+1番目を探索</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calc</span>(<span class="params">comb</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ナップサックに荷物が入れることが可能なら，荷物の金額を計算</span></span><br><span class="line">    <span class="comment">// 荷物の金額が最大であるか調査</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>この場合，配列combが取り得る値は <strong>[0,0,0]〜[1,1,1]</strong> であり，<strong>8通り</strong>探索すればよいとわかります．</p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>今回示した例題では，荷物の種類やナップサックの容量が少ないため全探索してもそれほど時間はかかりません．<br>しかし荷物やナップサックが大きくなった場合(例えば，荷物が数百種類，ナップサック容量が数百tなど)，数億通り以上の探索をしなければならず実行時間がかかってしまいます．<br>そのため，探索プログラムでは「探索範囲をいかに減らすか」が大変重要になります．<br>次回は，探索範囲をさらに減らす方法について検討していきたいと思います(予定)．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjul26492000gzssodbc6fedy" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-HEXOで作成したブログをGithub-ioで公開してみた" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" class="article-date">
@@ -164,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjujuuz8u0003g6uypjup0l3j" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjul2648p0003zsso0jrng228" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -204,7 +270,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 15px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 10px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 20px;">競技プログラミング</a>
+      <a href="/tags/AWS/" style="font-size: 13.33px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 13.33px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 10px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 16.67px;">競技プログラミング</a>
     </div>
   </div>
 
@@ -226,6 +292,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/">AWSアカウントとアベイラビリティーゾーン名</a>
           </li>
         
@@ -239,10 +309,6 @@
         
           <li>
             <a href="/2019/04/03/競技プログラミングと計算量/">競技プログラミングと計算量</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
           </li>
         
       </ul>
