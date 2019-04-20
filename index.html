@@ -62,6 +62,48 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Docker-for-Windowsと認証プロキシ" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/" class="article-date">
+  <time datetime="2019-04-20T00:57:29.000Z" itemprop="datePublished">2019-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>1時間ぐらいhttpステータスコード407と戦ったので，備忘録として残しておきます．</p>
+<p>認証プロキシ経由でイメージをpush/pullしたい場合，<br>proxiesに以下の設定を入れれば良いです．</p>
+<p><img src="/images/20190420-1.png" alt="図1: 認証プロキシ設定" title="図1: 認証プロキシ設定" width="700"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjuotut4x00052juyb6eh225e" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-AWSソリューションアーキテクト・アソシエイト試験勉強方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" class="article-date">
@@ -92,7 +134,7 @@
 <p>この中で，今回対象とするのは赤枠で囲った試験(ソリューションアーキテクト・アソシエイト)です．<br>私の周りでは，AWS認定初級試験として認識されている印象ですが，<br>出題範囲は広く，サーバやNWの知識からDBやCDNまで問われるため，きちんと勉強しなければ合格することができません．<br>主にサービスの仕様を答える問題が多いのが特徴で，AWSの考え方や仕様をきちんと理解する必要があります．</p>
 <p>，，，ですが，きちんと勉強すればそこまで難しい試験ではありませんのでご安心を！</p>
 <hr>
-<h1 id="3-アソシエイト認定に向けての勉強方法"><a href="#3-アソシエイト認定に向けての勉強方法" class="headerlink" title="3. アソシエイト認定に向けての勉強方法"></a>3. アソシエイト認定に向けての勉強方法</h1><h2 id="3-1-学習すべきサービス"><a href="#3-1-学習すべきサービス" class="headerlink" title="3.1 学習すべきサービス"></a>3.1 学習すべきサービス</h2><p>ソリューションアーキテクトの試験は出題範囲が広いですが，全てのサービスを理解する必要はありません．<br>なので，必要なサービスに絞って勉強していくことが大切です．<br>では何を勉強すべきか．．．私は以下のように考えています．<br><img src="/images/20190418-2.png" alt="図2: 学習すべきサービス一覧" title="図2: 学習すべきサービス一覧" width="700"><br>必要度(高)のサービスは頻出です．まず出題されると考えてもらって構いません．<br>必要度(中)のサービスは出題頻度高めで，失点は合否に関わると思います．<br>必要度(低)のサービスは，学習優先度は落ちますが，勉強しておいて損はありません．</p>
+<h1 id="3-アソシエイト認定に向けての勉強方法"><a href="#3-アソシエイト認定に向けての勉強方法" class="headerlink" title="3. アソシエイト認定に向けての勉強方法"></a>3. アソシエイト認定に向けての勉強方法</h1><h2 id="3-1-学習すべきサービス"><a href="#3-1-学習すべきサービス" class="headerlink" title="3.1 学習すべきサービス"></a>3.1 学習すべきサービス</h2><p>ソリューションアーキテクトの試験は出題範囲が広いですが，全てのサービスを理解する必要はありません．<br>なので，必要なサービスに絞って勉強していくことが大切です．<br>では何を勉強すべきか．．．私は以下のように考えています．<br><img src="/images/20190418-2.png" alt="図2: 学習すべきサービス一覧" title="図2: 学習すべきサービス一覧" width="700"><br>優先度(高)のサービスは頻出です．まず出題されると考えてもらって構いません．<br>優先度(中)のサービスは出題頻度高めで，失点は合否に関わると思います．<br>優先度(低)のサービスは，学習優先度は落ちますが，勉強しておいて損はありません．</p>
 <h2 id="3-2-学習方法"><a href="#3-2-学習方法" class="headerlink" title="3.2 学習方法"></a>3.2 学習方法</h2><p>学習効率が高い方法は，下記の2つです．</p>
 <ul>
 <li><a href="https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/" target="_blank" rel="noopener">BlackBelt</a>を読んで，AWSマネジメントコンソールで遊ぶ</li>
@@ -101,12 +143,12 @@
 <p>「習うより慣れろ」です！BlackBeltを軽く確認したら，AWSでいっぱい遊んでください．<br>例えば，「システム構成図通りにAWSに環境を構築する」なんて良いかもしれません．<br>システム構成図例は，<a href="https://www.ketancho.net/entry/2018/05/07/080000" target="_blank" rel="noopener">このブログ</a>を参考にすると良いでしょう．AWSでよく利用される構成が解説されています．</p>
 <p>また，ある程度AWSに慣れてきたら模試を受験しましょう．<br>30分で25問出題されるので，出題傾向をつかむことができます(お金は多少かかってしまいますが，，，)．</p>
 <hr>
-<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>AWSの理解を深めるのには，実際AWSを運用することが一番です．<br>運用で培った知識を，資格というカタチで見える化してみてはどうでしょうか？<br>それでは！</p>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>AWSの理解を深めるのには，実際AWSを実際に利用してみるのが一番です．<br>勉強で得た知識を，資格というカタチで見える化してみてはどうでしょうか？<br>それでは！</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjump0nyg0001bhuywf9uuqnm" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjuotut4s00012juy9g11vsbh" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
@@ -163,7 +205,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjump0nyv000fbhuya9bys0sa" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjuotut55000g2juy20ax7s1a" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -217,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjump0nyc0000bhuyi1pyljaj" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjuotut4o00002juyyy51maia" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -270,7 +312,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjump0nyn0005bhuy7xc7hk2k" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjuotut4y00072juy05034cnr" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -346,7 +388,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjump0nyk0003bhuyr0px0vjp" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjuotut4v00032juyy81068la" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -480,7 +522,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjump0nyy000kbhuyadh9o2wa" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjuotut59000n2juyt5mckv5s" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -543,7 +585,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjump0nyt000abhuyq2erogud" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjuotut52000c2juy16lccshe" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -600,7 +642,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjump0nyu000cbhuyzte8z46e" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjuotut54000f2juyoo5c05nn" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -670,54 +712,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjump0nyp0007bhuy4yoc1ccq" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjuotut51000a2juyngm7ovna" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Windowsが起動しなくなった話" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/22/Windowsが起動しなくなった話/" class="article-date">
-  <time datetime="2019-03-22T08:40:00.000Z" itemprop="datePublished">2019-03-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/Windowsが起動しなくなった話/">Windowsが起動しなくなった話</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>BootCampでデュアルブートしたWindows10のHyper-vを有効化して再起動した．<br>Windowsが起動しなくなった．<br>つらい．．．．泣きたい．．．．</p>
-<p><a href="https://support.apple.com/ja-jp/HT207469" target="_blank" rel="noopener">https://support.apple.com/ja-jp/HT207469</a></p>
-<h4 id="2019-03-26-追記"><a href="#2019-03-26-追記" class="headerlink" title="2019/03/26 追記"></a>2019/03/26 追記</h4><p>非公式ですが，下記の記事によるとSierra10.12.4以降であればバグが解消されている模様．<br>MacOSを確認すると，Sierra10.12.3だったので早速OSをMojaveにアップデート．<br>アップデートしてWindows10を起動したところ，無事ログインできました．</p>
-<p>お騒がせしましたm(_ _)m</p>
-<p><a href="https://applech2.com/archives/20170419-hyper-v-enable-after-macos-10-12-4-update.html" target="_blank" rel="noopener">https://applech2.com/archives/20170419-hyper-v-enable-after-macos-10-12-4-update.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjump0nyr0008bhuyevgw952t" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
 
     </footer>
   </div>
@@ -744,7 +742,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
     </div>
   </div>
 
@@ -754,7 +752,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 10px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
     </div>
   </div>
 
@@ -776,6 +774,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/">AWSソリューションアーキテクト・アソシエイト試験勉強方法</a>
           </li>
         
@@ -789,10 +791,6 @@
         
           <li>
             <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
           </li>
         
       </ul>
