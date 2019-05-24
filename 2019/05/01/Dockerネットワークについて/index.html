@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Dockerネットワークについて | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめに簡単な検証をすることが最近多いのですが，その際にDockerを触ることが多くなりました．多くのプロダクトがDockerHubより提供されているため，簡単な検証環境を構築する際にDockerは大変便利です．特に私の場合ローカルのPCスペックがそこまで良くないので，複数台のマシン(or 仮想マシン)を使った検証をすることができず必然的にDockerを利用して検証環境を作ることになります">
+<meta name="keywords" content="Docker,NW">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dockerネットワークについて">
+<meta property="og:url" content="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめに簡単な検証をすることが最近多いのですが，その際にDockerを触ることが多くなりました．多くのプロダクトがDockerHubより提供されているため，簡単な検証環境を構築する際にDockerは大変便利です．特に私の場合ローカルのPCスペックがそこまで良くないので，複数台のマシン(or 仮想マシン)を使った検証をすることができず必然的にDockerを利用して検証環境を作ることになります">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190501-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190501-2.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190501-3.png">
+<meta property="og:updated_time" content="2019-05-23T10:37:36.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dockerネットワークについて">
+<meta name="twitter:description" content="1. はじめに簡単な検証をすることが最近多いのですが，その際にDockerを触ることが多くなりました．多くのプロダクトがDockerHubより提供されているため，簡単な検証環境を構築する際にDockerは大変便利です．特に私の場合ローカルのPCスペックがそこまで良くないので，複数台のマシン(or 仮想マシン)を使った検証をすることができず必然的にDockerを利用して検証環境を作ることになります">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20190501-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Dockerネットワークについて" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/01/Dockerネットワークについて/" class="article-date">
+  <time datetime="2019-05-01T13:00:00.000Z" itemprop="datePublished">2019-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dockerネットワークについて
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>簡単な検証をすることが最近多いのですが，その際にDockerを触ることが多くなりました．<br>多くのプロダクトがDockerHubより提供されているため，簡単な検証環境を構築する際にDockerは大変便利です．<br>特に私の場合ローカルのPCスペックがそこまで良くないので，複数台のマシン(or 仮想マシン)を使った検証をすることができず<br>必然的にDockerを利用して検証環境を作ることになります．<br>これだけ世間で流行る理由がよくわかります．もう検証環境を構築するために仮想マシン立てることはできないでしょう．<br>めんどくさいですしw</p>
+<p>さて，今日はDockerの中でもネットワークに関して，少し触れていきたいと思います．</p>
+<hr>
+<h1 id="2-Dockerネットワーク概要"><a href="#2-Dockerネットワーク概要" class="headerlink" title="2. Dockerネットワーク概要"></a>2. Dockerネットワーク概要</h1><p>Dockerコンテナを起動させると，コンテナに対しネットワークが割り当てられます．<br>特に設定していない場合は”bridge”が利用され，ホストマシンをブリッジして外部の環境と通信をすることになります．</p>
+<p>しかし，Dockerネットワークにはbridge以外にも以下のネットワークがデフォルトで用意されています．</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">xxxxxxxxxxxx        bridge              bridge              <span class="built_in">local</span></span><br><span class="line">yyyyyyyyyyyy        host                host                <span class="built_in">local</span></span><br><span class="line">zzzzzzzzzzzz        none                null                <span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-1-bridgeネットワーク"><a href="#2-1-bridgeネットワーク" class="headerlink" title="2.1 bridgeネットワーク"></a>2.1 bridgeネットワーク</h2><p>docker0と呼ばれる仮想ブリッジ経由で通信する形式です．<br>各コンテナはveth(カーネルが提供するか仮想インターフェース)を介して仮想ブリッジに接続されます．<br>図で書くと以下のようになります．</p>
+<p><img src="/images/20190501-1.png" alt="図1: bridgeネットワーク" title="図1: bridgeネットワーク" width="500"></p>
+<p>コンテナはeth0というNICを認識し(実体はveth)，当該NICを利用してコンテナ同士 又は外部機器と通信します．<br>コンテナとホストマシンのネットワークは分離されているため，それぞれ異なるアドレスレンジを利用します．<br>なので，外部機器と通信する際はdocker0をデフォルトゲートウェイに利用し，そこでホストマシンのアドレスにNATされます．</p>
+<p>ここで注意すべき点として，<br>コンテナはDockerが管理するアドレス空間から利用されていないIPアドレスが自動的に割り当てられるため，コンテナのIPは不定となります．<br>DHCPを想像していただければ分かりやすいかと思います．<br>コンテナに割り当てられるアドレスレンジの確認は，以下のコマンドで行います．</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$ docker network inspect bridge</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"5482b53471090013ec6ec2605214545e595d713dede280e815dcc9efb0968458"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2019-05-01T12:40:10.365713105Z"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: &#123;</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: &#123;</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: &#123;</span><br><span class="line">            <span class="string">"f1761e429f3c3b797ea6db3e9f7ceae43190a43b5186e9805e32e78b50e6f616"</span>: &#123;</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"fuga"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"04815728bd8de73d69fe09b22f0f6b4feb61a5e609543b93731b336d0b8e54a9"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">      :</span><br><span class="line">   〜省略〜</span><br><span class="line">      :</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>コマンドの結果を確認すると，コンテナには172.17.0.0/16のネットワークが割り当てられ<br>そのデフォルトゲートウェイは172.17.0.1であることがわかります．<br>また，コンテナには，172.17.0.2のアドレスが割り当てられていることも合わせて確認することができます．</p>
+<h2 id="2-2-hostネットワーク"><a href="#2-2-hostネットワーク" class="headerlink" title="2.2 hostネットワーク"></a>2.2 hostネットワーク</h2><p>使ったことないので，軽めの説明です．<br>ホストマシンと同一のアドレスをコンテナで利用する際に本ネットワークを選択します．<br>図で書くと以下のような構成になります．</p>
+<p><img src="/images/20190501-2.png" alt="図2: hostネットワーク" title="図2: hostネットワーク" width="500"></p>
+<p>hostネットワークに所属する全てのコンテナがホストマシンと同一のアドレスとなるため，<br>通信する際はポートを指定することになります(なるはず)．<br>そのため，利用用途は限られるのではないかと考えています．</p>
+<p>※ hostネットワークは，Docker Desktop for Mac 及び Docker Desktop for Windowsで未サポートです．<br><a href="https://docs.docker.com/network/host/" target="_blank" rel="noopener">https://docs.docker.com/network/host/</a></p>
+<h2 id="2-2-noneネットワーク"><a href="#2-2-noneネットワーク" class="headerlink" title="2.2 noneネットワーク"></a>2.2 noneネットワーク</h2><p>このネットワークも使ったことないので，軽めの説明です．<br>公式ドキュメントに，「全てのネットワークがdisableになる」と記載があるため，<br>任意のコンテナが他のコンテナ 及び 外部と通信しない場合，本ネットワークを選択します．<br>図で書くと以下のような構成になります(と思います)．</p>
+<p><img src="/images/20190501-3.png" alt="図3: noneネットワーク" title="図3: noneネットワーク" width="500"></p>
+<p>noneネットワークを使用したコンテナのネットワークを確認します．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> container_name ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: tunl0@NONE: &lt;NOARP&gt; mtu 1480 qdisc noop state DOWN group default qlen 1</span><br><span class="line">    link/ipip 0.0.0.0 brd 0.0.0.0</span><br><span class="line">3: ip6tnl0@NONE: &lt;NOARP&gt; mtu 1452 qdisc noop state DOWN group default qlen 1</span><br><span class="line">    link/tunnel6 :: brd ::</span><br></pre></td></tr></table></figure></p>
+<p>ループバックアドレスのみ表示され，eth0がコンテナにアタッチされていないことが分かります．</p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>上記の3つのネットワークでは，特に理由がない限りbridgeを利用しておけば良さそうです．<br>また，これ以外にもoverlay networks等がありますが，そこまで勉強が及んでいないため次回以降に記載できればと思っております．</p>
+<p>上記以外に私が気になっているポイントとして，NICをプロミスキャスモードで利用するケースの有無です．<br>VMwareで仮想化したサーバの運用が長かったため，VMware的な考えになりがちなのですが，<br>Hypervisor上で仮想マシンを動作させる際は，物理NICをプロミスキャスモードにし，仮想スイッチで各仮想マシンにパケットを振り分けることが一般的です．<br>dockerを利用した際は，そのような利用方法はしないのでしょうか？私 気になります！<br>それでは！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjw2889g8000ig8uyqmdbqlcs" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NW/">NW</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/07/最短経路問題を解く/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          最短経路問題を解く
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Docker for Windowsと認証プロキシ</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/">AWSソリューションアーキテクト・アソシエイト試験勉強方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

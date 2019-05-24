@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>最短経路問題を解く | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめに競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．以前より，興味があった分野であるため少し勉強してみました．今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．それではいきましょう！  2. ワーシャルフロイド法ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．ワー">
+<meta name="keywords" content="競技プログラミング,アルゴリズム">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短経路問題を解く">
+<meta property="og:url" content="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめに競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．以前より，興味があった分野であるため少し勉強してみました．今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．それではいきましょう！  2. ワーシャルフロイド法ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．ワー">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190507-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190507-2.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190507-3.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20190507-4.png">
+<meta property="og:updated_time" content="2019-05-23T10:29:11.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最短経路問題を解く">
+<meta name="twitter:description" content="1. はじめに競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．以前より，興味があった分野であるため少し勉強してみました．今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．それではいきましょう！  2. ワーシャルフロイド法ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．ワー">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20190507-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-最短経路問題を解く" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/07/最短経路問題を解く/" class="article-date">
+  <time datetime="2019-05-07T13:00:00.000Z" itemprop="datePublished">2019-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      最短経路問題を解く
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．<br>以前より，興味があった分野であるため少し勉強してみました．<br>今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-ワーシャルフロイド法"><a href="#2-ワーシャルフロイド法" class="headerlink" title="2. ワーシャルフロイド法"></a>2. ワーシャルフロイド法</h1><p>ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．<br>ワーシャルフロイド法では，ノードkを経由してノードiからノードjへ移動する最小コストを更新していきます．<br>計算量はO(V^3)と少し重めですが，全てのノード間の最短経路を計算できるため有用です．<br>図を利用して説明しましょう．</p>
+<p><img src="/images/20190507-1.png" alt="図1: ワーシャルフロイド法解説" title="図1: ワーシャルフロイド法解説" width="500"></p>
+<p>図中の丸はノードを 線はノード間の接続を表し，線上に記載された値はノード移動の際に発生するコストを表します．<br>ワーシャルフロイド法では全ノード間の最短経路を探索するため，本来は全てのノードの探索を説明する必要があるのですが，<br>ここでは，ノードAからノードEへの最小コストにのみに着目し説明したいと思います．<br>まず，図よりノードAはノードBと接続しているため，ノードBを経由すればノードEへ到達できそうです．<br>その際のコストは15(5+10)となります．現在の最小コストとなります(青)．<br>次にノードAからノードBを経由してノードDへ到達した場合のコスト9(5+4)を記憶します(赤)．<br>最後にノードAからノードDを経由してノードE到達した場合，コストは13(9+4)となるため，最小コストが更新されます(赤)．</p>
+<p>このようにして最短経路を更新し続け，最終的に出力される経路が最短となります．<br>では，実装してみましょう．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配列dをコストで初期化</span></span><br><span class="line"><span class="comment">// d[start][goal] = cost;</span></span><br><span class="line"></span><br><span class="line">V = ノード数</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中継ノード</span></span><br><span class="line"><span class="keyword">for</span>(k = <span class="number">0</span> ; k = V ; k++)&#123;</span><br><span class="line">    <span class="comment">// スタートノード    </span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span> ; i = V ; i++)&#123;</span><br><span class="line">        <span class="comment">// ゴールノード</span></span><br><span class="line">        <span class="keyword">for</span>(j) = <span class="number">0</span> ; j = V ; j++)&#123;</span><br><span class="line">            d[i][j] = Min(d[i][j], d[i][k] + d[k][j])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上記の通り，アルゴリズムが非常に平易であるため，計算量的に厳しくなければワーシャルフロイドを利用することが良いでしょう．<br>AtCoderの場合，ノード数が10^2以内であれば間に合いそうです．<br>それ以上になると，計算量を落としたアルゴリズムを利用する必要があります．</p>
+<hr>
+<h1 id="3-ダイクストラ法"><a href="#3-ダイクストラ法" class="headerlink" title="3. ダイクストラ法"></a>3. ダイクストラ法</h1><p>インプットが少なければ，ワーシャルフロイド方で良いのですが，<br>インプットが大きい場合(例えば，ノードが10^3を超える場合)はダイクストラ法を利用することになるでしょう．<br>ダイクストラ法では，特定のスタートノードからの最短経路が確定していないノードに着目し，当該ノードの最短経路を確定させ続けることでスタートノードからゴールノードへの最短経路を確定させます．</p>
+<p><img src="/images/20190507-2.png" alt="図2: ダイクストラ法解説-1" title="図2: ダイクストラ法解説-1" width="500"></p>
+<p>ワーシャルフロイド法と同様にノードAからノードEへの最短経路を探索します．<br>まず，ノードAより移動可能なノードBのみなのでノードBへの最短経路は5と確定します．</p>
+<p><img src="/images/20190507-3.png" alt="図3: ダイクストラ法解説-2" title="図3: ダイクストラ法解説-2" width="500"></p>
+<p>次にノードBより移動可能なノードは，ノードC，ノードD，ノードEなので それぞれのノードへの移動コストを計算します．<br>計算すると12，9，15とわかります．<br>この中でノードDへ移動コストはこの中で最小の9であるため，ノードAからノードDへの移動の最小コストであるとわかります．</p>
+<p><img src="/images/20190507-4.png" alt="図4: ダイクストラ法解説-3" title="図4: ダイクストラ法解説-3" width="500"></p>
+<p>最後に，ノードDから移動可能なノードEであり，その距離は4であることが図からわかります．<br>そのため，ノードAからノードEへの最小コストは13であるとわかります．</p>
+<p>さて，ダイクストラ法も実装してみましょう．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配列costをコストで初期化</span></span><br><span class="line"><span class="comment">// (インプットとしてコストが与えられない場合，そのコストはInfinity)</span></span><br><span class="line"><span class="comment">// cost[start][goal] = cost;</span></span><br><span class="line"></span><br><span class="line">V = ノード数</span><br><span class="line">used[] = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// スタート地点まで到達するためのコストは0</span></span><br><span class="line">d[start] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    v = <span class="number">-1</span> ;</span><br><span class="line">    <span class="comment">// 最短経路が確定していないノードの中で，現在スタート地点からの距離が最短のノードを探索</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; V; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!used[i] &amp;&amp; (v == <span class="number">-1</span> || d[i] &lt; d[v]))&#123; </span><br><span class="line">            v = i;</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 利用フラグ立てる</span></span><br><span class="line">    used[i] = <span class="literal">true</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ノードを全て利用している場合，ループ終了</span></span><br><span class="line">    <span class="keyword">if</span>(v == <span class="number">-1</span>)&#123; <span class="keyword">break</span> &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 現在のノードvまでのコスト と ノードiまでのコストとノードiからノードvへのコストの合計 の小さい方を選択</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; V; i++)&#123;</span><br><span class="line">        d[v] = Min(d[v], d[i] + cost[i][v]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>部分集合の解を計算することで目的の値を取得することから，本アルゴリズムは計算動的計画法と言えると思います．<br>またダイクストラ法では，最短経路が確定した際に経路を記憶することで，スタートノードからゴールノードまでの経路情報を生成することも可能です．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日は経路探索アルゴリズムをみていきました．<br>実は，有名なアルゴリズムとしてベルマンフォード法もあるのですが，<br>負の閉路が存在するグラフ以外適用されないアルゴリズムであり，基本的に上記の2つの学習優先度の方が高いと判断しました．<br>良ければ学んでみてください．<br>それでは！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjw2889gk0012g8uy3ae0crig" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/01/Dockerネットワークについて/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Dockerネットワークについて</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/">AWSソリューションアーキテクト・アソシエイト試験勉強方法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

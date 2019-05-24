@@ -62,10 +62,131 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-最短経路問題を解く" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/07/最短経路問題を解く/" class="article-date">
+  <time datetime="2019-05-07T13:00:00.000Z" itemprop="datePublished">2019-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．<br>以前より，興味があった分野であるため少し勉強してみました．<br>今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-ワーシャルフロイド法"><a href="#2-ワーシャルフロイド法" class="headerlink" title="2. ワーシャルフロイド法"></a>2. ワーシャルフロイド法</h1><p>ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．<br>ワーシャルフロイド法では，ノードkを経由してノードiからノードjへ移動する最小コストを更新していきます．<br>計算量はO(V^3)と少し重めですが，全てのノード間の最短経路を計算できるため有用です．<br>図を利用して説明しましょう．</p>
+<p><img src="/images/20190507-1.png" alt="図1: ワーシャルフロイド法解説" title="図1: ワーシャルフロイド法解説" width="500"></p>
+<p>図中の丸はノードを 線はノード間の接続を表し，線上に記載された値はノード移動の際に発生するコストを表します．<br>ワーシャルフロイド法では全ノード間の最短経路を探索するため，本来は全てのノードの探索を説明する必要があるのですが，<br>ここでは，ノードAからノードEへの最小コストにのみに着目し説明したいと思います．<br>まず，図よりノードAはノードBと接続しているため，ノードBを経由すればノードEへ到達できそうです．<br>その際のコストは15(5+10)となります．現在の最小コストとなります(青)．<br>次にノードAからノードBを経由してノードDへ到達した場合のコスト9(5+4)を記憶します(赤)．<br>最後にノードAからノードDを経由してノードE到達した場合，コストは13(9+4)となるため，最小コストが更新されます(赤)．</p>
+<p>このようにして最短経路を更新し続け，最終的に出力される経路が最短となります．<br>では，実装してみましょう．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配列dをコストで初期化</span></span><br><span class="line"><span class="comment">// d[start][goal] = cost;</span></span><br><span class="line"></span><br><span class="line">V = ノード数</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中継ノード</span></span><br><span class="line"><span class="keyword">for</span>(k = <span class="number">0</span> ; k = V ; k++)&#123;</span><br><span class="line">    <span class="comment">// スタートノード    </span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span> ; i = V ; i++)&#123;</span><br><span class="line">        <span class="comment">// ゴールノード</span></span><br><span class="line">        <span class="keyword">for</span>(j) = <span class="number">0</span> ; j = V ; j++)&#123;</span><br><span class="line">            d[i][j] = Min(d[i][j], d[i][k] + d[k][j])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上記の通り，アルゴリズムが非常に平易であるため，計算量的に厳しくなければワーシャルフロイドを利用することが良いでしょう．<br>AtCoderの場合，ノード数が10^2以内であれば間に合いそうです．<br>それ以上になると，計算量を落としたアルゴリズムを利用する必要があります．</p>
+<hr>
+<h1 id="3-ダイクストラ法"><a href="#3-ダイクストラ法" class="headerlink" title="3. ダイクストラ法"></a>3. ダイクストラ法</h1><p>インプットが少なければ，ワーシャルフロイド方で良いのですが，<br>インプットが大きい場合(例えば，ノードが10^3を超える場合)はダイクストラ法を利用することになるでしょう．<br>ダイクストラ法では，特定のスタートノードからの最短経路が確定していないノードに着目し，当該ノードの最短経路を確定させ続けることでスタートノードからゴールノードへの最短経路を確定させます．</p>
+<p><img src="/images/20190507-2.png" alt="図2: ダイクストラ法解説-1" title="図2: ダイクストラ法解説-1" width="500"></p>
+<p>ワーシャルフロイド法と同様にノードAからノードEへの最短経路を探索します．<br>まず，ノードAより移動可能なノードBのみなのでノードBへの最短経路は5と確定します．</p>
+<p><img src="/images/20190507-3.png" alt="図3: ダイクストラ法解説-2" title="図3: ダイクストラ法解説-2" width="500"></p>
+<p>次にノードBより移動可能なノードは，ノードC，ノードD，ノードEなので それぞれのノードへの移動コストを計算します．<br>計算すると12，9，15とわかります．<br>この中でノードDへ移動コストはこの中で最小の9であるため，ノードAからノードDへの移動の最小コストであるとわかります．</p>
+<p><img src="/images/20190507-4.png" alt="図4: ダイクストラ法解説-3" title="図4: ダイクストラ法解説-3" width="500"></p>
+<p>最後に，ノードDから移動可能なノードEであり，その距離は4であることが図からわかります．<br>そのため，ノードAからノードEへの最小コストは13であるとわかります．</p>
+<p>さて，ダイクストラ法も実装してみましょう．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配列costをコストで初期化</span></span><br><span class="line"><span class="comment">// (インプットとしてコストが与えられない場合，そのコストはInfinity)</span></span><br><span class="line"><span class="comment">// cost[start][goal] = cost;</span></span><br><span class="line"></span><br><span class="line">V = ノード数</span><br><span class="line">used[] = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// スタート地点まで到達するためのコストは0</span></span><br><span class="line">d[start] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    v = <span class="number">-1</span> ;</span><br><span class="line">    <span class="comment">// 最短経路が確定していないノードの中で，現在スタート地点からの距離が最短のノードを探索</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; V; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!used[i] &amp;&amp; (v == <span class="number">-1</span> || d[i] &lt; d[v]))&#123; </span><br><span class="line">            v = i;</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 利用フラグ立てる</span></span><br><span class="line">    used[i] = <span class="literal">true</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ノードを全て利用している場合，ループ終了</span></span><br><span class="line">    <span class="keyword">if</span>(v == <span class="number">-1</span>)&#123; <span class="keyword">break</span> &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 現在のノードvまでのコスト と ノードiまでのコストとノードiからノードvへのコストの合計 の小さい方を選択</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; V; i++)&#123;</span><br><span class="line">        d[v] = Min(d[v], d[i] + cost[i][v]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>部分集合の解を計算することで目的の値を取得することから，本アルゴリズムは計算動的計画法と言えると思います．<br>またダイクストラ法では，最短経路が確定した際に経路を記憶することで，スタートノードからゴールノードまでの経路情報を生成することも可能です．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日は経路探索アルゴリズムをみていきました．<br>実は，有名なアルゴリズムとしてベルマンフォード法もあるのですが，<br>負の閉路が存在するグラフ以外適用されないアルゴリズムであり，基本的に上記の2つの学習優先度の方が高いと判断しました．<br>良ければ学んでみてください．<br>それでは！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjw2889gk0012g8uy3ae0crig" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Dockerネットワークについて" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/01/Dockerネットワークについて/" class="article-date">
+  <time datetime="2019-05-01T13:00:00.000Z" itemprop="datePublished">2019-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>簡単な検証をすることが最近多いのですが，その際にDockerを触ることが多くなりました．<br>多くのプロダクトがDockerHubより提供されているため，簡単な検証環境を構築する際にDockerは大変便利です．<br>特に私の場合ローカルのPCスペックがそこまで良くないので，複数台のマシン(or 仮想マシン)を使った検証をすることができず<br>必然的にDockerを利用して検証環境を作ることになります．<br>これだけ世間で流行る理由がよくわかります．もう検証環境を構築するために仮想マシン立てることはできないでしょう．<br>めんどくさいですしw</p>
+<p>さて，今日はDockerの中でもネットワークに関して，少し触れていきたいと思います．</p>
+<hr>
+<h1 id="2-Dockerネットワーク概要"><a href="#2-Dockerネットワーク概要" class="headerlink" title="2. Dockerネットワーク概要"></a>2. Dockerネットワーク概要</h1><p>Dockerコンテナを起動させると，コンテナに対しネットワークが割り当てられます．<br>特に設定していない場合は”bridge”が利用され，ホストマシンをブリッジして外部の環境と通信をすることになります．</p>
+<p>しかし，Dockerネットワークにはbridge以外にも以下のネットワークがデフォルトで用意されています．</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">xxxxxxxxxxxx        bridge              bridge              <span class="built_in">local</span></span><br><span class="line">yyyyyyyyyyyy        host                host                <span class="built_in">local</span></span><br><span class="line">zzzzzzzzzzzz        none                null                <span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-1-bridgeネットワーク"><a href="#2-1-bridgeネットワーク" class="headerlink" title="2.1 bridgeネットワーク"></a>2.1 bridgeネットワーク</h2><p>docker0と呼ばれる仮想ブリッジ経由で通信する形式です．<br>各コンテナはveth(カーネルが提供するか仮想インターフェース)を介して仮想ブリッジに接続されます．<br>図で書くと以下のようになります．</p>
+<p><img src="/images/20190501-1.png" alt="図1: bridgeネットワーク" title="図1: bridgeネットワーク" width="500"></p>
+<p>コンテナはeth0というNICを認識し(実体はveth)，当該NICを利用してコンテナ同士 又は外部機器と通信します．<br>コンテナとホストマシンのネットワークは分離されているため，それぞれ異なるアドレスレンジを利用します．<br>なので，外部機器と通信する際はdocker0をデフォルトゲートウェイに利用し，そこでホストマシンのアドレスにNATされます．</p>
+<p>ここで注意すべき点として，<br>コンテナはDockerが管理するアドレス空間から利用されていないIPアドレスが自動的に割り当てられるため，コンテナのIPは不定となります．<br>DHCPを想像していただければ分かりやすいかと思います．<br>コンテナに割り当てられるアドレスレンジの確認は，以下のコマンドで行います．</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$ docker network inspect bridge</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"Name"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"Id"</span>: <span class="string">"5482b53471090013ec6ec2605214545e595d713dede280e815dcc9efb0968458"</span>,</span><br><span class="line">        <span class="string">"Created"</span>: <span class="string">"2019-05-01T12:40:10.365713105Z"</span>,</span><br><span class="line">        <span class="string">"Scope"</span>: <span class="string">"local"</span>,</span><br><span class="line">        <span class="string">"Driver"</span>: <span class="string">"bridge"</span>,</span><br><span class="line">        <span class="string">"EnableIPv6"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"IPAM"</span>: &#123;</span><br><span class="line">            <span class="string">"Driver"</span>: <span class="string">"default"</span>,</span><br><span class="line">            <span class="string">"Options"</span>: null,</span><br><span class="line">            <span class="string">"Config"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">"Subnet"</span>: <span class="string">"172.17.0.0/16"</span>,</span><br><span class="line">                    <span class="string">"Gateway"</span>: <span class="string">"172.17.0.1"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"Internal"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Attachable"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Ingress"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"ConfigFrom"</span>: &#123;</span><br><span class="line">            <span class="string">"Network"</span>: <span class="string">""</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"ConfigOnly"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="string">"Containers"</span>: &#123;</span><br><span class="line">            <span class="string">"f1761e429f3c3b797ea6db3e9f7ceae43190a43b5186e9805e32e78b50e6f616"</span>: &#123;</span><br><span class="line">                <span class="string">"Name"</span>: <span class="string">"fuga"</span>,</span><br><span class="line">                <span class="string">"EndpointID"</span>: <span class="string">"04815728bd8de73d69fe09b22f0f6b4feb61a5e609543b93731b336d0b8e54a9"</span>,</span><br><span class="line">                <span class="string">"MacAddress"</span>: <span class="string">"02:42:ac:11:00:02"</span>,</span><br><span class="line">                <span class="string">"IPv4Address"</span>: <span class="string">"172.17.0.2/16"</span>,</span><br><span class="line">                <span class="string">"IPv6Address"</span>: <span class="string">""</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">      :</span><br><span class="line">   〜省略〜</span><br><span class="line">      :</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>コマンドの結果を確認すると，コンテナには172.17.0.0/16のネットワークが割り当てられ<br>そのデフォルトゲートウェイは172.17.0.1であることがわかります．<br>また，コンテナには，172.17.0.2のアドレスが割り当てられていることも合わせて確認することができます．</p>
+<h2 id="2-2-hostネットワーク"><a href="#2-2-hostネットワーク" class="headerlink" title="2.2 hostネットワーク"></a>2.2 hostネットワーク</h2><p>使ったことないので，軽めの説明です．<br>ホストマシンと同一のアドレスをコンテナで利用する際に本ネットワークを選択します．<br>図で書くと以下のような構成になります．</p>
+<p><img src="/images/20190501-2.png" alt="図2: hostネットワーク" title="図2: hostネットワーク" width="500"></p>
+<p>hostネットワークに所属する全てのコンテナがホストマシンと同一のアドレスとなるため，<br>通信する際はポートを指定することになります(なるはず)．<br>そのため，利用用途は限られるのではないかと考えています．</p>
+<p>※ hostネットワークは，Docker Desktop for Mac 及び Docker Desktop for Windowsで未サポートです．<br><a href="https://docs.docker.com/network/host/" target="_blank" rel="noopener">https://docs.docker.com/network/host/</a></p>
+<h2 id="2-2-noneネットワーク"><a href="#2-2-noneネットワーク" class="headerlink" title="2.2 noneネットワーク"></a>2.2 noneネットワーク</h2><p>このネットワークも使ったことないので，軽めの説明です．<br>公式ドキュメントに，「全てのネットワークがdisableになる」と記載があるため，<br>任意のコンテナが他のコンテナ 及び 外部と通信しない場合，本ネットワークを選択します．<br>図で書くと以下のような構成になります(と思います)．</p>
+<p><img src="/images/20190501-3.png" alt="図3: noneネットワーク" title="図3: noneネットワーク" width="500"></p>
+<p>noneネットワークを使用したコンテナのネットワークを確認します．<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> container_name ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: tunl0@NONE: &lt;NOARP&gt; mtu 1480 qdisc noop state DOWN group default qlen 1</span><br><span class="line">    link/ipip 0.0.0.0 brd 0.0.0.0</span><br><span class="line">3: ip6tnl0@NONE: &lt;NOARP&gt; mtu 1452 qdisc noop state DOWN group default qlen 1</span><br><span class="line">    link/tunnel6 :: brd ::</span><br></pre></td></tr></table></figure></p>
+<p>ループバックアドレスのみ表示され，eth0がコンテナにアタッチされていないことが分かります．</p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>上記の3つのネットワークでは，特に理由がない限りbridgeを利用しておけば良さそうです．<br>また，これ以外にもoverlay networks等がありますが，そこまで勉強が及んでいないため次回以降に記載できればと思っております．</p>
+<p>上記以外に私が気になっているポイントとして，NICをプロミスキャスモードで利用するケースの有無です．<br>VMwareで仮想化したサーバの運用が長かったため，VMware的な考えになりがちなのですが，<br>Hypervisor上で仮想マシンを動作させる際は，物理NICをプロミスキャスモードにし，仮想スイッチで各仮想マシンにパケットを振り分けることが一般的です．<br>dockerを利用した際は，そのような利用方法はしないのでしょうか？私 気になります！<br>それでは！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjw2889g8000ig8uyqmdbqlcs" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NW/">NW</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Docker-for-Windowsと認証プロキシ" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/" class="article-date">
-  <time datetime="2019-04-20T00:57:29.000Z" itemprop="datePublished">2019-04-20</time>
+  <time datetime="2019-04-20T01:30:00.000Z" itemprop="datePublished">2019-04-20</time>
 </a>
     
   </div>
@@ -92,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjuotut4x00052juyb6eh225e" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjw2889fi0001g8uye8j5n30p" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -148,7 +269,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjuotut4s00012juy9g11vsbh" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjw2889ff0000g8uyshbcjcqu" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
@@ -205,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjuotut55000g2juy20ax7s1a" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjw2889gg000tg8uy82iucgnt" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -259,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjuotut4o00002juyyy51maia" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjw2889fl0003g8uyb9wp6izm" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -312,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjuotut4y00072juy05034cnr" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjw2889g5000gg8uykbcjebjx" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -388,7 +509,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjuotut4v00032juyy81068la" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjw2889g4000fg8uyykafis3k" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -522,7 +643,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjuotut59000n2juyt5mckv5s" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjw2889gi0010g8uya91rjv59" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -585,134 +706,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjuotut52000c2juy16lccshe" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-クイックソート実装できますか？" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/27/クイックソート実装できますか？/" class="article-date">
-  <time datetime="2019-03-27T12:00:00.000Z" itemprop="datePublished">2019-03-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/27/クイックソート実装できますか？/">クイックソート実装できますか？</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>先日，「クイックソートの最悪計算量はいくつ？」と聞かれ，<br>「O(NlogN)です！」と高らかに解答して恥ずかしい思いをした筆者です．こんにちは！</p>
-<p>筆者の復習をかねて，今回はクイックソートを取り上げます．<br>それでは行きましょう．</p>
-<hr>
-<h1 id="2-クイックソート概要"><a href="#2-クイックソート概要" class="headerlink" title="2. クイックソート概要"></a>2. クイックソート概要</h1><p>クイックソートは，<strong>最良計算量O(NlogN)，平均計算量O(NlogN)，最悪計算量O(N^2)</strong>のアルゴリズムです．<br>計算量から分かる様に最悪のケースを引かなければ，とってもクイックにソート可能です．</p>
-<p>クイックソート(昇順)は以下の手順で実施します．</p>
-<ol>
-<li>ソート対象の中で基準要素を決定する(ソート対象の中央値が望ましい)</li>
-<li>基準要素よりも「小さい要素のグループ」を前方に，基準要素よりも「大きい要素のグループ」後方に移動する(分割する)</li>
-<li>1,2を繰り返し，各グループの要素が1つになったら終了する</li>
-</ol>
-<p>図で書くとこんな感じです(図1では，グループの先頭要素を基準要素としている)<br><img src="/images/20190327-1.png" alt="図1: クイックソートの流れ" title="図1: クイックソートの流れ" width="500"></p>
-<h2 id="2-1-クイックソート最良計算量"><a href="#2-1-クイックソート最良計算量" class="headerlink" title="2.1 クイックソート最良計算量"></a>2.1 クイックソート最良計算量</h2><p>クイックソートで最良計算量となるのは，常にN/2:N/2で分割されるケースで<br>その場合，入れ替え捜査のために配列をNlogN回捜査する必要があるため，実行時間はO(NlogN)となります．<br>※ NlogN = N + (N/2 + N/2) + (N/4 + N/4 + N/4 + N/4) + … +(2 + 2 + … + 2)</p>
-<h2 id="2-2-クイックソート最悪計算量"><a href="#2-2-クイックソート最悪計算量" class="headerlink" title="2.2 クイックソート最悪計算量"></a>2.2 クイックソート最悪計算量</h2><p>クイックソートで最悪計算量となるのは，常に1:N-1で分割されるケースで<br>その場合，入れ替え操作のために配列内をN(N-2)/2回捜査する必要があるため，実行時間はO(N^2)となります．<br>※ N(N+2)/2 = N + N-1 + N-2 + … + 2 </p>
-<hr>
-<h1 id="3-クイックソート実装"><a href="#3-クイックソート実装" class="headerlink" title="3. クイックソート実装"></a>3. クイックソート実装</h1><p>再起関数を使うと簡単に実装できました．<br>(下記の例では，ソート対象配列のスコープはグローバルとします．)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quicksort</span>(<span class="params">left, right</span>)</span></span><br><span class="line"><span class="function">/* クイックソート</span></span><br><span class="line"><span class="function"> * <span class="title">left</span>  : ソートするデータの開始位置</span></span><br><span class="line"><span class="function"> * <span class="title">right</span> : ソートするデータの終了位置</span></span><br><span class="line"><span class="function"> */ </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="keyword">var</span> i = left; <span class="keyword">var</span> j = right;</span><br><span class="line">        <span class="keyword">var</span> tmp;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> pivot = array[<span class="built_in">Math</span>.floor((array[right] + array[left]) / <span class="number">2</span>)]; <span class="comment">/* 中央値が望ましい */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) &#123; <span class="comment">/* array[] を pivot 以上と以下の集まりに分割する */</span></span><br><span class="line">            <span class="keyword">while</span> (array[i] &lt; pivot) &#123; i++; &#125;  <span class="comment">/* array[i] &gt;= pivot となる位置を検索 */</span></span><br><span class="line">            <span class="keyword">while</span> (pivot &lt; array[j]) &#123; j--; &#125;  <span class="comment">/* array[j] &lt;= pivot となる位置を検索 */</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i &gt;= j) <span class="keyword">break</span>;</span><br><span class="line">            tmp = array[i]; array[i] = array[j]; array[j] = tmp; <span class="comment">/* array[i],array[j] を交換 */</span></span><br><span class="line">            i++; j--;</span><br><span class="line">        &#125;</span><br><span class="line">        quicksort(left, i - <span class="number">1</span>);  <span class="comment">/* 分割した左を再帰的にソート */</span></span><br><span class="line">        quicksort(j + <span class="number">1</span>, right); <span class="comment">/* 分割した右を再帰的にソート */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>本日はクイックソートを取り上げました．<br>最近？の高級言語はソートメソッドが用意されているケースが多く，ソートを実装することも少ないと思います．<br>本記事が読者の復習に利用頂けたら幸いです．</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjuotut54000f2juyoo5c05nn" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Union-Findアルゴリズムを解説する" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/24/Union-Findアルゴリズムを解説する/" class="article-date">
-  <time datetime="2019-03-24T14:30:00.000Z" itemprop="datePublished">2019-03-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/24/Union-Findアルゴリズムを解説する/">Union-Findアルゴリズムを解説する</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>ここ最近，暇さえあればDP問題を解いてニヤニヤしている筆者です．こんにちは．<br>過去2回のブログで探索系アルゴリズムの説明をしてきましたが，本日も引き続き探索系アルゴリズムを紹介します．<br>その名もUnion-Findです！　それでは，いきましょう！</p>
-<hr>
-<h1 id="2-Union-Findアルゴリズム概要"><a href="#2-Union-Findアルゴリズム概要" class="headerlink" title="2.Union-Findアルゴリズム概要"></a>2.Union-Findアルゴリズム概要</h1><p>Union-Findとは，文字通り<strong>Union</strong>と<strong>Find</strong>を実施するためのアルゴリズムです．<br>UnionとFindとは，</p>
-<ul>
-<li>Union:2つの集合を1つに統合する </li>
-<li>Find: 2つの要素が同一集合に属しているかどうか判定する</li>
-</ul>
-<p>つまりUnion-Findでは，任意の集合同士を結合した際に，任意2つの要素が同一の集合に属しているかを判定する　ことができます．<br>わかりましたか？　これだけの説明では，どのようなケースで利用するかわかりませんね苦笑　具体的な問題を使って説明します．</p>
-<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p><strong>N個の島とM本の橋があります。</strong><br>i番目の橋はAi番目の島とBi番目の島を繋いでおり、双方向に行き来可能です。<br>はじめ、全ての島で橋は存在していません．<br>そこで，橋を順に<strong>建築することにしました．</strong><br>「いくつかの橋を渡って互いに行き来できる2つの島の組(a, b)(a &lt; b) の数」を便利さと呼ぶことにします。<br>各i(1≤i≤M)について、i番目の橋を建築した直後の便利さを求めてください。</p>
-<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>入力は全て整数である。<br>2≤N≤10^5, 1≤M≤10^5<br>1≤Ai&lt;Bi≤N<br>(Ai,Bi) の組は全て異なる。<br>初期状態における便利さは0である。<br><strong>出展：<a href="https://atcoder.jp/contests/abc120/tasks/abc120_d" target="_blank" rel="noopener">https://atcoder.jp/contests/abc120/tasks/abc120_d</a></strong> (※上記の問題は少しアレンジしてます)</p>
-<p>さて，皆さんはどのようなアルゴリズムを利用して解きますか？<br>ここから2つの解法を示します．1つは直感的な解法で，2つめはUnion-Findを利用した解法です．<br>まず直感的な解法をみていきましょう．</p>
-<h2 id="2-1-直感的な解法-Not-Union-Find"><a href="#2-1-直感的な解法-Not-Union-Find" class="headerlink" title="2.1. 直感的な解法(Not Union-Find)"></a>2.1. 直感的な解法(Not Union-Find)</h2><p>問題を解くために島と島同士の関係を保持する必要があるため，<br>インデックスが<strong>島</strong>の表し，配列の要素が<strong>渡航可能な島グループ</strong>を表すような配列を用意します．<br>初期状態では橋がかかっていないため，各島は他の島に渡航することができません<br>つまり，配列の渡航可能な島グループはそれぞれ異なる値をとります．<br>今回は，配列array = [1,2,3,..,N] とします(図1 Before)．<br>この状態ですと，どの島へも渡航不可能なので便利さ0です．</p>
-<p>ここで，島1と島2に橋がかかったとしましょう．<br>すると，島1と島2は渡航可能になるので，島1と島2の渡航可能な島グループはともに1となります．<br>この場合，配列array = [1,1,3,..,N] となり，便利さが1となります(図1 After)．<br>図で表すと下記の様なイメージです．</p>
-<p><img src="/images/20190324-1.png" alt="図1: 渡航可能情報を配列で管理" title="図1: 渡航可能情報を配列で管理" width="500"></p>
-<p>このように橋がかかるたびに，配列を更新することで便利さを計算することが可能です．<br>しかし，配列の更新にO(N)必要であり，それを橋の数だけ更新する必要があるため，<strong>実行時間はO(N^M)</strong>となります．</p>
-<h2 id="2-2-Union-Findを利用した解法"><a href="#2-2-Union-Findを利用した解法" class="headerlink" title="2.2. Union-Findを利用した解法"></a>2.2. Union-Findを利用した解法</h2><p>それに対し，Union-Findでは上記の問題をO(N^M)より少ない計算量で解くことが可能です．<br>そのために木を利用します．</p>
-<p><img src="/images/20190324-2.png" alt="図2: Union-Findを利用した際の集合同士の結合" title="図2: Union-Findを利用した際の集合同士の結合" width="700"></p>
-<p>Union-Findでは，同じグループに所属する要素をエッジで接続するデータ構造をとります．<br>上記の図では，要素1と要素3がグループ1，要素2と要素4がグループ2に所属することを表しています(図2 Before)．<br>ここでグループ1とグループ2が結合された場合，それぞれのグループ同士を線で結ぶ処理をします(図2 After)．<br>これにより，<strong>2つのグループを結合した際に要素が同一グループに所属しているかどうか</strong>を高速に判定することができます．</p>
-<p><img src="/images/20190324-3.png" alt="図3: 根の探索" title="図3: 根の探索" width="350"></p>
-<p>判定方法は，任意要素から順に上へ遡り，根を確認することで実現できます．<br>図3から分かるように2つの要素が同一グループである場合，根は同一になります．<br>反対に異なるグループであれば，根は同一とはなりません．<br>なので，<strong>木の根が同一であれば同一グループ</strong>，<strong>木の根が同一でなければ異なるグループ</strong>　と言えそうです．<br>例えば，図3の要素3と要素4は共に要素1が根であるため，同一グループと言えます．</p>
-<p>このように結合と探索を実施した場合，<strong>結合にO(1),探索にO(木の高さ)</strong>の計算量で完結します．<br>これだけでも直感的な解放よりも高速ですが，Union-Findをさらに高速化するため木の構造を図3から図4の様に修正します．<br>この場合，結合と探索は共に<strong>O(1)</strong>で実施可能です．</p>
-<p><img src="/images/20190324-4.png" alt="図3: 探索高速化のため木構造を修正" title="図3: 探索高速化のため木構造を修正" width="350"></p>
-<hr>
-<h1 id="3-Union-Findアルゴリズム実装"><a href="#3-Union-Findアルゴリズム実装" class="headerlink" title="3. Union-Findアルゴリズム実装"></a>3. Union-Findアルゴリズム実装</h1><p>さて，Union-Findを実装しましょう．<br>実装では，<strong>初期化，グループの結合，根の探索，要素同士が同一グループであるか調査</strong>の4つのコンポーネントが必要です．</p>
-<h4 id="初期化"><a href="#初期化" class="headerlink" title="初期化"></a>初期化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funciton init(n)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; n ; i++)&#123;</span><br><span class="line">        <span class="comment">// 自身の根は自分で初期化</span></span><br><span class="line">        per[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="グループの結合"><a href="#グループの結合" class="headerlink" title="グループの結合"></a>グループの結合</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unit</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    x = root(x);</span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が同一であれば，同一グループ(結合の必要なし)</span></span><br><span class="line">    <span class="keyword">if</span>(x == y)&#123; <span class="keyword">return</span>(<span class="number">0</span>); &#125;</span><br><span class="line">    <span class="comment">// 根が異なれば，xの根をyとする(結合)</span></span><br><span class="line">    <span class="keyword">else</span>&#123; ptr[x] = y; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="根の探索"><a href="#根の探索" class="headerlink" title="根の探索"></a>根の探索</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">root</span>(<span class="params">x</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 自身の根が自身出会った場合(根が判明した場合)，根を返す</span></span><br><span class="line">    <span class="keyword">if</span>(per[x]==x) &#123; <span class="keyword">return</span>(x); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 根の探索 および 探索圧縮の実施</span></span><br><span class="line">        per[x] = root(per[x]);</span><br><span class="line">        <span class="keyword">return</span>( per[x]  );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="同一グループであるか調査"><a href="#同一グループであるか調査" class="headerlink" title="同一グループであるか調査"></a>同一グループであるか調査</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">same</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 要素xの根を探索</span></span><br><span class="line">    x = root(x);</span><br><span class="line">    <span class="comment">// 要素yの根を探索</span></span><br><span class="line">    y = root(y);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 根が一致していれば同一ブループ，一致していなければ異なるグループ</span></span><br><span class="line">    <span class="keyword">if</span>(x == y) &#123; <span class="keyword">return</span>(<span class="literal">true</span>); &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; <span class="keyword">return</span>(<span class="literal">false</span>); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>Union-Findアルゴリズムご理解いただけたでしょうか．<br>なんとなく理解できた方は，一度ご自身で問題を解いてみると良いと思います．<br>理解している部分としていない部分がよく分かると思います．</p>
-<p>さて次回は，ダイクストラを紹介したいと思いますが，<br>私自身もしっかり理解しているとは言い難いので，これから頑張って勉強しますw<br>それでは．</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjuotut51000a2juyngm7ovna" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjw2889gd000pg8uyj73kyjhg" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -742,7 +736,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
     </div>
   </div>
 
@@ -752,7 +746,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
     </div>
   </div>
 
@@ -761,7 +755,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
     </div>
   </div>
 
@@ -774,6 +768,14 @@
       <ul>
         
           <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
           </li>
         
@@ -783,14 +785,6 @@
         
           <li>
             <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/">AWSアカウントとアベイラビリティーゾーン名</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/09/Javascriptの罠-値渡しと参照渡し-/">Javascriptの罠 〜値渡しと参照渡し〜</a>
           </li>
         
       </ul>
