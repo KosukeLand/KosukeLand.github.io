@@ -90,12 +90,12 @@
 <hr>
 <h1 id="2-桁DPの考え方-および-実装"><a href="#2-桁DPの考え方-および-実装" class="headerlink" title="2. 桁DPの考え方 および 実装"></a>2. 桁DPの考え方 および 実装</h1><p>桁DPとは，複数の数字列に対して特定の数字の出現回数をカウントする場合に利用するアルゴリズムです．<br>以下の具体例を見ながら，勉強していきましょう．</p>
 <p>1から順に9876まで書き出した際に，「1」を書く回数を調査<br>(例えば，1から12を記載する場合，1が出現するのは1,10,11,12であり，1の記載回数は5)</p>
-<p>まずは，ナイーブなアルゴリズムから記載します．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">1</span> ; i &lt;= N ; i++)&#123;</span><br><span class="line">    <span class="comment">// 桁ごとに数字を分割</span></span><br><span class="line">    z = i.split()</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span> ; j &lt; z.length ; j++)&#123;</span><br><span class="line">        <span class="comment">// 数値i桁目の数字がxなら，ans++</span></span><br><span class="line">        <span class="keyword">if</span>(z[j] == x)&#123; ans++ &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>まずは，ナイーブなアルゴリズムから記載します．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">1</span> ; i &lt;= N ; i++)&#123;</span><br><span class="line">    <span class="comment">// 桁ごとに数字を分割</span></span><br><span class="line">    z = i.split()</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span> ; j &lt; z.length ; j++)&#123;</span><br><span class="line">        <span class="comment">// i桁目の数字がxなら，ans++</span></span><br><span class="line">        <span class="keyword">if</span>(z[j] == x)&#123; ans++ &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>この場合，1から9876までの数字列の各桁を参照し，それが「1」と一致するか判定することで「1」の記載回数を探索しています．<br>したがって，計算量はO(N^2)となります．</p>
 <p>ただしこのプログラムは，<br>「桁ごとの数字が異なっていても1の出現回数が同一であれば，同一箇所を複数回計算する必要はない」<br>という理由で無駄が多いと言えます．<br>少し分かりづらいですよね．詳細を説明します．<br>例えば，12010と12058のように一致している桁がある場合(この場合は，上位3桁が一致している)，<br>一致箇所の結果を記憶しておくことで，複数回探索する必要はないことはすぐ分かると思います．<br>つまり，「120では1は1回しか記述しない」と記憶しておくことで，12001は120で1は1回，10で1が1回　合わせて2回とできそうです．</p>
-<p>しかし，さらに計算量を削減できることに気付きます．<br>なぜなら，今回重要な情報は1の出現回数であり，各桁の数字が一致しているかどうかは1の記載回数に影響がないからです．<br>例えば，1321と1541のような上位3桁は異なっていたとしても，1の出現回数は同じな値に関して，それぞれを個別に考慮する必要はありません．<br>同一の状況として記憶すれば良いのです．</p>
+<p>しかし，さらに計算量を削減できることに気付きます．<br>なぜなら，今回重要な情報は1の出現回数であり，各桁の数字が一致しているかどうかは1の出現回数に影響がないからです．<br>例えば，1321と1541のような上位3桁は異なっていたとしても，1の出現回数は同じならば，それぞれを個別に考慮する必要はありません．<br>同一の状況として記憶すれば良いのです．</p>
 <p>では，上記のアルゴリズムでプログラムを書いていきましょう．</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line">memo = [][][]</span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// k: 現在探索している桁数(上位から数えてk桁目)</span></span><br><span class="line"><span class="comment">// tight: 上位から数えてk桁目の取りうる値の範囲を示すフラグ trueの場合，k桁目の取りうる値の範囲が制限される</span></span><br><span class="line"><span class="comment">// sum:  1が出現した回数をカウント</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">k, tight, sum</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 入力が一致していたら，メモ化(図1:条件3)</span></span><br><span class="line">    <span class="keyword">if</span>(memo[k][tight][sum]) &#123; <span class="keyword">return</span> (memo[k][tight][sum]) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// k桁目がN.lengthと一致したら終了</span></span><br><span class="line">    <span class="keyword">if</span>(k === N.length)&#123; <span class="keyword">return</span> (sum); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="comment">// </span></span><br><span class="line">        r = (tight ? N[k] : <span class="number">9</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// k桁目が，N[k]以下であれば，k桁目が取りうる値が9 (図1:条件2)</span></span><br><span class="line">        <span class="comment">// k桁目が，N[k]であれば，k桁目が取りうる値はN[k]</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= r; i++)&#123;</span><br><span class="line">            <span class="comment">//k桁目がxならば(図1:条件1)</span></span><br><span class="line">            <span class="keyword">if</span>(i == x)&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum + <span class="number">1</span>); &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum); &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 結果を記憶し再利用</span></span><br><span class="line">        memo[k][tight][sum] = res;</span><br><span class="line">        <span class="keyword">return</span>(memo[k][tight][sum])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line">memo = [][][]</span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// k: 現在探索している桁数(上位から数えてk桁目)</span></span><br><span class="line"><span class="comment">// tight: 上位から数えてk桁目の取りうる値の範囲を示すフラグ trueの場合，k桁目の取りうる値の範囲が制限される</span></span><br><span class="line"><span class="comment">// sum:  1が出現した回数をカウント</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">k, tight, sum</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 入力が一致していたら，メモ化(図1:条件3)</span></span><br><span class="line">    <span class="keyword">if</span>(memo[k][tight][sum]) &#123; <span class="keyword">return</span> (memo[k][tight][sum]) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// k桁目がN.lengthと一致したら終了</span></span><br><span class="line">    <span class="keyword">if</span>(k === N.length)&#123; <span class="keyword">return</span> (sum); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="comment">// k桁目が取りうる値の範囲(図1:条件2)</span></span><br><span class="line">        r = (tight ? N[k] : <span class="number">9</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= r; i++)&#123;</span><br><span class="line">            <span class="comment">//k桁目がxならば(図1:条件1)</span></span><br><span class="line">            <span class="keyword">if</span>(i == x)&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum + <span class="number">1</span>); &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum); &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 結果を記憶し再利用</span></span><br><span class="line">        memo[k][tight][sum] = res;</span><br><span class="line">        <span class="keyword">return</span>(memo[k][tight][sum])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>再帰関数で記載する方が好みであるので，このように記載しました(まぁ，桁DPの解説はほぼメモ化使ってる気がするが．．)．<br>本プログラムは図1の条件1，条件2，条件3をもとに計算しています．<br>kが検索対象である1と同一であれば合計値を加算し，加えて条件2，条件3を適用することで，検索対象を絞っています．<br><img src="/images/20190622-1.png" alt="図1: 桁DPの考え方" title="図1: 桁DPの考え方" width="700"></p>
 <hr>
 <h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>今日は，桁DPについてふれていきました．<br>AtCoderでも桁DP問題があるので，解いて理解を深めていきましょう．<br>それではーノシ</p>
@@ -103,7 +103,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/06/22/桁DP実装したった/" data-id="cjx7nwebd000q6vuyln6qt9u2" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/06/22/桁DP実装したった/" data-id="cjx7ojxl8000u8vuyswh2gfhj" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -162,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjx7nwebc000p6vuyxihpfrk3" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjx7ojxl5000p8vuyx0tnlixb" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -224,7 +224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjx7nweaz00066vuyrno45b6h" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjx7ojxkt00078vuytihr18fd" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NW/">NW</a></li></ul>
@@ -266,7 +266,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjx7nweb5000c6vuyowxztu7p" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjx7ojxks00068vuyj05terxg" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -322,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjx7nweay00056vuyemn142ke" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjx7ojxko00038vuyu1uea4oc" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
@@ -379,7 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjx7nweba000k6vuyjoit0pmb" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjx7ojxl4000k8vuy3gqh71lw" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -433,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjx7nweau00026vuyma3ka6e7" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjx7ojxkn00028vuyzeq7qbu4" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -486,7 +486,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjx7nweb100096vuy9sdfgepq" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjx7ojxkw000a8vuyyie6ty3y" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -562,7 +562,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjx7nweav00036vuy7fhpnj6o" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjx7ojxkr00058vuywzxkthr2" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -696,7 +696,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjx7nwebe000u6vuy8shmqp2m" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjx7ojxl7000s8vuymsv23eat" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
