@@ -62,6 +62,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-桁DP実装したった" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/22/桁DP実装したった/" class="article-date">
+  <time datetime="2019-06-22T14:00:00.000Z" itemprop="datePublished">2019-06-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>今日は久しぶりにDPネタを扱ってみようと思います．<br>DPネタで有名なのはナップサック問題ですが，経路探索もDPですし，LCSと呼ばれる文字列探索DPもあります．<br>DPは奥が深いのです！！<br>そんな奥が深いDPのなかで，今日は桁DPを扱います．<br>それでは行ってみましょー！！</p>
+<p>最近，筆者のメイン言語がJavaScriptからGolangに変わりました．<br>今後，コードの書き方がGolangライクになるかと思いますが，ご了承下さいm(_ _)m</p>
+<hr>
+<h1 id="2-桁DPの考え方-および-実装"><a href="#2-桁DPの考え方-および-実装" class="headerlink" title="2. 桁DPの考え方 および 実装"></a>2. 桁DPの考え方 および 実装</h1><p>桁DPとは，複数の数字列に対して特定の数字の出現回数をカウントする場合に利用するアルゴリズムです．<br>以下の具体例を見ながら，勉強していきましょう．</p>
+<p>1から順に9876まで書き出した際に，「1」を書く回数を調査<br>(例えば，1から12を記載する場合，1が出現するのは1,10,11,12であり，1の記載回数は5)</p>
+<p>まずは，ナイーブなアルゴリズムから記載します．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">1</span> ; i &lt;= N ; i++)&#123;</span><br><span class="line">    <span class="comment">// 桁ごとに数字を分割</span></span><br><span class="line">    z = i.split()</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span> ; j &lt; z.length ; j++)&#123;</span><br><span class="line">        <span class="comment">// 数値i桁目の数字がxなら，ans++</span></span><br><span class="line">        <span class="keyword">if</span>(z[j] == x)&#123; ans++ &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>この場合，1から9876までの数字列の各桁を参照し，それが「1」と一致するか判定することで「1」の記載回数を探索しています．<br>したがって，計算量はO(N^2)となります．</p>
+<p>ただしこのプログラムは，<br>「桁ごとの数字が異なっていても1の出現回数が同一であれば，同一箇所を複数回計算する必要はない」<br>という理由で無駄が多いと言えます．<br>少し分かりづらいですよね．詳細を説明します．<br>例えば，12010と12058のように一致している桁がある場合(この場合は，上位3桁が一致している)，<br>一致箇所の結果を記憶しておくことで，複数回探索する必要はないことはすぐ分かると思います．<br>つまり，「120では1は1回しか記述しない」と記憶しておくことで，12001は120で1は1回，10で1が1回　合わせて2回とできそうです．</p>
+<p>しかし，さらに計算量を削減できることに気付きます．<br>なぜなら，今回重要な情報は1の出現回数であり，各桁の数字が一致しているかどうかは1の記載回数に影響がないからです．<br>例えば，1321と1541のような上位3桁は異なっていたとしても，1の出現回数は同じな値に関して，それぞれを個別に考慮する必要はありません．<br>同一の状況として記憶すれば良いのです．</p>
+<p>では，上記のアルゴリズムでプログラムを書いていきましょう．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数値Nの桁ごとの数字のカウント</span></span><br><span class="line">N = <span class="number">9876</span>; x = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">ans = <span class="number">0</span>;</span><br><span class="line">memo = [][][]</span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// k: 現在探索している桁数(上位から数えてk桁目)</span></span><br><span class="line"><span class="comment">// tight: 上位から数えてk桁目の取りうる値の範囲を示すフラグ trueの場合，k桁目の取りうる値の範囲が制限される</span></span><br><span class="line"><span class="comment">// sum:  1が出現した回数をカウント</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dfs</span>(<span class="params">k, tight, sum</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 入力が一致していたら，メモ化(図1:条件3)</span></span><br><span class="line">    <span class="keyword">if</span>(memo[k][tight][sum]) &#123; <span class="keyword">return</span> (memo[k][tight][sum]) &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// k桁目がN.lengthと一致したら終了</span></span><br><span class="line">    <span class="keyword">if</span>(k === N.length)&#123; <span class="keyword">return</span> (sum); &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="comment">// </span></span><br><span class="line">        r = (tight ? N[k] : <span class="number">9</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// k桁目が，N[k]以下であれば，k桁目が取りうる値が9 (図1:条件2)</span></span><br><span class="line">        <span class="comment">// k桁目が，N[k]であれば，k桁目が取りうる値はN[k]</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= r; i++)&#123;</span><br><span class="line">            <span class="comment">//k桁目がxならば(図1:条件1)</span></span><br><span class="line">            <span class="keyword">if</span>(i == x)&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum + <span class="number">1</span>); &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123; res += dfs(k + <span class="number">1</span>,(tight &amp;&amp; i == r), sum); &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 結果を記憶し再利用</span></span><br><span class="line">        memo[k][tight][sum] = res;</span><br><span class="line">        <span class="keyword">return</span>(memo[k][tight][sum])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再帰関数で記載する方が好みであるので，このように記載しました(まぁ，桁DPの解説はほぼメモ化使ってる気がするが．．)．<br>本プログラムは図1の条件1，条件2，条件3をもとに計算しています．<br>kが検索対象である1と同一であれば合計値を加算し，加えて条件2，条件3を適用することで，検索対象を絞っています．<br><img src="/images/20190622-1.png" alt="図1: 桁DPの考え方" title="図1: 桁DPの考え方" width="700"></p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>今日は，桁DPについてふれていきました．<br>AtCoderでも桁DP問題があるので，解いて理解を深めていきましょう．<br>それではーノシ</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/06/22/桁DP実装したった/" data-id="cjx7nwebd000q6vuyln6qt9u2" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-最短経路問題を解く" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/07/最短経路問題を解く/" class="article-date">
@@ -87,13 +140,13 @@
         <hr>
 <h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>競技プログラミングにおいて，最短経路探索を問われるケースは多々あります．<br>以前より，興味があった分野であるため少し勉強してみました．<br>今日は，代表的なアルゴリズムである，ワーシャルフロイド法とダイクストラ法を解説していきます．<br>それではいきましょう！</p>
 <hr>
-<h1 id="2-ワーシャルフロイド法"><a href="#2-ワーシャルフロイド法" class="headerlink" title="2. ワーシャルフロイド法"></a>2. ワーシャルフロイド法</h1><p>ワーシャルフロイド法の方がダイクストラ方に比べて平易であり理解が進むと思うため，こちら先に記載しています．<br>ワーシャルフロイド法では，ノードkを経由してノードiからノードjへ移動する最小コストを更新していきます．<br>計算量はO(V^3)と少し重めですが，全てのノード間の最短経路を計算できるため有用です．<br>図を利用して説明しましょう．</p>
+<h1 id="2-ワーシャルフロイド法"><a href="#2-ワーシャルフロイド法" class="headerlink" title="2. ワーシャルフロイド法"></a>2. ワーシャルフロイド法</h1><p>ワーシャルフロイド法の方がダイクストラ法に比べて平易であり理解が進むと思うため，こちらを先に記載しています．<br>ワーシャルフロイド法では，ノードkを経由してノードiからノードjへ移動する最小コストを更新していきます．<br>計算量はO(V^3)と少し重めですが，全てのノード間の最短経路を計算できるため有用です．<br>図を利用して説明しましょう．</p>
 <p><img src="/images/20190507-1.png" alt="図1: ワーシャルフロイド法解説" title="図1: ワーシャルフロイド法解説" width="500"></p>
 <p>図中の丸はノードを 線はノード間の接続を表し，線上に記載された値はノード移動の際に発生するコストを表します．<br>ワーシャルフロイド法では全ノード間の最短経路を探索するため，本来は全てのノードの探索を説明する必要があるのですが，<br>ここでは，ノードAからノードEへの最小コストにのみに着目し説明したいと思います．<br>まず，図よりノードAはノードBと接続しているため，ノードBを経由すればノードEへ到達できそうです．<br>その際のコストは15(5+10)となります．現在の最小コストとなります(青)．<br>次にノードAからノードBを経由してノードDへ到達した場合のコスト9(5+4)を記憶します(赤)．<br>最後にノードAからノードDを経由してノードE到達した場合，コストは13(9+4)となるため，最小コストが更新されます(赤)．</p>
 <p>このようにして最短経路を更新し続け，最終的に出力される経路が最短となります．<br>では，実装してみましょう．<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配列dをコストで初期化</span></span><br><span class="line"><span class="comment">// d[start][goal] = cost;</span></span><br><span class="line"></span><br><span class="line">V = ノード数</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中継ノード</span></span><br><span class="line"><span class="keyword">for</span>(k = <span class="number">0</span> ; k = V ; k++)&#123;</span><br><span class="line">    <span class="comment">// スタートノード    </span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span> ; i = V ; i++)&#123;</span><br><span class="line">        <span class="comment">// ゴールノード</span></span><br><span class="line">        <span class="keyword">for</span>(j) = <span class="number">0</span> ; j = V ; j++)&#123;</span><br><span class="line">            d[i][j] = Min(d[i][j], d[i][k] + d[k][j])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上記の通り，アルゴリズムが非常に平易であるため，計算量的に厳しくなければワーシャルフロイドを利用することが良いでしょう．<br>AtCoderの場合，ノード数が10^2以内であれば間に合いそうです．<br>それ以上になると，計算量を落としたアルゴリズムを利用する必要があります．</p>
 <hr>
-<h1 id="3-ダイクストラ法"><a href="#3-ダイクストラ法" class="headerlink" title="3. ダイクストラ法"></a>3. ダイクストラ法</h1><p>インプットが少なければ，ワーシャルフロイド方で良いのですが，<br>インプットが大きい場合(例えば，ノードが10^3を超える場合)はダイクストラ法を利用することになるでしょう．<br>ダイクストラ法では，特定のスタートノードからの最短経路が確定していないノードに着目し，当該ノードの最短経路を確定させ続けることでスタートノードからゴールノードへの最短経路を確定させます．</p>
+<h1 id="3-ダイクストラ法"><a href="#3-ダイクストラ法" class="headerlink" title="3. ダイクストラ法"></a>3. ダイクストラ法</h1><p>インプットが少なければ，ワーシャルフロイド法で良いのですが，<br>インプットが大きい場合(例えば，ノードが10^3を超える場合)はダイクストラ法を利用することになるでしょう．<br>ダイクストラ法では，特定のスタートノードからの最短経路が確定していないノードに着目し，当該ノードの最短経路を確定させ続けることでスタートノードからゴールノードへの最短経路を確定させます．</p>
 <p><img src="/images/20190507-2.png" alt="図2: ダイクストラ法解説-1" title="図2: ダイクストラ法解説-1" width="500"></p>
 <p>ワーシャルフロイド法と同様にノードAからノードEへの最短経路を探索します．<br>まず，ノードAより移動可能なノードBのみなのでノードBへの最短経路は5と確定します．</p>
 <p><img src="/images/20190507-3.png" alt="図3: ダイクストラ法解説-2" title="図3: ダイクストラ法解説-2" width="500"></p>
@@ -109,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjw2889gk0012g8uy3ae0crig" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="cjx7nwebc000p6vuyxihpfrk3" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -171,7 +224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjw2889g8000ig8uyqmdbqlcs" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="cjx7nweaz00066vuyrno45b6h" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NW/">NW</a></li></ul>
@@ -213,7 +266,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjw2889fi0001g8uye8j5n30p" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="cjx7nweb5000c6vuyowxztu7p" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -269,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjw2889ff0000g8uyshbcjcqu" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="cjx7nweay00056vuyemn142ke" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
@@ -326,7 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjw2889gg000tg8uy82iucgnt" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="cjx7nweba000k6vuyjoit0pmb" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -380,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjw2889fl0003g8uyb9wp6izm" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="cjx7nweau00026vuyma3ka6e7" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -433,7 +486,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjw2889g5000gg8uykbcjebjx" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="cjx7nweb100096vuy9sdfgepq" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -509,7 +562,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjw2889g4000fg8uyykafis3k" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="cjx7nweav00036vuy7fhpnj6o" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
@@ -643,73 +696,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjw2889gi0010g8uya91rjv59" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/03/競技プログラミングと計算量/" data-id="cjx7nwebe000u6vuy8shmqp2m" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-しゃくとり法で計算量削減" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/31/しゃくとり法で計算量削減/" class="article-date">
-  <time datetime="2019-03-31T10:30:00.000Z" itemprop="datePublished">2019-03-31</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>今日は，競技プログラミングで必須のテクニックである<strong>しゃくとり法</strong>について解説していきます．<br>それでは行きましょう！<br>※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが，<br> 思うように勉強が進まなかったので次回以降のネタにします．．．<br> ゆるして(´；ω；｀)ﾌﾞﾜｯ</p>
-<hr>
-<h1 id="2-しゃくとり法とは"><a href="#2-しゃくとり法とは" class="headerlink" title="2. しゃくとり法とは"></a>2. しゃくとり法とは</h1><p>しゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．<br>例えば，文字列の部分集合を発見する問題など通常O(N^2)かかる計算をO(N)で計算可能です．<br>具体例を使って説明します．</p>
-<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p>WUPC2019の開催を記念して、カトーくんは文字列sをプレゼントとしてもらいました。<br>しかしながら、カトーくんは’WA’という文字列が嫌いなので、’WA’という文字列がなくなるまで以下の行動をすることにしました。<br>文字列sを先頭から見ていき、連続する2文字が’WA’である場合、これを’AC’という文字列に置換する。<br>1回の置換を行った場合、文字列の先頭から再び上記の行動を行い、置換が行われなかった場合、終了する。<br>カトーくんが行動を終了したときの文字列を答えよ。</p>
-<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>1≤|s|≤10^5<br>入力される文字列は英大文字のみで構成される。<br>制限時間: 2s<br><strong>出展：<a href="https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a" target="_blank" rel="noopener">https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a</a></strong> </p>
-<p>上記の問題において，入力’CWWWWA’が与えられたとします．<br>ここで入力を頭から捜査し，素直に’WA’を’AC’に変化させていくと<br> <strong>CWWWWA → CWWWAC → CWWACC → CWACCC → CACCCC</strong><br>となります．<br>この場合，N x N回文字列を捜査する必要があるため計算量はO(N^2)です(二重ループが必要)．<br>しかし，文字列の最大サイズは10^5なので，これでは制限時間に間に合いません(TLEの判断に関しては別途ブログで記載したいと思います)</p>
-<p>TLEを回避するために，しゃくとり法を利用してみます．<br>しゃくとり法では，上記の問題を2つのポインタを利用することで文字列に対する捜査回数を減らします．<br>以下の図を利用して説明します．</p>
-<p><img src="/images/20190331-1.png" alt="図1: しゃくとり法の考え方" title="図1: しゃくとり法の考え方" width="600"></p>
-<ol>
-<li><p>文字列を指すポインタ(Left, Right)を用意します(初期状態では，両ポインタとも先頭文字を指します)．<br>LeftとRightが同位置に存在する場合，<br>ポインタが指す文字が”W”以外であれば両ポインタを右へ移動させ，<br>ポインタが指す文字が”W”であればRightのみを右へ移動させます.<br>図1の先頭文字は’C’なので両ポインタを右へ移動させます．</p>
-</li>
-<li><p>2文字目は’W’なので，しゃくとり法のルールに従いRightのみ右へ移動させます．<br>この時，WW…Aを考慮するため，W以外が出現するまでRightを移動させることを忘れないでください．</p>
-</li>
-<li><p>‘W’以外の文字である’A’が出現したので，カトーくんが嫌いな’WA’が存在していることがわかりました．<br>なので，問題文のルールに従いLeftが指す文字を’A’へ置換し，RightとLeftの間にある文字を’C’へ置換します．<br>最後に，Leftの位置をRightと同じにします．</p>
-</li>
-<li><p>Rightが文字列の端に到達した場合，捜査を終了します．</p>
-</li>
-</ol>
-<p>このように，2つのポインタを使って部分集合を発見することで，部分集合に対して処理の処理をO(N)で実施可能です．<br>※ なお，本問題では文字列を後ろから捜査することで しゃくとり法でなくともO(N)で計算可能です苦笑</p>
-<hr>
-<h1 id="3-しゃくとり法の実装"><a href="#3-しゃくとり法の実装" class="headerlink" title="3. しゃくとり法の実装"></a>3. しゃくとり法の実装</h1><p>上記の問題を解くプログラムを実装してみます．</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">lines <span class="comment">// 文字列</span></span><br><span class="line">len;  <span class="comment">// 文字数の長さ</span></span><br><span class="line">left = <span class="number">0</span>; right = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// しゃくとり法</span></span><br><span class="line"><span class="keyword">while</span>(right &lt; len)&#123;</span><br><span class="line">    <span class="comment">// "W"が出現したら</span></span><br><span class="line">    <span class="keyword">if</span> (lines[left] == <span class="string">"W"</span>) &#123;</span><br><span class="line">        <span class="comment">// "W"の出現がなくなるまで，rightをカウントアップ</span></span><br><span class="line">        <span class="keyword">while</span> (lines[right + <span class="number">1</span>] == <span class="string">"W"</span>) &#123; right++; &#125;</span><br><span class="line">        right++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// "W"の後に"A"が出現した場合，"WWW...WA" ==&gt; "ACC...CC"に書き換え</span></span><br><span class="line">        <span class="keyword">if</span> (lines[right] == <span class="string">"A"</span>) &#123;</span><br><span class="line">            lines[left] = <span class="string">"A"</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> j = left + <span class="number">1</span>; j &lt;= right; j++) &#123; lines[j] = <span class="string">"C"</span>; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// left == rightに</span></span><br><span class="line">        right++; left = right;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">// "W"が出現していない</span></span><br><span class="line">    <span class="keyword">else</span> &#123; left++; right++; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日はしゃくとり法の説明でした．<br>次は何を題材にブログを買いていきましょうか(遠い目)<br>実は，そろそろネタ切れだったり…苦笑<br>では^^</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjw2889gd000pg8uyj73kyjhg" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
 
     </footer>
   </div>
@@ -736,7 +726,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DP/">DP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
     </div>
   </div>
 
@@ -746,7 +736,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
     </div>
   </div>
 
@@ -755,7 +745,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
     </div>
   </div>
 
@@ -766,6 +756,10 @@
     <h3 class="widget-title">最近の投稿</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+          </li>
         
           <li>
             <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
@@ -781,10 +775,6 @@
         
           <li>
             <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/">AWSソリューションアーキテクト・アソシエイト試験勉強方法</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
           </li>
         
       </ul>

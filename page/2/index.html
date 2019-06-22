@@ -62,6 +62,69 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-しゃくとり法で計算量削減" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/31/しゃくとり法で計算量削減/" class="article-date">
+  <time datetime="2019-03-31T10:30:00.000Z" itemprop="datePublished">2019-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/31/しゃくとり法で計算量削減/">しゃくとり法で計算量削減</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>今日は，競技プログラミングで必須のテクニックである<strong>しゃくとり法</strong>について解説していきます．<br>それでは行きましょう！<br>※前回のブログの終わりに「次はダイクストラを解説するぜ！」と書いたのですが，<br> 思うように勉強が進まなかったので次回以降のネタにします．．．<br> ゆるして(´；ω；｀)ﾌﾞﾜｯ</p>
+<hr>
+<h1 id="2-しゃくとり法とは"><a href="#2-しゃくとり法とは" class="headerlink" title="2. しゃくとり法とは"></a>2. しゃくとり法とは</h1><p>しゃくとり法とは，与えられた文字列の検索にかかる時間を削減する手法の一つです．<br>例えば，文字列の部分集合を発見する問題など通常O(N^2)かかる計算をO(N)で計算可能です．<br>具体例を使って説明します．</p>
+<h4 id="＜＜問題文＞＞"><a href="#＜＜問題文＞＞" class="headerlink" title="＜＜問題文＞＞"></a>＜＜問題文＞＞</h4><p>WUPC2019の開催を記念して、カトーくんは文字列sをプレゼントとしてもらいました。<br>しかしながら、カトーくんは’WA’という文字列が嫌いなので、’WA’という文字列がなくなるまで以下の行動をすることにしました。<br>文字列sを先頭から見ていき、連続する2文字が’WA’である場合、これを’AC’という文字列に置換する。<br>1回の置換を行った場合、文字列の先頭から再び上記の行動を行い、置換が行われなかった場合、終了する。<br>カトーくんが行動を終了したときの文字列を答えよ。</p>
+<h4 id="＜＜制約＞＞"><a href="#＜＜制約＞＞" class="headerlink" title="＜＜制約＞＞"></a>＜＜制約＞＞</h4><p>1≤|s|≤10^5<br>入力される文字列は英大文字のみで構成される。<br>制限時間: 2s<br><strong>出展：<a href="https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a" target="_blank" rel="noopener">https://atcoder.jp/contests/wupc2019/tasks/wupc2019_a</a></strong> </p>
+<p>上記の問題において，入力’CWWWWA’が与えられたとします．<br>ここで入力を頭から捜査し，素直に’WA’を’AC’に変化させていくと<br> <strong>CWWWWA → CWWWAC → CWWACC → CWACCC → CACCCC</strong><br>となります．<br>この場合，N x N回文字列を捜査する必要があるため計算量はO(N^2)です(二重ループが必要)．<br>しかし，文字列の最大サイズは10^5なので，これでは制限時間に間に合いません(TLEの判断に関しては別途ブログで記載したいと思います)</p>
+<p>TLEを回避するために，しゃくとり法を利用してみます．<br>しゃくとり法では，上記の問題を2つのポインタを利用することで文字列に対する捜査回数を減らします．<br>以下の図を利用して説明します．</p>
+<p><img src="/images/20190331-1.png" alt="図1: しゃくとり法の考え方" title="図1: しゃくとり法の考え方" width="600"></p>
+<ol>
+<li><p>文字列を指すポインタ(Left, Right)を用意します(初期状態では，両ポインタとも先頭文字を指します)．<br>LeftとRightが同位置に存在する場合，<br>ポインタが指す文字が”W”以外であれば両ポインタを右へ移動させ，<br>ポインタが指す文字が”W”であればRightのみを右へ移動させます.<br>図1の先頭文字は’C’なので両ポインタを右へ移動させます．</p>
+</li>
+<li><p>2文字目は’W’なので，しゃくとり法のルールに従いRightのみ右へ移動させます．<br>この時，WW…Aを考慮するため，W以外が出現するまでRightを移動させることを忘れないでください．</p>
+</li>
+<li><p>‘W’以外の文字である’A’が出現したので，カトーくんが嫌いな’WA’が存在していることがわかりました．<br>なので，問題文のルールに従いLeftが指す文字を’A’へ置換し，RightとLeftの間にある文字を’C’へ置換します．<br>最後に，Leftの位置をRightと同じにします．</p>
+</li>
+<li><p>Rightが文字列の端に到達した場合，捜査を終了します．</p>
+</li>
+</ol>
+<p>このように，2つのポインタを使って部分集合を発見することで，部分集合に対して処理の処理をO(N)で実施可能です．<br>※ なお，本問題では文字列を後ろから捜査することで しゃくとり法でなくともO(N)で計算可能です苦笑</p>
+<hr>
+<h1 id="3-しゃくとり法の実装"><a href="#3-しゃくとり法の実装" class="headerlink" title="3. しゃくとり法の実装"></a>3. しゃくとり法の実装</h1><p>上記の問題を解くプログラムを実装してみます．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">lines <span class="comment">// 文字列</span></span><br><span class="line">len;  <span class="comment">// 文字数の長さ</span></span><br><span class="line">left = <span class="number">0</span>; right = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// しゃくとり法</span></span><br><span class="line"><span class="keyword">while</span>(right &lt; len)&#123;</span><br><span class="line">    <span class="comment">// "W"が出現したら</span></span><br><span class="line">    <span class="keyword">if</span> (lines[left] == <span class="string">"W"</span>) &#123;</span><br><span class="line">        <span class="comment">// "W"の出現がなくなるまで，rightをカウントアップ</span></span><br><span class="line">        <span class="keyword">while</span> (lines[right + <span class="number">1</span>] == <span class="string">"W"</span>) &#123; right++; &#125;</span><br><span class="line">        right++;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// "W"の後に"A"が出現した場合，"WWW...WA" ==&gt; "ACC...CC"に書き換え</span></span><br><span class="line">        <span class="keyword">if</span> (lines[right] == <span class="string">"A"</span>) &#123;</span><br><span class="line">            lines[left] = <span class="string">"A"</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> j = left + <span class="number">1</span>; j &lt;= right; j++) &#123; lines[j] = <span class="string">"C"</span>; &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// left == rightに</span></span><br><span class="line">        right++; left = right;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">// "W"が出現していない</span></span><br><span class="line">    <span class="keyword">else</span> &#123; left++; right++; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>今日はしゃくとり法の説明でした．<br>次は何を題材にブログを買いていきましょうか(遠い目)<br>実は，そろそろネタ切れだったり…苦笑<br>では^^</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/03/31/しゃくとり法で計算量削減/" data-id="cjx7nweb8000h6vuy768cf5bb" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-クイックソート実装できますか？" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/27/クイックソート実装できますか？/" class="article-date">
@@ -107,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjw2889ge000sg8uyhttfbigi" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/27/クイックソート実装できますか？/" data-id="cjx7nweb9000i6vuy06y7fv2m" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -177,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjw2889g9000jg8uy4s3e8njv" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/24/Union-Findアルゴリズムを解説する/" data-id="cjx7nweb2000a6vuypfvccjlk" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -221,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjw2889gb000ng8uyj03j6qgp" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/22/Windowsが起動しなくなった話/" data-id="cjx7nweb7000e6vuy1ghj1q3r" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
@@ -290,7 +353,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjw2889gh000vg8uyhcyx5hs7" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/18/探索系問題の探索範囲削減方法/" data-id="cjx7nwebb000m6vuy05pbn0b4" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -356,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjw2889gi000xg8uywq9qd9l5" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/10/深さ優先探索について/" data-id="cjx7nwebd000s6vuymqqmhew6" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -470,7 +533,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjw2889ga000kg8uydchf1aut" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/03/04/HEXOで作成したブログをGithub-ioで公開してみた/" data-id="cjx7nweb000076vuyxvz8gfw6" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -500,7 +563,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグ</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DP/">DP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
     </div>
   </div>
 
@@ -510,7 +573,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
     </div>
   </div>
 
@@ -519,7 +582,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">アーカイブ</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
     </div>
   </div>
 
@@ -530,6 +593,10 @@
     <h3 class="widget-title">最近の投稿</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+          </li>
         
           <li>
             <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
@@ -545,10 +612,6 @@
         
           <li>
             <a href="/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/">AWSソリューションアーキテクト・アソシエイト試験勉強方法</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/17/幅優先探索について/">幅優先探索について</a>
           </li>
         
       </ul>
