@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>AWSで資産管理してみる#1 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにお久しぶりです．更新するのは久々です．今日はAWSを使ってライフハックしたので，備忘録として載せておきます．それでは，いきましょう．  2. やりたいこと当方，株式投資に興味を持ち数年前よりちょいちょい株式を買っております．毎日，証券会社のコンソールで利益率を確認しておりますが，確認できるのは持ち株の利益率のみで株式投資を始めてから現在までのトータルとしてどの程度利益や損失が出たの">
+<meta name="keywords" content="AWS,ライフハック">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWSで資産管理してみる#1">
+<meta property="og:url" content="https://kosukeland.github.io/2019/10/11/AWSで資産管理してみる/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにお久しぶりです．更新するのは久々です．今日はAWSを使ってライフハックしたので，備忘録として載せておきます．それでは，いきましょう．  2. やりたいこと当方，株式投資に興味を持ち数年前よりちょいちょい株式を買っております．毎日，証券会社のコンソールで利益率を確認しておりますが，確認できるのは持ち株の利益率のみで株式投資を始めてから現在までのトータルとしてどの程度利益や損失が出たの">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20191011-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20191011-2.png">
+<meta property="og:updated_time" content="2019-10-12T05:28:12.667Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWSで資産管理してみる#1">
+<meta name="twitter:description" content="1. はじめにお久しぶりです．更新するのは久々です．今日はAWSを使ってライフハックしたので，備忘録として載せておきます．それでは，いきましょう．  2. やりたいこと当方，株式投資に興味を持ち数年前よりちょいちょい株式を買っております．毎日，証券会社のコンソールで利益率を確認しておりますが，確認できるのは持ち株の利益率のみで株式投資を始めてから現在までのトータルとしてどの程度利益や損失が出たの">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20191011-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-AWSで資産管理してみる" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/11/AWSで資産管理してみる/" class="article-date">
+  <time datetime="2019-10-11T13:00:00.000Z" itemprop="datePublished">2019-10-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AWSで資産管理してみる#1
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>お久しぶりです．更新するのは久々です．<br>今日はAWSを使ってライフハックしたので，備忘録として載せておきます．<br>それでは，いきましょう．</p>
+<hr>
+<h1 id="2-やりたいこと"><a href="#2-やりたいこと" class="headerlink" title="2. やりたいこと"></a>2. やりたいこと</h1><p>当方，株式投資に興味を持ち数年前よりちょいちょい株式を買っております．<br>毎日，証券会社のコンソールで利益率を確認しておりますが，確認できるのは持ち株の利益率のみで<br>株式投資を始めてから現在までのトータルとしてどの程度利益や損失が出たのか確認する術はありません．<br>株はもちろん売買しますし，売った利益はコンソール上には反映されません．<br>そこで以下の項目を見える化し，トータルでどの程度利益を出したか把握できる環境を構築します．<br>・現金，株式，投資信託ごとの資産額の推移<br>・個別銘柄ごとの資産額の推移</p>
+<hr>
+<h1 id="3-アーキテクチャ"><a href="#3-アーキテクチャ" class="headerlink" title="3. アーキテクチャ"></a>3. アーキテクチャ</h1><p>証券会社のサイトから自身の資産情報をキャッチして，それをストレージに保管するため<br>こんな感じのアーキテクチャを考えてみました．</p>
+<p><img src="/images/20191011-1.png" alt="図1: アーキテクチャ" title="図1: アーキテクチャ" width="600"></p>
+<p>証券会社から情報を取得するために，AWSのLambdaでコードを実行します．<br>Lambdaでキャッチした情報は，JSON形式に変換してS3へ保存することで永続化します．<br>資産を見える化するためにはBIツール等を利用する必要がありますが，それについては現在検討中です．<br>後日ブログで紹介できたらなーと考えております．</p>
+<p>さて，図の数字に沿って細かく説明していきます．<br>まず，CloudWatchEventsがLambdaをキックすることで，システムが動きます．<br>私の投資先は投資信託が中心であり，基準価格が更新されるタイミングは1日1回のためLambdaをキックするのも1日1回で十分です．<br>手動でLambdaを実行するのは辛いので，LambdaのキックをCloudWatchEventsに任せます．<br>CloudWatchEventsの設定に関しては，<a href="https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/events/ScheduledEvents.html" target="_blank" rel="noopener">こちら</a>が参考になります．<br>また，CloudWatchEventsのCronを利用する際の注意なのですが，<br>本機能は世界標準時を利用しているため，日本の場合，設定時間は”-9時間”する必要があります．</p>
+<p>次に，Lambdaで証券会社より情報を取得するのですが，おそらくアクセスする際はUSERIDとPASSが必要となると思います．<br>これらは，ソースコードに記載の無いようご注意ください(GitHub等外部リポジトリにpushすることを考えて)．<br>Lambdaの環境変数として定義することをオススメします．</p>
+<p><img src="/images/20191011-2.png" alt="図2: 環境変数" title="図2: 環境変数" width="600"></p>
+<p>最後に取得したデータをS3に格納するのですが，私はSDKを利用しました．<br>資産データをJSON形式でLambdaの/tmpにファイルを吐き出した後，当該ファイルをS3へ転送しております．<br>実はLambdaは/tmp以下にファイルを保存することができるのです．Lambda実行後に削除されてしましますが，，，</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>自身の資産データをS3に保存することはできるようになりました．<br>次にやるべきこととして，以下を考えております．</p>
+<ol>
+<li>データの見える化 (BIツールの導入)</li>
+<li>デプロイの自動化(CI/CD)</li>
+</ol>
+<p>イケてるBIツール，CI/CDツール教えてください！！！</p>
+<hr>
+<h1 id="5-余談"><a href="#5-余談" class="headerlink" title="5. 余談"></a>5. 余談</h1><h2 id="5-1-なんで，自宅サーバにしなかったのか？"><a href="#5-1-なんで，自宅サーバにしなかったのか？" class="headerlink" title="5.1. なんで，自宅サーバにしなかったのか？"></a>5.1. なんで，自宅サーバにしなかったのか？</h2><p>昔，RaspberryPiを自宅サーバとして運用しておりましたが辞めました．<br>理由はいくつかありますが，一番は火事が怖いからです．<br>自宅サーバで火事になったことも，友人宅で火事が発生したこともありませんが，<br>火事になったら近隣住人にまで影響がでてしまうため，リスクを回避することにしました．</p>
+<h2 id="5-2-Lambdaが最適か？"><a href="#5-2-Lambdaが最適か？" class="headerlink" title="5.2. Lambdaが最適か？"></a>5.2. Lambdaが最適か？</h2><p>当方，クラウドはAWSしかわかりません．なので，AWSのサービスから選びました．<br>AWSの数あるサービスの中でLambdaを利用した理由は，作成したスクリプト実行時間が3秒以下で実行回数が1回/日だからです．<br>最近Dockerを触ることが多いのでFargateも検討しましたが，3秒の実行のためにECRからイメージを吸い出して展開するのは<br>あまりにもリッチすぎると結論づけました．<br>たしか実行時間が15分を超える場合，Lambdaを利用することはできないはずなので<br>長時間のバッチ等を動かす際は，Fargateも検討したいと思います(AWS Batchの方が良いのか？)．</p>
+<h2 id="5-3-LambdaはVPC内に配置することもできたよね？"><a href="#5-3-LambdaはVPC内に配置することもできたよね？" class="headerlink" title="5.3. LambdaはVPC内に配置することもできたよね？"></a>5.3. LambdaはVPC内に配置することもできたよね？</h2><p>LambdaはVPC内に入れることも可能ですが運用コストが増加するため，今回は非VPCとしております．<br>(LambdaをVPC内に入れると，IP管理等のコストが増えます)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/10/11/AWSで資産管理してみる/" data-id="ck1n4dhut00070puy67885j1k" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ライフハック/">ライフハック</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/22/桁DP実装したった/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">桁DP実装したった</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DP/">DP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ライフハック/">ライフハック</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/ライフハック/" style="font-size: 10px;">ライフハック</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/11/AWSで資産管理してみる/">AWSで資産管理してみる#1</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
