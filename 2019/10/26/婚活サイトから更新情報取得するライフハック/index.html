@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>婚活サイトから更新情報取得するライフハック | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめにこんにちは．筆者です．今回もライフハック記事を書きました．それではいきましょう！  2. やりたいこと恥ずかしながら当方30歳を超えておりますが結婚する予定もなく，昨年より婚活サイトに登録して日々活動しているわけです．しかし，私が利用しているサイトはWebページのみでアプリはなく，色々と不便なことが多いです．一番辛いのは，プッシュ機能がないこと．サイト内の情報が更新されても，気付か">
+<meta name="keywords" content="AWS,ライフハック">
+<meta property="og:type" content="article">
+<meta property="og:title" content="婚活サイトから更新情報取得するライフハック">
+<meta property="og:url" content="https://kosukeland.github.io/2019/10/26/婚活サイトから更新情報取得するライフハック/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめにこんにちは．筆者です．今回もライフハック記事を書きました．それではいきましょう！  2. やりたいこと恥ずかしながら当方30歳を超えておりますが結婚する予定もなく，昨年より婚活サイトに登録して日々活動しているわけです．しかし，私が利用しているサイトはWebページのみでアプリはなく，色々と不便なことが多いです．一番辛いのは，プッシュ機能がないこと．サイト内の情報が更新されても，気付か">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20191026-1.png">
+<meta property="og:updated_time" content="2019-10-27T01:28:31.766Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="婚活サイトから更新情報取得するライフハック">
+<meta name="twitter:description" content="1. はじめにこんにちは．筆者です．今回もライフハック記事を書きました．それではいきましょう！  2. やりたいこと恥ずかしながら当方30歳を超えておりますが結婚する予定もなく，昨年より婚活サイトに登録して日々活動しているわけです．しかし，私が利用しているサイトはWebページのみでアプリはなく，色々と不便なことが多いです．一番辛いのは，プッシュ機能がないこと．サイト内の情報が更新されても，気付か">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20191026-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-婚活サイトから更新情報取得するライフハック" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/" class="article-date">
+  <time datetime="2019-10-26T11:00:00.000Z" itemprop="datePublished">2019-10-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      婚活サイトから更新情報取得するライフハック
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>こんにちは．筆者です．今回もライフハック記事を書きました．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-やりたいこと"><a href="#2-やりたいこと" class="headerlink" title="2. やりたいこと"></a>2. やりたいこと</h1><p>恥ずかしながら当方30歳を超えておりますが結婚する予定もなく，昨年より婚活サイトに登録して日々活動しているわけです．<br>しかし，私が利用しているサイトはWebページのみでアプリはなく，色々と不便なことが多いです．<br>一番辛いのは，プッシュ機能がないこと．<br>サイト内の情報が更新されても，気付かないなんてこともありますし，<br>更新の有無を求めてリロードを繰り返し，通信制限に引っかかってしまうなんてことも増えてきました(ちょっと大袈裟)．<br>なんとかせねば．．．．</p>
+<p>ということで，定期的に婚活サイトにhttpリクエストを飛ばして，更新をチェックする仕組みを作ることにしました．</p>
+<hr>
+<h1 id="3-アーキテクチャ"><a href="#3-アーキテクチャ" class="headerlink" title="3. アーキテクチャ"></a>3. アーキテクチャ</h1><p>まず，どの基盤でシステムを作るかですが，，，AWS大好きなので今回もAWSを使います(自宅サーバなんて論外♡)．<br>前回同様，お金ないので全部サーバレスで実装し，運用は私が困らない程度の作り込みになります．<br>正直，運用についてはあまり考えられていません．ご承知おきください．</p>
+<p>さて，今回のアーキテクチャはこちら．<br><img src="/images/20191026-1.png" alt="図1: アーキテクチャ" title="図1: アーキテクチャ" width="600"><br>図内の数字は，機能の実行順を表します．詳細を見ていきましょう．<br>私の要件を満たすためには，次の3つのステップが必要になります．</p>
+<ol>
+<li>婚活サイトへGetリクエストを飛ばして，結果をHTMLファイルとしてS3のNewバケットに保存</li>
+<li>NewバケットのHTMLとOldバケットのHTMLを比較して差分の有無をチェック．差分があったら通知．</li>
+<li>NewバケットのHTMLをOldバケットに移動</li>
+</ol>
+<p>それぞれの機能をLambdaで動かします．<br>1機能当たり2秒から10秒前後で完了するため，コンテナをわざわざ利用する必要はありません．Lambdaで十分！<br>まず，CloudWatchEventのCron機能を利用して定期的にシステムを起動させます．<br>起動タイミングはお好みだとは思いますが，起動間隔はある程度空けるようにしましょう．DoSと認識されてしまいます．</p>
+<p>次に，情報を取得するGetリクエストを飛ばすためにpythonのrequestsライブラリを利用しました．<br>おそらくpythonでhttpリクエストをする際に最も使われるライブラリだと思います．<br>使い方はとても簡単で，Getリクエストを送る際は以下を記述するだけです．<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">html = requests.session().get(URL)</span><br></pre></td></tr></table></figure></p>
+<p>ちなみに，S3へのGet/Putリクエストにはboto3ライブラリを利用しています．これは前回の記事と同様かな．</p>
+<p>差分が発生した際の通知先ですが少し悩みました．勉強のためにSNS使ってメール通知とするか，Slack通知とするか．．．<br>ウンウン悩んだ結果，，使い慣れたLineでいっか！  って感じでLineになりました．<br>Lineに通知するために，LineDevelopersよりMessagingAPIを作成してAWSから当該APIをキックすることで実現しました．<br>MessagingAPIをキックするためには，<a href="https://github.com/line/line-bot-sdk-python" target="_blank" rel="noopener">LineBotApi及びTextSendMessageライブラリ</a>を利用します，<br>当該API経由でLineに通知するコードはこんな感じ．<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> linebot <span class="keyword">import</span> LineBotApi</span><br><span class="line"><span class="keyword">from</span> linebot.models <span class="keyword">import</span> TextSendMessage</span><br><span class="line">message = TextSendMessage(text=<span class="string">f"更新がありました"</span>)</span><br><span class="line">LineBotApi(LINE_ACCESS_TOKEN).push_message(USER_ID,messages=message)</span><br></pre></td></tr></table></figure></p>
+<p>USER_IDとLINE_ACCESS_TOKENは．MessagingAPI作成後に取得でき，これを利用してAPIをキックします．<br>これで，「更新がありました」と通知されます．</p>
+<p>最後になりますが，これら一連の流れを管理するためにAWS Stepfunctionsを利用しました．<br>AWS Stepfunctionsはジョブの実行順，分岐，待ち合わせ等を定義し，ジョブをコントロールするためのサービスです．<br>今回は，Lambdaの繋ぎをAWS Stepfunctions実現しています．<br>AWS Stepfunctionの設定については別途ブログに書こうかな．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>婚活ライフハックをしてみました．<br>ライフハックしたからといって，結婚に近くという訳ではありませんが，<br>生活を便利にするために改善をすることは好きなので，今後も続けていきます．</p>
+<hr>
+<h1 id="5-余談"><a href="#5-余談" class="headerlink" title="5. 余談"></a>5. 余談</h1><h2 id="5-1-差分チェックはHTMLを比較するだけか？"><a href="#5-1-差分チェックはHTMLを比較するだけか？" class="headerlink" title="5.1. 差分チェックはHTMLを比較するだけか？"></a>5.1. 差分チェックはHTMLを比較するだけか？</h2><p>いいえ違います．<br>Getリクエストの戻り値には，リクエストごとにvalueが異なる箇所がありました(婚活サイトの仕様？)．<br>これでは常に差分が発生し，狼少年になってしまいます．<br>そのためHTML全体を比較することはやめて，必要な箇所のみ差分を取得するようにしました．<br>必要な箇所を取得するために，ちょっとだけスクレイピングをしております．ライブラリはBeautifulSoupです．</p>
+<h2 id="5-2-例外処理はしているのか？"><a href="#5-2-例外処理はしているのか？" class="headerlink" title="5.2. 例外処理はしているのか？"></a>5.2. 例外処理はしているのか？</h2><p>してません．<br>そして，機能2がタイムアウトするとシステムがバグるのを確認しています．<br>例えば，婚活サイトがダウンしていた際がこれに当たります．<br>しかし，個人開発なのであまり凝ったことをするつもりはありません．</p>
+<p>余談ですが，上記のシステムでは機能2の実行時間が長いです．5秒から10秒程度かかります．<br>時間の大部分を占めているのはGetリクエストで，おそらく婚活サイトのWebサーバが遅いためと考えられます．<br>そのため，Lambdaのタイムアウト時間を20秒程度にしております(これでバグらない)．<br>本来ならタイムアウトした場合を考慮して実装すべきなのですが，今回は目を瞑っています．</p>
+<h2 id="5-4-月々のキャッシュアウトは？"><a href="#5-4-月々のキャッシュアウトは？" class="headerlink" title="5.4. 月々のキャッシュアウトは？"></a>5.4. 月々のキャッシュアウトは？</h2><p>イニシャルコストは0円でした．私の労働力だけです．<br>月々のランニングコストは今のところ不明ですが，数円程度必要になると思います(S3のPut回数の無料枠が2000回/月なので)．</p>
+<h2 id="5-3-開発について"><a href="#5-3-開発について" class="headerlink" title="5.3. 開発について"></a>5.3. 開発について</h2><p>ローカルのDocker環境で開発しています．<br>プログラムが完成したらLambdaにデプロイするのですが，デプロイが辛すぎて泣きそうです．<br>なぜなら，必要なライブラリをzipに固めてアップロードする必要があるから！マネジメントコンソールを使ってアップロードしているから！<br>これは，本当になんとかしたい！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/10/26/婚活サイトから更新情報取得するライフハック/" data-id="ck27aqpfa000cjfuy9m8dmbq4" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ライフハック/">ライフハック</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/11/AWSで資産管理してみる/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">AWSで資産管理してみる#1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DP/">DP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ライフハック/">ライフハック</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/ライフハック/" style="font-size: 12.5px;">ライフハック</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/">婚活サイトから更新情報取得するライフハック</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/11/AWSで資産管理してみる/">AWSで資産管理してみる#1</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

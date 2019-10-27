@@ -62,6 +62,71 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-婚活サイトから更新情報取得するライフハック" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/" class="article-date">
+  <time datetime="2019-10-26T11:00:00.000Z" itemprop="datePublished">2019-10-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/26/婚活サイトから更新情報取得するライフハック/">婚活サイトから更新情報取得するライフハック</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>こんにちは．筆者です．今回もライフハック記事を書きました．<br>それではいきましょう！</p>
+<hr>
+<h1 id="2-やりたいこと"><a href="#2-やりたいこと" class="headerlink" title="2. やりたいこと"></a>2. やりたいこと</h1><p>恥ずかしながら当方30歳を超えておりますが結婚する予定もなく，昨年より婚活サイトに登録して日々活動しているわけです．<br>しかし，私が利用しているサイトはWebページのみでアプリはなく，色々と不便なことが多いです．<br>一番辛いのは，プッシュ機能がないこと．<br>サイト内の情報が更新されても，気付かないなんてこともありますし，<br>更新の有無を求めてリロードを繰り返し，通信制限に引っかかってしまうなんてことも増えてきました(ちょっと大袈裟)．<br>なんとかせねば．．．．</p>
+<p>ということで，定期的に婚活サイトにhttpリクエストを飛ばして，更新をチェックする仕組みを作ることにしました．</p>
+<hr>
+<h1 id="3-アーキテクチャ"><a href="#3-アーキテクチャ" class="headerlink" title="3. アーキテクチャ"></a>3. アーキテクチャ</h1><p>まず，どの基盤でシステムを作るかですが，，，AWS大好きなので今回もAWSを使います(自宅サーバなんて論外♡)．<br>前回同様，お金ないので全部サーバレスで実装し，運用は私が困らない程度の作り込みになります．<br>正直，運用についてはあまり考えられていません．ご承知おきください．</p>
+<p>さて，今回のアーキテクチャはこちら．<br><img src="/images/20191026-1.png" alt="図1: アーキテクチャ" title="図1: アーキテクチャ" width="600"><br>図内の数字は，機能の実行順を表します．詳細を見ていきましょう．<br>私の要件を満たすためには，次の3つのステップが必要になります．</p>
+<ol>
+<li>婚活サイトへGetリクエストを飛ばして，結果をHTMLファイルとしてS3のNewバケットに保存</li>
+<li>NewバケットのHTMLとOldバケットのHTMLを比較して差分の有無をチェック．差分があったら通知．</li>
+<li>NewバケットのHTMLをOldバケットに移動</li>
+</ol>
+<p>それぞれの機能をLambdaで動かします．<br>1機能当たり2秒から10秒前後で完了するため，コンテナをわざわざ利用する必要はありません．Lambdaで十分！<br>まず，CloudWatchEventのCron機能を利用して定期的にシステムを起動させます．<br>起動タイミングはお好みだとは思いますが，起動間隔はある程度空けるようにしましょう．DoSと認識されてしまいます．</p>
+<p>次に，情報を取得するGetリクエストを飛ばすためにpythonのrequestsライブラリを利用しました．<br>おそらくpythonでhttpリクエストをする際に最も使われるライブラリだと思います．<br>使い方はとても簡単で，Getリクエストを送る際は以下を記述するだけです．<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">html = requests.session().get(URL)</span><br></pre></td></tr></table></figure></p>
+<p>ちなみに，S3へのGet/Putリクエストにはboto3ライブラリを利用しています．これは前回の記事と同様かな．</p>
+<p>差分が発生した際の通知先ですが少し悩みました．勉強のためにSNS使ってメール通知とするか，Slack通知とするか．．．<br>ウンウン悩んだ結果，，使い慣れたLineでいっか！  って感じでLineになりました．<br>Lineに通知するために，LineDevelopersよりMessagingAPIを作成してAWSから当該APIをキックすることで実現しました．<br>MessagingAPIをキックするためには，<a href="https://github.com/line/line-bot-sdk-python" target="_blank" rel="noopener">LineBotApi及びTextSendMessageライブラリ</a>を利用します，<br>当該API経由でLineに通知するコードはこんな感じ．<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> linebot <span class="keyword">import</span> LineBotApi</span><br><span class="line"><span class="keyword">from</span> linebot.models <span class="keyword">import</span> TextSendMessage</span><br><span class="line">message = TextSendMessage(text=<span class="string">f"更新がありました"</span>)</span><br><span class="line">LineBotApi(LINE_ACCESS_TOKEN).push_message(USER_ID,messages=message)</span><br></pre></td></tr></table></figure></p>
+<p>USER_IDとLINE_ACCESS_TOKENは．MessagingAPI作成後に取得でき，これを利用してAPIをキックします．<br>これで，「更新がありました」と通知されます．</p>
+<p>最後になりますが，これら一連の流れを管理するためにAWS Stepfunctionsを利用しました．<br>AWS Stepfunctionsはジョブの実行順，分岐，待ち合わせ等を定義し，ジョブをコントロールするためのサービスです．<br>今回は，Lambdaの繋ぎをAWS Stepfunctions実現しています．<br>AWS Stepfunctionの設定については別途ブログに書こうかな．</p>
+<hr>
+<h1 id="4-おわりに"><a href="#4-おわりに" class="headerlink" title="4. おわりに"></a>4. おわりに</h1><p>婚活ライフハックをしてみました．<br>ライフハックしたからといって，結婚に近くという訳ではありませんが，<br>生活を便利にするために改善をすることは好きなので，今後も続けていきます．</p>
+<hr>
+<h1 id="5-余談"><a href="#5-余談" class="headerlink" title="5. 余談"></a>5. 余談</h1><h2 id="5-1-差分チェックはHTMLを比較するだけか？"><a href="#5-1-差分チェックはHTMLを比較するだけか？" class="headerlink" title="5.1. 差分チェックはHTMLを比較するだけか？"></a>5.1. 差分チェックはHTMLを比較するだけか？</h2><p>いいえ違います．<br>Getリクエストの戻り値には，リクエストごとにvalueが異なる箇所がありました(婚活サイトの仕様？)．<br>これでは常に差分が発生し，狼少年になってしまいます．<br>そのためHTML全体を比較することはやめて，必要な箇所のみ差分を取得するようにしました．<br>必要な箇所を取得するために，ちょっとだけスクレイピングをしております．ライブラリはBeautifulSoupです．</p>
+<h2 id="5-2-例外処理はしているのか？"><a href="#5-2-例外処理はしているのか？" class="headerlink" title="5.2. 例外処理はしているのか？"></a>5.2. 例外処理はしているのか？</h2><p>してません．<br>そして，機能2がタイムアウトするとシステムがバグるのを確認しています．<br>例えば，婚活サイトがダウンしていた際がこれに当たります．<br>しかし，個人開発なのであまり凝ったことをするつもりはありません．</p>
+<p>余談ですが，上記のシステムでは機能2の実行時間が長いです．5秒から10秒程度かかります．<br>時間の大部分を占めているのはGetリクエストで，おそらく婚活サイトのWebサーバが遅いためと考えられます．<br>そのため，Lambdaのタイムアウト時間を20秒程度にしております(これでバグらない)．<br>本来ならタイムアウトした場合を考慮して実装すべきなのですが，今回は目を瞑っています．</p>
+<h2 id="5-4-月々のキャッシュアウトは？"><a href="#5-4-月々のキャッシュアウトは？" class="headerlink" title="5.4. 月々のキャッシュアウトは？"></a>5.4. 月々のキャッシュアウトは？</h2><p>イニシャルコストは0円でした．私の労働力だけです．<br>月々のランニングコストは今のところ不明ですが，数円程度必要になると思います(S3のPut回数の無料枠が2000回/月なので)．</p>
+<h2 id="5-3-開発について"><a href="#5-3-開発について" class="headerlink" title="5.3. 開発について"></a>5.3. 開発について</h2><p>ローカルのDocker環境で開発しています．<br>プログラムが完成したらLambdaにデプロイするのですが，デプロイが辛すぎて泣きそうです．<br>なぜなら，必要なライブラリをzipに固めてアップロードする必要があるから！マネジメントコンソールを使ってアップロードしているから！<br>これは，本当になんとかしたい！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2019/10/26/婚活サイトから更新情報取得するライフハック/" data-id="ck27aqpfa000cjfuy9m8dmbq4" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ライフハック/">ライフハック</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-AWSで資産管理してみる" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/11/AWSで資産管理してみる/" class="article-date">
@@ -111,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/10/11/AWSで資産管理してみる/" data-id="ck1n4dhut00070puy67885j1k" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/10/11/AWSで資産管理してみる/" data-id="ck27aqpf00001jfuypyd45ytv" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ライフハック/">ライフハック</a></li></ul>
@@ -164,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/06/22/桁DP実装したった/" data-id="ck1n4dhv6000t0puyaanysmb8" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/06/22/桁DP実装したった/" data-id="ck27aqpfi000ojfuy4druddkc" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DP/">DP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -223,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="ck1n4dhv5000r0puymai6zq6v" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/07/最短経路問題を解く/" data-id="ck27aqpfj000qjfuyjcd8lci5" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li></ul>
@@ -285,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="ck1n4dhuu00080puy19qzcodl" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/05/01/Dockerネットワークについて/" data-id="ck27aqpf50005jfuy9k55mc33" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NW/">NW</a></li></ul>
@@ -327,7 +392,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="ck1n4dhuw000a0puy7svglf0c" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/20/Docker-for-Windowsと認証プロキシ/" data-id="ck27aqpf30003jfuy6yy4ytc6" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -383,7 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="ck1n4dhuq00040puyu7k74pzh" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/18/AWSソリューションアーキテクト・アソシエイト試験勉強方法/" data-id="ck27aqpfc000fjfuyf5euh2rr" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
@@ -440,7 +505,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="ck1n4dhv4000n0puykoajw0p9" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/17/幅優先探索について/" data-id="ck27aqpfh000njfuyf8u497di" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li></ul>
@@ -494,7 +559,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="ck1n4dhup00030puy5s4lmiz4" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/16/AWSアカウントとアベイラビリティーゾーン名/" data-id="ck27aqpex0000jfuypsveo7xr" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小ネタ/">小ネタ</a></li></ul>
@@ -547,86 +612,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="ck1n4dhux000b0puycb1glp78" class="article-share-link">共有</a>
+      <a data-url="https://kosukeland.github.io/2019/04/09/Javascriptの罠-値渡しと参照渡し-/" data-id="ck27aqpfg000kjfuyo8dcb3ii" class="article-share-link">共有</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/トラブル/">トラブル</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-CloudFormation-1-テンプレートを書いてみた" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" class="article-date">
-  <time datetime="2019-04-08T10:45:00.000Z" itemprop="datePublished">2019-04-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/CloudFormation-1-テンプレートを書いてみた/">CloudFormation(1) 〜テンプレートを書いてみた〜</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>AWSの資格をとって約3ヶ月弱経ったわけですが，特にAWSに触れることなく過ぎ去ってしまいました．<br>なので，リハビリ？ではないですが，今日はAWSに関して触れていきます．<br>今日のテーマはAWSのプロビジョニングツール CloudFormationです！<br>※筆者もCloudFormationに関しては完全なる初心者なので，手探り状態ですがご了承のほどよろしくお願いします．</p>
-<hr>
-<h1 id="2-ドキュメントを眺めながら手を動かしてみた"><a href="#2-ドキュメントを眺めながら手を動かしてみた" class="headerlink" title="2. ドキュメントを眺めながら手を動かしてみた"></a>2. ドキュメントを眺めながら手を動かしてみた</h1><p>AWSのドキュメントと言えば，BlackBeltが有名です．<br>各ソリューションの概要が適切にまとめられており，勉強するには最適です．<br>リンク貼っておきます↓<br><strong><a href="https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/" target="_blank" rel="noopener">https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-service-cut/</a></strong></p>
-<h2 id="2-1-CloudFormtionの用途"><a href="#2-1-CloudFormtionの用途" class="headerlink" title="2.1. CloudFormtionの用途"></a>2.1. CloudFormtionの用途</h2><p>AWSには様々なデプロイツール/プロビジョニングツールが用意されていますが，<br>CloudFormationの立ち位置は，<strong>AWSのネットワーク構築や各インスタンスの配置，セキュリティ等，マネジメントコンソールから実施できる作業の自動化</strong>になります．</p>
-<p>その他のデプロイツールとその立ち位置に関しては，BlackBelt資料に記載があるのでこちらを参照ください．<br><strong><a href="https://www.slideshare.net/AmazonWebServicesJapan/aws-black-belt-online-seminar-aws-cloudformation/12" target="_blank" rel="noopener">https://www.slideshare.net/AmazonWebServicesJapan/aws-black-belt-online-seminar-aws-cloudformation/12</a></strong></p>
-<p>※別途機会を設けて，CloudFormation以外の紹介もできたらとも思っております．</p>
-<h2 id="2-2-CloudFormtionテンプレート"><a href="#2-2-CloudFormtionテンプレート" class="headerlink" title="2.2. CloudFormtionテンプレート"></a>2.2. CloudFormtionテンプレート</h2><p>AWSのサービスを自動的にプロビジョニングするためには，<br>プロビジョニング方法を規定した”基盤の設計書”を事前に用意する必要があります．<br>CloudFormationでは，当該設計書をテンプレートと呼び，json または yamlで記載します．</p>
-<p>テンプレートの記載可能な内容は以下の通りです．<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">AWSTemplateFormatVersion: &quot;version date&quot; // テンプレートバージョン記載</span><br><span class="line">Description:   // テンプレート説明文を記載</span><br><span class="line">Resources:     // EC2やRDSなどAWSのリソースとプロパティ(必須項目)</span><br><span class="line">Parameters:    // インスタンスサイズ，ユーザ名等 ユーザに入力されるパラメータ</span><br><span class="line">Metadata:      // テンプレートに関する付加情報</span><br><span class="line">Mappings:      // キーと値のマッピング</span><br><span class="line">Condition:     // 条件名と条件判断内容</span><br><span class="line">Transform:     // サーバレスアプリケーションの場合，使用するSAMのバージョンを指定</span><br><span class="line">Outputs:       // デプロイ後にCloudFormationから出力させる値</span><br></pre></td></tr></table></figure></p>
-<p>今日はこのなかで，<strong>Resources, Parameters</strong>に関してみていきます(他の項目は，まだ理解していない汗)．</p>
-<h3 id="2-2-1-Resources"><a href="#2-2-1-Resources" class="headerlink" title="2.2.1 Resources"></a>2.2.1 Resources</h3><p>Resourcesには，プロビジョニング対象のAWSのリソース情報(VPC，インスタンス，RDS等)を記載します(必須記載項目です！)．<br>記載内容は，インスタンスのサイズ(t2.micro等)やIP，VPCに割り当てるのアドレスなど，多岐に渡ります．<br>具体例をみていきましょう．ここではyamlで記載したテンプレートを紹介します．</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  MyVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
-<p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>Resources識別子の以下に，VPCに関する詳細情報が記載されてます．<br>1行ずつみていきます．</p>
-<ul>
-<li>1行目: テンプレートのバージョンを規定しています</li>
-<li>2行目: これ以降にリソースを記載する と宣言しています．</li>
-<li>3行目: 論理IDを指定しています．</li>
-<li>4行目: リソースタイプを指定します．ここではVPCを指定しています．</li>
-<li>5行目: これ以降にリソースプロパティを記載する と宣言しています．</li>
-<li>6行目: VPCのCidrBlockを指定しています．</li>
-<li>7行目: VPC内でDNSを利用有無を指定しています．</li>
-<li>8行目: VPC内のインスタンスがDNSホスト名を取得するように指定しています．</li>
-</ul>
-<p>※論理ID: テンプレート内で利用する識別子です．他のリソース設定で本リソース情報を利用する場合は，論理IDを指定します．</p>
-<h3 id="2-2-2-Parameters"><a href="#2-2-2-Parameters" class="headerlink" title="2.2.2 Parameters"></a>2.2.2 Parameters</h3><p>Parameterには，テンプレート内に変数を持ちたい場合に利用されます．<br>例えば，プロビジョニングの度にVPCのCidrBlockを変更したい場合，その都度テンプレートを書き換えるのは非効率です．<br>バグの温床になる可能性もあります．<br>このような場合，VPCのCidrBlockを変数(Parameters)として定義することで，プロビジョニングの度にCidrBlockを変更することが可能です．<br>具体例を見ていきます．</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">AWSTemplateFormatVersion:</span> <span class="number">2010</span><span class="bullet">-09</span><span class="bullet">-09</span></span><br><span class="line"><span class="attr">Parameters:</span></span><br><span class="line"><span class="attr">  VPCcidr:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">String</span></span><br><span class="line"><span class="attr">    Default:</span> <span class="number">10.100</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span></span><br><span class="line"><span class="attr">    AllowedPattern:</span> <span class="string">'(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)\.(\d&#123;1,3&#125;)/(\d&#123;1,2&#125;)'</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">Resources:</span></span><br><span class="line"><span class="attr">  MyVPC:</span></span><br><span class="line"><span class="attr">    Type:</span> <span class="string">'AWS::EC2::VPC'</span></span><br><span class="line"><span class="attr">    Properties:</span></span><br><span class="line"><span class="attr">      CidrBlock:</span> <span class="type">!Ref</span> <span class="string">VPCcidr</span></span><br><span class="line"><span class="attr">      EnableDnsSupport:</span> <span class="string">'true'</span></span><br><span class="line"><span class="attr">      EnableDnsHostnames:</span> <span class="string">'true'</span></span><br></pre></td></tr></table></figure>
-<p>上記は，CloudFormationでVPCを作成するテンプレートです．<br>先ほどの例と異なり，今回はVPCのCidrBlockを変数化しています．<br>1行ずつみていきます．</p>
-<ul>
-<li>2行目: これ以降にパラメータを記載する と宣言しています</li>
-<li>3行目: 論理IDを指定しています．</li>
-<li>4行目: 入力タイプStringを指定しています．</li>
-<li>5行目: CidrBlockのデフォルト値を指定しています．</li>
-<li>6行目: デフォルトから入力を変更する場合，許可する入力パターンを指定しています．</li>
-<li>12行目: VPCのCidrBlockに関してはParameterを参照しています．Ref関数を利用します．</li>
-</ul>
-<p>上記の2つの例(yaml)は，CloudFormationに食わせることでVPCを作成することができます．<br>ぜひ試してみてください！</p>
-<hr>
-<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>今日は，CloudFormationのテンプレートのResorces識別子とParameters識別子に関して記載しました．<br>次回(以降？)は，その他の識別子に関しても記事にできればと思っております．</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://kosukeland.github.io/2019/04/08/CloudFormation-1-テンプレートを書いてみた/" data-id="ck1n4dhus00060puyx2kmqbgo" class="article-share-link">共有</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li></ul>
 
     </footer>
   </div>
@@ -663,7 +652,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">タグクラウド</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/ライフハック/" style="font-size: 10px;">ライフハック</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/ライフハック/" style="font-size: 12.5px;">ライフハック</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
     </div>
   </div>
 
@@ -685,6 +674,10 @@
       <ul>
         
           <li>
+            <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/">婚活サイトから更新情報取得するライフハック</a>
+          </li>
+        
+          <li>
             <a href="/2019/10/11/AWSで資産管理してみる/">AWSで資産管理してみる#1</a>
           </li>
         
@@ -698,10 +691,6 @@
         
           <li>
             <a href="/2019/05/01/Dockerネットワークについて/">Dockerネットワークについて</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/20/Docker-for-Windowsと認証プロキシ/">Docker for Windowsと認証プロキシ</a>
           </li>
         
       </ul>
