@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>AWSで資産管理してみる#2 | 某SIerの技術備忘録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. はじめに明けましておめでとうございます．本年も当ブログをどうぞよろしくお願いいたします． 最近，更新頻度が下がってきました．サボり気味でダメですね．気合を入れて開発を続けていきます．さて，今回は10月に記載した「AWSで資産管理してみる#1」の続編です．それでは，いきましょう．  2. やりたいことまずは，前回のおさらいです．前回の記事では，証券会社から取得した資産情報をデータレイクに貯め">
+<meta name="keywords" content="AWS,ライフハック">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWSで資産管理してみる#2">
+<meta property="og:url" content="https://kosukeland.github.io/2020/01/02/AWSで資産管理してみる2/index.html">
+<meta property="og:site_name" content="某SIerの技術備忘録">
+<meta property="og:description" content="1. はじめに明けましておめでとうございます．本年も当ブログをどうぞよろしくお願いいたします． 最近，更新頻度が下がってきました．サボり気味でダメですね．気合を入れて開発を続けていきます．さて，今回は10月に記載した「AWSで資産管理してみる#1」の続編です．それでは，いきましょう．  2. やりたいことまずは，前回のおさらいです．前回の記事では，証券会社から取得した資産情報をデータレイクに貯め">
+<meta property="og:locale" content="ja">
+<meta property="og:image" content="https://kosukeland.github.io/images/20200102-1.png">
+<meta property="og:image" content="https://kosukeland.github.io/images/20200102-2.png">
+<meta property="og:updated_time" content="2020-01-02T10:57:49.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWSで資産管理してみる#2">
+<meta name="twitter:description" content="1. はじめに明けましておめでとうございます．本年も当ブログをどうぞよろしくお願いいたします． 最近，更新頻度が下がってきました．サボり気味でダメですね．気合を入れて開発を続けていきます．さて，今回は10月に記載した「AWSで資産管理してみる#1」の続編です．それでは，いきましょう．  2. やりたいことまずは，前回のおさらいです．前回の記事では，証券会社から取得した資産情報をデータレイクに貯め">
+<meta name="twitter:image" content="https://kosukeland.github.io/images/20200102-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="某SIerの技術備忘録" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">某SIerの技術備忘録</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSSフィード"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="検索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kosukeland.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-AWSで資産管理してみる2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/02/AWSで資産管理してみる2/" class="article-date">
+  <time datetime="2020-01-02T09:00:00.000Z" itemprop="datePublished">2020-01-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AWSで資産管理してみる#2
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h1 id="1-はじめに"><a href="#1-はじめに" class="headerlink" title="1. はじめに"></a>1. はじめに</h1><p>明けましておめでとうございます．<br>本年も当ブログをどうぞよろしくお願いいたします．</p>
+<p>最近，更新頻度が下がってきました．<br>サボり気味でダメですね．気合を入れて開発を続けていきます．<br>さて，今回は10月に記載した「<a href="https://kosukeland.github.io/2019/10/11/AWSで資産管理してみる1/">AWSで資産管理してみる#1</a>」の続編です．<br>それでは，いきましょう．</p>
+<hr>
+<h1 id="2-やりたいこと"><a href="#2-やりたいこと" class="headerlink" title="2. やりたいこと"></a>2. やりたいこと</h1><p>まずは，前回のおさらいです．<br>前回の記事では，証券会社から取得した資産情報をデータレイクに貯める処理まで記載しました．<br>資産情報の取得にはLambdaを利用し，取得したデータをS3に投げ込むことでデータの利活用を目指します．<br>取得したデータは日次ごとにファイルに記載し，とりあえず日次ファイルは以下のフォーマットとしました．<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"保有資産評価"</span>: &#123;</span><br><span class="line">        <span class="attr">"現金残高等"</span>: <span class="number">10000</span>,</span><br><span class="line">        <span class="attr">"株式"</span>: <span class="number">20000</span>,</span><br><span class="line">        <span class="attr">"投資信託"</span>: <span class="number">30000</span>,</span><br><span class="line">        <span class="attr">"計"</span>: <span class="number">60000</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"株式"</span>:&#123;</span><br><span class="line">         <span class="attr">"株式会社xxx"</span>: &#123;</span><br><span class="line">            <span class="attr">"保有株数"</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="attr">"取得単価"</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">"現在値"</span>: <span class="number">300</span>,</span><br><span class="line">            <span class="attr">"評価損益"</span>: <span class="number">10000</span></span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="attr">"株式会社yyy"</span>: &#123;</span><br><span class="line">            <span class="attr">"保有株数"</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="attr">"取得単価"</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">"現在値"</span>: <span class="number">300</span>,</span><br><span class="line">            <span class="attr">"評価損益"</span>: <span class="number">10000</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"投資信託"</span>:&#123;</span><br><span class="line">        <span class="attr">"日経225連動型"</span>: &#123;</span><br><span class="line">            <span class="attr">"保有口数"</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="attr">"取得単価"</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">"基準価額"</span>: <span class="number">300</span>,</span><br><span class="line">            <span class="attr">"評価損益"</span>: <span class="number">10000</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>また，上記のjsonファイルを用いて，以下の項目を見える化したいと考えました．<br>・現金，株式，投資信託ごとの資産額の推移<br>・個別銘柄ごとの資産額の推移</p>
+<p>以上が前回のブログ記載時に実施したこと 及び 考えていたことです．</p>
+<p>さて，，，S3に保存したデータを利活用するために，データの見える化をします．<br>フロントエンドにBIツールを利用することを考え，BIツールと連携しやすいDWHにデータをインポートする必要がありそうです．<br>また，個人開発なのでコストはなるべく抑える必要があります．<br>QCDでいうと，圧倒的にCが大事です．</p>
+<p>上記の元，AWS上で構築する上で候補になったのは以下の2つ．</p>
+<ol>
+<li>Athena + QuickSight</li>
+<li>ElasticSearch + Kibana</li>
+</ol>
+<p>BIツールは世の中に腐るほどあるのですが(本当か？)，<br>AWSを基盤として気軽にデータ解析をしようとすると，この2パターンがいいのかなと(マネージドサービスですしw)<br>さて，比較します．</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Athena + QuickSight</th>
+<th style="text-align:left">ElasticSearch Service + Kibana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">コスト</td>
+<td style="text-align:left">1ユーザで利用する場合，ほぼタダ</td>
+<td style="text-align:left">microインスタンスを利用して$13.5/month</td>
+</tr>
+<tr>
+<td style="text-align:left">セキュリティ</td>
+<td style="text-align:left">QuickSightの機能で認証認可　　</td>
+<td style="text-align:left">Kibanaをインターネットに晒す場合，Cognito等を併用して認証認可？</td>
+</tr>
+<tr>
+<td style="text-align:left">速度</td>
+<td style="text-align:left">何もわからない</td>
+<td style="text-align:left">何もわからない</td>
+</tr>
+<tr>
+<td style="text-align:left">運用</td>
+<td style="text-align:left">マネージドサービスなので運用不要</td>
+<td style="text-align:left">ElasticSearchの運用等(バージョンアップとか)はユーザ責任</td>
+</tr>
+</tbody>
+</table>
+<p>ということで，コストを優先して今回はAthena + QuickSightを採用します．<br>ちなみに，上記の「1ユーザでAthena + QuickSight利用する場合，ほぼタダ」というのは，<br> ・Athenaは1TBのスキャン当たり$5必要なのに対して，自身がS3に保存しているデータは10MB以下なので，スキャン費用もほぼタダ<br> ・QuickSightは1ユーザ無料特典がついているため，費用は掛からず利用ができる(<a href="https://aws.amazon.com/jp/quicksight/pricing/" target="_blank" rel="noopener">参考</a>)<br>という意味です．</p>
+<p>さて，構成図はこんな感じになります．<br>S3のjsonファイルをAthenaを用いてスキャンし，その結果をQuickSightで表示します(Lambda, S3の構成は前回のブログと同様)．</p>
+<p><img src="/images/20200102-1.png" alt="図1: 構成図" title="図1: 構成図" width="600"></p>
+<p>さて，実装です(AthenaとQuickSightの使い方は，まとめてくださっている方々がいるので割愛)．<br>S3に保存したデータをAthenaで利用するために，データカタログを作ろうとしたところうまくできず．．．．<br>理由としてはjsonがネストしていたからなのですが，それ以外にも2byte文字(記号とかスペースとか)がjson内に存在したりと問題がありそうなので，jsonファイルを整形します．こんな感じに．<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"日時"</span>: <span class="string">"20xx-xx-xx"</span>, <span class="attr">"銘柄"</span>: <span class="string">"xxxx"</span>, <span class="attr">"保有株数"</span>: <span class="number">100</span>, <span class="attr">"取得単価"</span>: <span class="number">200</span>, <span class="attr">"現在値"</span>: <span class="number">300</span>, <span class="attr">"資産額"</span>: <span class="number">30000</span>, <span class="attr">"評価損益"</span>: <span class="number">10000</span>&#125;</span><br><span class="line">&#123;<span class="attr">"日時"</span>: <span class="string">"20xx-xx-xx"</span>, <span class="attr">"銘柄"</span>: <span class="string">"yyyy"</span>, <span class="attr">"保有株数"</span>: <span class="number">200</span>, <span class="attr">"取得単価"</span>: <span class="number">200</span>, <span class="attr">"現在値"</span>: <span class="number">300</span>, <span class="attr">"資産額"</span>: <span class="number">60000</span>, <span class="attr">"評価損益"</span>: <span class="number">20000</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>整形前のjsonには，総資産および株式，投資信託の情報全てが記載されていました．<br>しかし，それだとデータカタログを綺麗に作れそうにないので，各々(総資産と株式と投資信託)を1jsonファイルずつに分割しました．<br>銘柄には証券コードを記載し，2byte文字(記号とかスペースとか)の混入を防いでいます．<br>また，いろいろ試してわかったのですが，Athenaのパーサは括弧(“{“)と括弧(“}”)の間に改行を含めると<br>うまくいかないようなので，括弧内の全ての改行を消去しました(<a href="https://dev.classmethod.jp/cloud/aws/athena-json/" target="_blank" rel="noopener">参考</a>)</p>
+<p>AthenaはHive？ベースのSQLらしく，ちょっと癖があるとのこと．．．(あまりよく分かってない)<br>テーブルを全表示させるために下記のようにSQLを書くらしいが，最終的にQuickSightからSQLを発行するはずなので気にしない．<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">"asset"</span>.<span class="string">"sum"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>AthenaでSQLが発行できたら，最後にQuickSightの設定をします．<br>QuickSight自体はユーザを登録し，データソースをインポートすればすぐに利用できるのだが，<br>QuickSightからデータファイル(json)が入っているS3のバケットへのReadを有効にしないと，以下のエラーが発生します．<br>この点は要注意．</p>
+<p><img src="/images/20200102-2.png" alt="図2: QuickSightエラー" title="図2: QuickSightエラー" width="600"></p>
+<hr>
+<h1 id="3-おわりに"><a href="#3-おわりに" class="headerlink" title="3. おわりに"></a>3. おわりに</h1><p>これで，資産の見える化がある程度できました．<br>とりあえずは数ヶ月間利用してみて，改善点を洗い出そうかな．<br>あとCI/CD… そろそろなんとかしないと…</p>
+<hr>
+<h1 id="4-余談"><a href="#4-余談" class="headerlink" title="4. 余談"></a>4. 余談</h1><h2 id="4-1-コードの公開して"><a href="#4-1-コードの公開して" class="headerlink" title="4.1. コードの公開して"></a>4.1. コードの公開して</h2><p>Githubで公開できる様，準備しております．<br>少々，お待ちください．</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kosukeland.github.io/2020/01/02/AWSで資産管理してみる2/" data-id="ck4wmoygb0014mbuyhjxf306d" class="article-share-link">共有</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ライフハック/">ライフハック</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">婚活サイトから更新情報取得するライフハック</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグ</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CloudFormation/">CloudFormation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DP/">DP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-for-Windows/">Docker for Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NW/">NW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/アルゴリズム/">アルゴリズム</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/トラブル/">トラブル</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ライフハック/">ライフハック</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小ネタ/">小ネタ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/競技プログラミング/">競技プログラミング</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/認定試験/">認定試験</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">タグクラウド</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 17.5px;">AWS</a> <a href="/tags/CloudFormation/" style="font-size: 10px;">CloudFormation</a> <a href="/tags/DP/" style="font-size: 10px;">DP</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Docker-for-Windows/" style="font-size: 10px;">Docker for Windows</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/NW/" style="font-size: 10px;">NW</a> <a href="/tags/アルゴリズム/" style="font-size: 20px;">アルゴリズム</a> <a href="/tags/トラブル/" style="font-size: 12.5px;">トラブル</a> <a href="/tags/ライフハック/" style="font-size: 15px;">ライフハック</a> <a href="/tags/小ネタ/" style="font-size: 12.5px;">小ネタ</a> <a href="/tags/競技プログラミング/" style="font-size: 17.5px;">競技プログラミング</a> <a href="/tags/認定試験/" style="font-size: 10px;">認定試験</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/02/AWSで資産管理してみる2/">AWSで資産管理してみる#2</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/26/婚活サイトから更新情報取得するライフハック/">婚活サイトから更新情報取得するライフハック</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/11/AWSで資産管理してみる1/">AWSで資産管理してみる#1</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/22/桁DP実装したった/">桁DP実装したった</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/07/最短経路問題を解く/">最短経路問題を解く</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Kosuke<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
